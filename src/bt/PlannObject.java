@@ -1,0 +1,624 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package bt;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.layout.Border;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolTip;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.plaf.IconUIResource;
+
+/**
+ *
+ * @author gabor_hanacsek
+ */
+public class PlannObject extends JLabel {
+
+    private Variables.status stat = Variables.status.NotReleased;
+    public String neve = "";
+    private int mousepozx = 0;
+    private int mousepozy = 0;
+    private String pn = "";
+    private String job = "";
+    private int terv = 0;
+    private int teny = 0;
+    private double dbzold = 0.00;
+    private double dbpiros = 0.00;
+    private String labeltext = "";
+    private String tooltiptext = "";
+    private boolean engineer = false;
+    private String plannerkomment = "";
+    private String komment = "";
+    private double idozold = 0.00;
+    private double idopiros = 0.00;
+    //gyártási idő órában!
+    private double gyartasiido = 0.00;
+    private String starttime = "";
+    //waterfall
+    private int wtf = 0;
+    private String workStation = "";
+    private BeSheet backendSheet;
+    private ImageIcon img;
+    private MainWindow m;
+    private double ciklusido = 0.00;
+
+//construct
+    public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, boolean mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
+        this.backendSheet = b;
+        this.m = m;
+        this.ciklusido = ciklusido;
+//szélesség magasság beállítása
+        this.setSize(hossz, magassag);
+
+//átlátszatlanság beállítása
+        this.setOpaque(true);
+//icon és szöveg távolság beállítása
+        this.setIconTextGap(0);
+//border beállítások
+        javax.swing.border.Border border = BorderFactory.createLineBorder(Color.BLUE, 2);
+        this.setBorder(border);
+
+//tooltip beállítások
+        ToolTipManager.sharedInstance().setInitialDelay(500);
+        ToolTipManager.sharedInstance().setDismissDelay(2000);
+
+//ikon beállítása
+        setMainIcon(Variables.status.NotReleased);
+
+//egér motion hozzáadása
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+                if (e.getComponent() instanceof JLabel) {
+//a plannobject mozgatása
+                    e.getComponent().setLocation(e.getXOnScreen() - (int) getParent().getLocationOnScreen().getX() - mousepozx, e.getYOnScreen() - (int) getParent().getLocationOnScreen().getY() - mousepozy);
+//helyetcserélünk ha kell
+                    //helycsere();
+
+//a scrollpane ujraméretezése amennyiben szükséges
+                    setScrollpanel();
+                    b.repaint();
+
+                }
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+
+        addMouseListener(new MouseListener() {
+//a plannobject setupablak megjelenítése
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                //b.setPlannObjectData.setVisible(true, (PlannObject) e.getComponent(), new Point(e.getXOnScreen(), e.getYOnScreen()));
+            }
+//egér pozíció felvétele a jlabelen
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                if (e.getComponent() instanceof JLabel) {
+                    JLabel l = (JLabel) e.getComponent();
+                    getParent().setComponentZOrder(l, 0);
+                    Point p = new Point(0, 0);
+                    try {
+                        p = new Point(l.getMousePosition());
+                        mousepozx = (int) p.getX();
+                        mousepozy = (int) p.getY();
+
+                    } catch (Exception ex) {
+                    }
+
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //keressük az indulási idejét
+                resetStartTime();
+//osszerenezzuk
+                osszerendez();
+                b.repaint();
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+                b.repaint();
+            }
+        });
+//a háttér beállítása
+        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/poback.jpg"));
+
+//popupmenu csinálása
+        JPopupMenu popupMenu = new PlannPopup(this, m);
+//setteljuk be a sok szart
+        this.setComponentPopupMenu(popupMenu);
+        setPn(pn);
+        setJob(job);
+        setTerv(terv);
+        setTeny(teny);
+        //ez ki is szamolja a po ra vonatkozo ossz gyartasi idot
+        setGyartasiido(ciklusido);
+        setPlannerKomment(plannerkomment);
+        setKomment(komment);
+        setEngineer(mernoki);
+        setStartdate(startdate);
+        setWtf(wtf);
+        setWorkStation(workstation);
+        formatText();
+
+//keresse meg a helyét
+        setStartLocation();
+
+    }
+
+    public BeSheet getbackendSheet() {
+        return backendSheet;
+    }
+
+//ez a metódus összerendezi a po-kat az adott jpanelen a vt jük mellé és egymás alá
+    public void osszerendez() {
+//begyüjtjük a vertical lineokat
+        Component[] vtcomponents = backendSheet.jPanel2.getComponents();
+        Component[] pocomponents = backendSheet.jPanel1.getComponents();
+//ha vt-t találunk
+        for (int i = 0; i < vtcomponents.length; i++) {
+            if (vtcomponents[i] instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) vtcomponents[i];
+//csinálunk egy arrayt a po-knak amik ehhez a vt hez tartoznak
+                ArrayList<PlannObject> polist = new ArrayList<>();
+//az összes olyan po-t ami ehhez a vt hez tartozik betesszük ebbe a listába
+                for (int c = 0; c < pocomponents.length; c++) {
+
+                    if (pocomponents[c] instanceof PlannObject) {
+                        PlannObject po = (PlannObject) pocomponents[c];
+                        if (po.getStartdate().contains(vt.getVtstartdate())) {
+
+                            polist.add(po);
+
+                        }
+
+                    }
+
+                }
+
+//feltöltöttük a polistunket a megfelelő po-kkal, most be kéne buborékolni őket a lokációjuk alapján
+                class sortByLoc implements Comparator<PlannObject> {
+
+                    @Override
+                    public int compare(PlannObject a, PlannObject b) {
+                        return a.getLocation().y - b.getLocation().y;
+                    }
+
+                }
+//sorba rendezzük
+                Collections.sort(polist, new sortByLoc());
+
+//ha ez kész akkor relokáljuk őket ennek a sorrendnek megfelelően és beállítjuk a wtf et
+                int uccsohely = 10;
+                wtf = 0;
+                for (int c = 0; c < polist.size(); c++) {
+
+                    polist.get(c).setLocation(vt.getLocation().x, uccsohely);
+                    polist.get(c).setWtf(wtf);
+                    uccsohely = polist.get(c).getLocation().y + polist.get(c).getHeight() + 5;
+//beállítjuk az uj startdatet is
+                    resetStartTime();
+                    wtf++;
+
+                }
+
+            }
+
+        }
+
+        setScrollpanel();
+
+    }
+
+    public String getWorkStation() {
+        return workStation;
+    }
+
+    public void setWorkStation(String workStation) {
+        this.workStation = workStation;
+    }
+
+//a waterfall beállítása
+    public void setWtf(int wtf) {
+        this.wtf = wtf;
+    }
+//a waterfall kiszedése
+
+    public int getWtf() {
+        return wtf;
+    }
+
+    public MainWindow getMainWindow() {
+        return m;
+    }
+
+    public double getCiklusido() {
+        return ciklusido;
+    }
+
+//scrollpanel ujrameretezese ha szukseges
+    public void setScrollpanel() {
+
+        Component components[] = backendSheet.jPanel1.getComponents();
+        int maxx = 200;
+        int maxy = 200;
+        for (int i = 0; i < components.length; i++) {
+
+            if (components[i] instanceof PlannObject) {
+
+                PlannObject po = (PlannObject) components[i];
+
+                if (po.getLocation().x + this.getWidth() > maxx) {
+
+                    maxx = po.getLocation().x + this.getWidth() + 100;
+                }
+
+                if (po.getLocation().y + this.getHeight() > maxy) {
+
+                    maxy = po.getLocation().y + this.getHeight() + 100;
+                }
+
+            }
+
+        }
+
+        backendSheet.jPanel1.setPreferredSize(new Dimension(maxx, maxy));
+        backendSheet.jPanel2.setPreferredSize(new Dimension(maxx, (int) backendSheet.jPanel2.getPreferredSize().getHeight()));
+
+        backendSheet.jPanel1.revalidate();
+        repaint();
+
+    }
+
+    //a starttime átírása a balról a legközelebbi vt nek megfelelően
+    public void resetStartTime() {
+        //elindulunk szépen a this lokációtól balra és megkeressük az elő verticaltimelinet és felvesszük az ő idejét
+        boolean c = true;
+        int x = this.getLocation().x;
+
+        while (c) {
+
+            if (backendSheet.jPanel2.getComponentAt(x, 0) instanceof VerticalTimeline) {
+
+                VerticalTimeline vt = (VerticalTimeline) backendSheet.jPanel2.getComponentAt(x, 0);
+                this.setStartdate(vt.getVtstartdate());
+                c = false;
+
+            } else if (x <= 0) {
+
+                c = false;
+
+            } else {
+
+                x--;
+            }
+
+        }
+
+        backendSheet.collectData();
+
+    }
+
+//az objektek elhelyezése a lekérdezés után
+    public void setStartLocation() {
+//összeszedjük a komponenseket
+        Component[] components = backendSheet.jPanel2.getComponents();
+
+//beforgatjuk és megkeressük a vt-ket
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) components[i];
+//ha vt hez érek megnézem, hogy egyezik e a startdátumuk
+                if (this.getStartdate().contains(vt.getVtstartdate())) {
+
+//berakjuk a vt maxy -ra és hozzáadunk valamennyit
+                    this.setLocation(vt.getLocation().x, vt.getMaxy());
+                    this.setScrollpanel();
+                    vt.setMaxy(vt.getMaxy() + this.getHeight() + 5);
+                    return;
+
+                }
+            }
+
+        }
+
+    }
+
+//gyártási idő beállítása
+    public void setGyartasiido(double ciklusido) {
+
+//a gyartasi ido oraban van megadva, db/ora, tehat a gyartasi ido a telses po ra tekintve
+        this.gyartasiido = (60 / ciklusido * this.getTerv()) / 60;
+//a grafikon szineinek kiszamitasa
+        setProducTime();
+
+    }
+//a gyártási idő közvetlen beállítása
+
+    public void setOsszGyartasiIdo(double ido) {
+
+        this.gyartasiido = ido;
+
+    }
+
+//mérnöki beállítása
+    public void setEngineer(boolean b) {
+        engineer = b;
+    }
+//komment beállítása
+
+    public void setPlannerKomment(String komment) {
+        this.plannerkomment = komment;
+    }
+//a termelés kommentje
+
+    public void setKomment(String komment) {
+        this.komment = komment;
+    }
+
+//partnumber beállítása
+    public void setPn(String pn) {
+        this.pn = pn;
+    }
+//job beállítása
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+//terv beállítása
+
+    public void setTerv(int qty) {
+        this.terv = qty;
+        setProducted();
+    }
+//teny beallitasa
+
+    public void setTeny(int teny) {
+        this.teny = teny;
+        setProducted();
+    }
+// fő ikon beallitasa
+
+    public void setMainIcon(Variables.status stat) {
+
+        switch (stat) {
+
+            case NotReleased:
+                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")));
+                break;
+            case Released:
+                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/released.png")));
+                break;
+            case Complete:
+                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/complete.png")));
+                break;
+            default:
+                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")));
+
+        }
+
+    }
+
+//a darabszám indikátor számainak kiszámítása
+    public void setProducted() {
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        df.setRoundingMode(RoundingMode.UP);
+        try {
+            dbzold = this.getSize().getWidth() * Double.parseDouble(df.format((double) teny / (double) terv));
+            dbpiros = this.getSize().getWidth() - dbzold;
+        } catch (Exception e) {
+        }
+
+    }
+//gyártási idő indikátor számainak kiszámítása
+
+    public void setProducTime() {
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        df.setRoundingMode(RoundingMode.UP);
+        try {
+            idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) gyartasiido) / 12));
+            idopiros = this.getSize().getWidth() - idozold;
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void setStat(Variables.status stat) {
+        this.stat = stat;
+    }
+
+    public Variables.status getStat() {
+        return stat;
+    }
+
+    public String getPn() {
+        return pn;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public int getTerv() {
+        return terv;
+    }
+
+    public int getTeny() {
+        return teny;
+    }
+
+    public boolean isEngineer() {
+        return engineer;
+    }
+
+    public String getPlannerkomment() {
+        return plannerkomment;
+    }
+
+    public String getKomment() {
+        return komment;
+    }
+
+    public double getGyartasiido() {
+        return gyartasiido;
+    }
+
+//a startidő beállítása
+    public void setStartdate(String startdate) {
+        this.starttime = startdate;
+    }
+//a startdátum kiszedése
+
+    public String getStartdate() {
+        return starttime;
+    }
+
+//a tooltip és a szöveg formátumának előállítása és beállítása
+    public void formatText() {
+//
+//        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
+//        setText(labeltext);
+        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font></html>";
+
+        setToolTipText(tooltiptext);
+
+    }
+//a label ábrái 
+
+    @Override
+    public void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        g.drawImage(img.getImage(), 0, 0, null);
+        Graphics2D g2d = (Graphics2D) g;
+// a darabszám indikátor megrajzolása
+//zöld
+        g2d.setColor(Variables.zold);
+        g2d.fillRect(0, this.getHeight() - 7, (int) dbzold, 7);
+        g2d.setColor(Variables.piros);
+        g2d.fillRect(0 + (int) dbzold, this.getHeight() - 7, (int) dbpiros, 7);
+//zöld , ha nincs terv csak tény
+        g2d.setColor(Variables.zold);
+        if (getTerv() == 0) {
+
+            g2d.fillRect(0, this.getHeight() - 7, 200, 7);
+
+        }
+
+//a gyártási idő indikátor beállítása
+        //zöld
+        g2d.setColor(Variables.zold);
+        g2d.fillRect(0, 0, (int) idozold, 7);
+        g2d.setColor(Variables.piros);
+        g2d.fillRect(0 + (int) idozold, 0, (int) idopiros, 7);
+
+//ha van komment rajzolunk más ikont is
+        if ((plannerkomment.length() > 0) || (komment.length() > 0)) {
+
+            Icon komment = new javax.swing.ImageIcon(getClass().getResource("/pictures/comment.png"));
+            komment.paintIcon(this, g, (int) this.getSize().getWidth() - 30, 5);
+
+        }
+//mérnöki ikon beállítása
+        if (engineer) {
+            Icon engineer = new javax.swing.ImageIcon(getClass().getResource("/pictures/engineer.png"));
+            engineer.paintIcon(this, g, (int) this.getSize().getWidth() - 30, this.getHeight() - 7 - engineer.getIconHeight());
+
+        }
+
+//a ws kiiratása
+        g2d.setColor(Color.RED);
+        g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+        g2d.drawString("WS:", 30, 20);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(getWorkStation(), 57, 20);
+//a pn kiirása
+        g2d.setColor(Color.RED);
+        //g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        g2d.drawString("PN:", 30, 35);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(getPn(), 57, 35);
+//a job kiirása
+        g2d.setColor(Color.RED);
+        //g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        g2d.drawString("JOB:", 30, 50);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(getJob(), 57, 50);
+
+//a terv/tény kiirása
+        g2d.setColor(Color.RED);
+        //g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        g2d.drawString("Terv/Tény:", 30, 65);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(getTerv() + " / " + getTeny(), 90, 65);
+
+//a mainicon beállítása
+        switch (stat) {
+
+            case NotReleased:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")).getImage(), 0, 15, null);
+                break;
+            case Released:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/released.png")).getImage(), 0, 15, null);
+                break;
+            case Complete:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/complete.png")).getImage(), 0, 15, null);
+                break;
+            default:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")).getImage(), 0, 15, null);
+
+        }
+
+    }
+
+}
