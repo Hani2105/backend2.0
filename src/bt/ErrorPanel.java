@@ -13,7 +13,7 @@ import javax.swing.JRootPane;
  *
  * @author gabor_hanacsek
  */
-public class ErrorPanel extends javax.swing.JDialog {
+public  class ErrorPanel extends javax.swing.JDialog {
 
     /**
      * Creates new form ErrorPanel
@@ -55,7 +55,7 @@ public class ErrorPanel extends javax.swing.JDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel3.setForeground(new java.awt.Color(204, 0, 0));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/error.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {

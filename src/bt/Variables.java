@@ -7,6 +7,7 @@ package bt;
 
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 /**
@@ -23,6 +24,7 @@ public class Variables {
 //a tab szinei
     public static Color tabcolor = new Color(15775206);
     public static Color selectedtabcolor = new Color(7191285);
+    public static ArrayList<String[]> pnkomment = new ArrayList<>();
 
     
     

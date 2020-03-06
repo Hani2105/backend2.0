@@ -18,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,14 +54,16 @@ public class LoaderPanel extends javax.swing.JDialog {
     //berakjuk az adatokat egy arraybe, ha nincs benne
     ArrayList<String> pnlist = new ArrayList<>();
     ArrayList<String> wslist = new ArrayList<>();
+    MainWindow m;
 
-    public LoaderPanel(java.awt.Frame parent, boolean modal) {
+    public LoaderPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
         super(parent, modal);
 
         initComponents();
         this.jTable1.setDefaultRenderer(Object.class, new LoaderRenderer(this));
         jScrollPane1.getViewport().setOpaque(false);
         jScrollPane2.getViewport().setOpaque(false);
+        this.m = m;
 
     }
 
@@ -83,6 +86,7 @@ public class LoaderPanel extends javax.swing.JDialog {
         jTable2 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -283,7 +287,7 @@ public class LoaderPanel extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("X");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/close_1.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -301,6 +305,17 @@ public class LoaderPanel extends javax.swing.JDialog {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/tablatorles.png"))); // NOI18N
+        jLabel3.setToolTipText("Tábla törlése!");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -309,15 +324,18 @@ public class LoaderPanel extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1))
         );
@@ -389,41 +407,143 @@ public class LoaderPanel extends javax.swing.JDialog {
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         //tervek hozzáadása
 //csak azokat adjuk hozzá, amik benne vannak az adatokban!! (pn,ws,ciklusidő)
-
+        addTerv();
 
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // ha ráklikkelünk a plusz gombra
+
         if (jTable1.getSelectedColumn() == 7) {
-            PlanConnect pc = new PlanConnect();
-//fel kell tolteni a pn-t a ws-t , ciklusidőt és a kommentet majd
-            String insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
+            PlanConnect pc = null;
             try {
-                String driver = "com.mysql.jdbc.driver";
-                String url = "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8";
-                String username = "plan";
-                String password = "plan500";
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection(url, username, password);
-                Statement st = conn.createStatement();
-                st.executeUpdate(insertquery);
-                ResultSet rs = st.getGeneratedKeys();
+                pc = new PlanConnect();
+            } catch (SQLException ex) {
+                Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//fel kell tolteni a pn-t a ws-t , ciklusidőt és a kommentet majd
+//pn feltoltese
+            String insertquery = "";
+            try {
+                insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+                m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
+                return;
+            }
+//ws feltoltese
+            try {
+                insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+                m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
+                return;
+            }
+//prodmatrix feltoltese
+            try {
+                insertquery = "insert ignore tc_prodmatrix (id_tc_bepns,id_tc_becells,id_tc_bestations,ciklusido,pk) values ((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'), '" + Double.parseDouble(jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString()) + "',(concat((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'))))\n"
+                        + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
 
-                while (rs.next()) {
+                m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
+                return;
 
-                    System.out.println(rs.getString(1));
-                }
-
+            }
+//updatelni kell a kommentet is
+            try {
+                insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+            }
+            try {
+                adatleker();
+                MainWindow.pnCommentLeker();
             } catch (SQLException ex) {
                 Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            jTable1.repaint();
             pc.kinyir();
         }
+
+
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        tablaTorol();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    public void tablaTorol() {
+        //kinullázunk mindent a táblán
+        DefaultTableModel model = new DefaultTableModel();
+        model = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+
+            for (int o = 0; o < model.getColumnCount(); o++) {
+
+                model.setValueAt(null, i, o);
+            }
+        }
+
+        jTable1.setModel(model);
+
+    }
+
+    public void addTerv() {
+//a tervek hozzáadása a loaderből
+        //végigmegyünk a loader táblán
+        outerloop:
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            try {
+//azokkal a sorokkal foglalkozunk ahol nem nulla  pn ws qty
+                if (!jTable1.getValueAt(i, 1).toString().equals("") && !jTable1.getValueAt(i, 2).toString().equals("") && Integer.parseInt(jTable1.getValueAt(i, 3).toString()) > 0) {
+//kiszedjük a pn-t és leellenőrizzük, hogy fel van e vive az adatok közé
+                    String pn = jTable1.getValueAt(i, 1).toString().trim();
+                    String ws = jTable1.getValueAt(i, 2).toString().trim();
+                    String job = "";
+                    String startdate = "";
+                    try {
+                        job = jTable1.getValueAt(i, 3).toString().trim();
+                    } catch (Exception e) {
+
+                    }
+                    try {
+                        startdate = jTable1.getValueAt(i, 4).toString().trim();
+                    } catch (Exception e) {
+                    }
+                    for (int c = 0; c < adatok.size(); c++) {
+
+                        if (adatok.get(c)[0].equals(pn) && adatok.get(c)[1].equals(ws)) {
+
+                            BeSheet b = (BeSheet) m.jTabbedPane1.getSelectedComponent();
+                            //System.out.print(b.getName());
+
+//ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
+                            try {
+                                PlannObject po = new PlannObject(b, 200, 75, pn, job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", false, 0, ws, Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                b.jPanel1.add(po);
+                                b.repaint();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+
+                            continue outerloop;
+                        }
+
+                    }
+//ha ide eljutunk akkor nem szerepelt ilyen adat, kiirjuk a hibát
+                    m.error.setVisible(true, "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>");
+
+                }
+
+            } catch (Exception e) {
+                // e.printStackTrace();
+            }
+        }
+
+    }
 
     public void adatleker() throws SQLException, ClassNotFoundException {
         new ExcelAdapter(jTable1, this);
@@ -438,7 +558,7 @@ public class LoaderPanel extends javax.swing.JDialog {
                     + "left join tc_prodmatrix on tc_prodmatrix.id_tc_becells = tc_becells.idtc_cells\n"
                     + "left join tc_bepns on tc_bepns.idtc_bepns = tc_prodmatrix.id_tc_bepns\n"
                     + "left join tc_bestations on tc_bestations.idtc_bestations = tc_prodmatrix.id_tc_bestations\n"
-                    + "where tc_becells.cellname = '" + tabneve + "' order by tc_bepns.partnumber asc,  tc_bestations.workstation asc";
+                    + "where tc_becells.cellname = '" + tabneve + "' and partnumber is not null and workstation is not null and tc_prodmatrix.pk is not null order by tc_bepns.partnumber asc,  tc_bestations.workstation asc";
 
             PlanConnect pc = new PlanConnect();
             pc.lekerdez(query);
@@ -523,14 +643,14 @@ public class LoaderPanel extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                LoaderPanel dialog = new LoaderPanel(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+//                LoaderPanel dialog = new LoaderPanel(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
             }
         });
     }
@@ -538,6 +658,7 @@ public class LoaderPanel extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

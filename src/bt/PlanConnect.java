@@ -26,118 +26,27 @@ public class PlanConnect {
 
     public ResultSet rs;
     public Connection conn;
+    String driver = "com.mysql.jdbc.driver";
+    String url = "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8";
+    String username = "plan";
+    String password = "plan500";
+    public Statement st;
+
+    public PlanConnect() throws SQLException {
+        conn = (Connection) DriverManager.getConnection(url, username, password);
+        st = conn.createStatement();
+    }
 
     public Object lekerdez(String startQuery) throws SQLException, ClassNotFoundException {
 
-        String driver = "com.mysql.jdbc.driver";
-        String url = "jdbc:mysql://143.116.140.114/planningdb?zeroDateTimeBehavior=convertToNull&characterEncoding=utf8";
-        String username = "plan";
-        String password = "plan500";
-        Class.forName("com.mysql.jdbc.Driver");
-
-        this.conn = (Connection) DriverManager.getConnection(url, username, password);
-        Statement st = conn.createStatement();
-
-        rs = st.executeQuery(startQuery);
-
-        return rs;
-
-    }
-
-    public Object templekerdez(String startQuery) throws SQLException, ClassNotFoundException {
-
-        Class.forName("com.mysql.jdbc.Driver");
-        Statement st = conn.createStatement();
-
         rs = st.executeQuery(startQuery);
         return rs;
 
     }
 
-    public static TableModel resultSetToTableModel(ResultSet rs, DefaultTableModel tm, int colnum) {
-        try {
+    public void feltolt(String query) throws SQLException {
 
-            DefaultTableModel szerkeszt = tm;
-            String value = "Nincs találat";
-
-            if (rs.next()) {
-                value = rs.getNString("Board_PN");
-            }
-
-            szerkeszt.setValueAt(value, 0, colnum);
-
-            return szerkeszt;
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return null;
-        }
-    }
-
-    public void feltolt(String query, boolean infobox) {
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-
-            String driver = "com.mysql.jdbc.driver";
-            String url = "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8";
-            String username = "plan";
-            String password = "plan500";
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url, username, password);
-            stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null) {
-                    conn.close();
-                }
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-
-    }
-
-    public void createtemp(String query, boolean infobox) {
-
-        Statement stmt = null;
-        try {
-
-            String driver = "com.mysql.jdbc.driver";
-            String url = "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8";
-            String username = "plan";
-            String password = "plan500";
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url, username, password);
-            stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-
-        }
+        st.executeUpdate(query);
 
     }
 
@@ -145,53 +54,16 @@ public class PlanConnect {
 
         try {
             if (conn != null) {
-                this.rs.close();
+
                 this.conn.close();
+            }
+
+            if (rs != null) {
+                this.rs.close();
             }
         } catch (SQLException ex) {
             Logger.getLogger(PlanConnect.class.getName()).log(Level.SEVERE, null, ex);
 
-        }
-
-    }
-
-    public void feltolt1(String query, boolean infobox) {
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-
-            String driver = "com.mysql.jdbc.driver";
-            String url = "jdbc:mysql://143.116.140.114:3306/planningdb?CharSet=utf8mb4";
-            String username = "plan";
-            String password = "plan500";
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(url, username, password);
-            stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null) {
-                    conn.close();
-                }
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
         }
 
     }

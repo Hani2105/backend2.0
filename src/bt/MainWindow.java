@@ -7,6 +7,7 @@ package bt;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,19 +28,20 @@ public class MainWindow extends javax.swing.JFrame {
     public ErrorPanel error = new ErrorPanel(this, true);
     public InfoPanel info = new InfoPanel(this, true);
     public LoginScreen ls = new LoginScreen(this, rootPaneCheckingEnabled, this);
-    public LoaderPanel lp = new LoaderPanel(this, false);
+    public LoaderPanel lp = new LoaderPanel(this, false, this);
 
     //a panel szelessege es magassaga
 //inicializálás
-    public MainWindow() throws IOException {
-//        new CloseTabIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/close.png")));
+    public MainWindow() throws IOException, SQLException, ClassNotFoundException {
+       
         initComponents();
+        pnCommentLeker();
         new IniKezel().iniOlvas(this);
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
         this.setVisible(true);
         ls.setVisible(true);
-        
+
     }
 
     /**
@@ -58,9 +60,8 @@ public class MainWindow extends javax.swing.JFrame {
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jLabel1.setText("jLabel1");
 
@@ -70,13 +71,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         jTabbedPane1.setOpaque(true);
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(1000, 600));
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         jMenuBar2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
 
+        jMenu3.setBackground(new java.awt.Color(102, 153, 255));
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/menu.png"))); // NOI18N
         jMenu3.setText("Menü");
         jMenu3.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
 
+        jMenuItem1.setBackground(new java.awt.Color(102, 153, 255));
         jMenuItem1.setText("Control Panel");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,22 +93,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem1);
 
-        jMenuItem2.setText("Terv lekér");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem2);
-
-        jMenuItem3.setText("Login");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem3);
-
+        jMenuItem4.setBackground(new java.awt.Color(102, 153, 255));
         jMenuItem4.setText("Loader panel");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,6 +101,15 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem4);
+
+        jMenuItem3.setBackground(new java.awt.Color(102, 153, 255));
+        jMenuItem3.setText("Login");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
 
         jMenuBar2.add(jMenu3);
 
@@ -128,28 +130,27 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public static void pnCommentLeker() throws SQLException, ClassNotFoundException {
+        Variables.pnkomment.clear();
+        //letároljuk az összes pnkommentet a variablesbe
+        String query = "select pn_data.PartNumber,pn_data.Comment from pn_data";
+        PlanConnect pc = new PlanConnect();
+        pc.lekerdez(query);
+        while (pc.rs.next()) {
+
+            String[] adatok = new String[2];
+            adatok[0] = pc.rs.getString(1);
+            adatok[1] = pc.rs.getString(2);
+            Variables.pnkomment.add(adatok);
+
+        }
+
+    }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // controlpanel előszedése
         cp.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        //annyi besheetet adunk hozzá amennyi a control panel jlist2 ben van
-        //beszedjuk a jlistpanel2 elemeit egy tömbbe
-//        ArrayList<String> tabok = new ArrayList<>();
-        jTabbedPane1.removeAll();
-        for (int i = 0; i < ControlPanel.jList2.getModel().getSize(); i++) {
-            
-            BeSheet b = new BeSheet(this);
-            b.setName(ControlPanel.jList2.getModel().getElementAt(i));
-            b.getTerv(ControlPanel.jDateChooser1.getDate(), ControlPanel.jDateChooser2.getDate());
-            jTabbedPane1.add(b, b.getName());
-            
-        }
-        
-
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         //login screen
@@ -160,6 +161,18 @@ public class MainWindow extends javax.swing.JFrame {
         // loader panel
         lp.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        //változik a seleted tab
+        lp.tablaTorol();
+        try {
+            lp.adatleker();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * @param args the command line arguments
@@ -195,6 +208,10 @@ public class MainWindow extends javax.swing.JFrame {
                     new MainWindow().setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -205,7 +222,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     public static javax.swing.JTabbedPane jTabbedPane1;

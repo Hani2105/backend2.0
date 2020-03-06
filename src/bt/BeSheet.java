@@ -106,7 +106,7 @@ public class BeSheet extends javax.swing.JPanel {
 
     }
 
-    public void getTerv(Date tol, Date ig) {
+    public void getTerv(Date tol, Date ig) throws SQLException {
         Calendar c = Calendar.getInstance();
         //a datumot be kell formazni stringe
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
