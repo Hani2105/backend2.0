@@ -26,6 +26,7 @@ public class MainWindow extends javax.swing.JFrame {
     public ControlPanel cp = new ControlPanel(this, false, this);
     public SetPlannObjectData spo = new SetPlannObjectData(this, false);
     public ErrorPanel error = new ErrorPanel(this, true);
+    public OkPanel okpanel = new OkPanel(this, false);
     public InfoPanel info = new InfoPanel(this, true);
     public LoginScreen ls = new LoginScreen(this, rootPaneCheckingEnabled, this);
     public LoaderPanel lp = new LoaderPanel(this, false, this);

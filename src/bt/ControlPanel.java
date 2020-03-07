@@ -43,7 +43,6 @@ public class ControlPanel extends javax.swing.JDialog {
         super(parent, modal);
         this.m = m;
         initComponents();
-      
 
     }
 
@@ -70,6 +69,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -158,15 +158,27 @@ public class ControlPanel extends javax.swing.JDialog {
 
         jPanel3.setOpaque(false);
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(557, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 455, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(423, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab2", jPanel3);
@@ -348,6 +360,27 @@ public class ControlPanel extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        //kereső
+        BeSheet b = (BeSheet) m.jTabbedPane1.getSelectedComponent();
+        for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+
+            if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+
+                PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
+                if (!po.getPn().contains(jTextField1.getText()) && !po.getJob().contains(jTextField1.getText())) {
+                    po.setVisible(false);
+
+                } else {
+                    po.setVisible(true);
+
+                }
+
+            }
+
+        }
+    }//GEN-LAST:event_jTextField1KeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -375,19 +408,6 @@ public class ControlPanel extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-////            public void run() {
-////                ControlPanel dialog = new ControlPanel(new javax.swing.JFrame(), true);
-////                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-////                    @Override
-////                    public void windowClosing(java.awt.event.WindowEvent e) {
-////                        System.exit(0);
-////                    }
-////                });
-////                dialog.setVisible(true);
-////            }
-////        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -405,6 +425,7 @@ public class ControlPanel extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
 }

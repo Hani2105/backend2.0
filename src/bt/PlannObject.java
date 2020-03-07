@@ -41,7 +41,7 @@ import javax.swing.plaf.IconUIResource;
  */
 public class PlannObject extends JLabel {
 
-    private Variables.status stat = Variables.status.NotReleased;
+    private Variables.status stat = Variables.status.NotExists;
     public String neve = "";
     private int mousepozx = 0;
     private int mousepozy = 0;
@@ -53,7 +53,7 @@ public class PlannObject extends JLabel {
     private double dbpiros = 0.00;
     private String labeltext = "";
     private String tooltiptext = "";
-    private boolean engineer = false;
+    private double engineer = 0.00;
     private String plannerkomment = "";
     private String komment = "";
     private double idozold = 0.00;
@@ -70,7 +70,7 @@ public class PlannObject extends JLabel {
     private double ciklusido = 0.00;
 
 //construct
-    public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, boolean mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
+    public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
         this.backendSheet = b;
         this.m = m;
         this.ciklusido = ciklusido;
@@ -87,11 +87,10 @@ public class PlannObject extends JLabel {
 
 //tooltip beállítások
         ToolTipManager.sharedInstance().setInitialDelay(500);
-        ToolTipManager.sharedInstance().setDismissDelay(2000);
+        ToolTipManager.sharedInstance().setDismissDelay(5000);
 
 //ikon beállítása
-        setMainIcon(Variables.status.NotReleased);
-
+//        setMainIcon(Variables.status.NotReleased);
 //egér motion hozzáadása
         addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -311,7 +310,6 @@ public class PlannObject extends JLabel {
 
         backendSheet.jPanel1.setPreferredSize(new Dimension(maxx, maxy));
         backendSheet.jPanel2.setPreferredSize(new Dimension(maxx, (int) backendSheet.jPanel2.getPreferredSize().getHeight()));
-
         backendSheet.jPanel1.revalidate();
         repaint();
 
@@ -389,7 +387,7 @@ public class PlannObject extends JLabel {
     }
 
 //mérnöki beállítása
-    public void setEngineer(boolean b) {
+    public void setEngineer(double b) {
         engineer = b;
     }
 //komment beállítása
@@ -423,27 +421,6 @@ public class PlannObject extends JLabel {
     public void setTeny(int teny) {
         this.teny = teny;
         setProducted();
-    }
-// fő ikon beallitasa
-
-    public void setMainIcon(Variables.status stat) {
-
-        switch (stat) {
-
-            case NotReleased:
-                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")));
-                break;
-            case Released:
-                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/released.png")));
-                break;
-            case Complete:
-                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/complete.png")));
-                break;
-            default:
-                this.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")));
-
-        }
-
     }
 
 //a darabszám indikátor számainak kiszámítása
@@ -497,7 +474,7 @@ public class PlannObject extends JLabel {
         return teny;
     }
 
-    public boolean isEngineer() {
+    public double getEngineer() {
         return engineer;
     }
 
@@ -528,7 +505,7 @@ public class PlannObject extends JLabel {
 //
 //        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
 //        setText(labeltext);
-        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font></html>";
+        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
 
         setToolTipText(tooltiptext);
 
@@ -570,7 +547,7 @@ public class PlannObject extends JLabel {
 
         }
 //mérnöki ikon beállítása
-        if (engineer) {
+        if (engineer > 0) {
             Icon engineer = new javax.swing.ImageIcon(getClass().getResource("/pictures/engineer.png"));
             engineer.paintIcon(this, g, (int) this.getSize().getWidth() - 30, this.getHeight() - 7 - engineer.getIconHeight());
 
@@ -613,6 +590,13 @@ public class PlannObject extends JLabel {
                 break;
             case Complete:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/complete.png")).getImage(), 0, 15, null);
+                break;
+            case Skeleton:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/skeleton.png")).getImage(), 0, 15, null);
+                break;
+
+            case NotExists:
+                g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notexists.png")).getImage(), 0, 15, null);
                 break;
             default:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")).getImage(), 0, 15, null);

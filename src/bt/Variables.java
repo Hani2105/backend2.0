@@ -33,7 +33,7 @@ public class Variables {
     public static String user = "";
 
     public static enum status {
-        NotReleased, Released, Complete
+        NotReleased, Released, Complete,Skeleton,NotExists
     };
 
     public static enum viewports {

@@ -458,6 +458,13 @@ public class LoaderPanel extends javax.swing.JDialog {
             }
             try {
                 adatleker();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
                 MainWindow.pnCommentLeker();
             } catch (SQLException ex) {
                 Logger.getLogger(LoaderPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -466,6 +473,7 @@ public class LoaderPanel extends javax.swing.JDialog {
             }
             jTable1.repaint();
             pc.kinyir();
+            m.okpanel.setVisible(true, "Az adatokat felvittük!");
         }
 
 
@@ -522,7 +530,7 @@ public class LoaderPanel extends javax.swing.JDialog {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
-                                PlannObject po = new PlannObject(b, 200, 75, pn, job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", false, 0, ws, Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                PlannObject po = new PlannObject(b, 200, 75, pn, job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws, Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
                                 b.repaint();
                             } catch (Exception ex) {
@@ -596,7 +604,7 @@ public class LoaderPanel extends javax.swing.JDialog {
             wscolumn.setCellEditor(new DefaultCellEditor(WscomboBox));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
