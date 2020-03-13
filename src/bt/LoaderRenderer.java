@@ -19,9 +19,9 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class LoaderRenderer extends DefaultTableCellRenderer {
 
-    LoaderPanel lp;
+    ControlPanel lp;
 
-    public LoaderRenderer(LoaderPanel lp) {
+    public LoaderRenderer(ControlPanel lp) {
         this.lp = lp;
     }
 

@@ -9,10 +9,16 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import static javax.swing.SwingConstants.CENTER;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -63,7 +69,28 @@ public class PlannPopup extends JPopupMenu {
                 rp.fullRePlann(p);
             }
         });
-
+//SFDC
+        JMenuItem Sfdc = new JMenuItem("SFDC lekérése", new javax.swing.ImageIcon(getClass().getResource("/pictures/sfdc.png")));
+        Sfdc.setOpaque(true);
+        Sfdc.setBackground(Variables.plannObjectPopupColor);
+        this.add(Sfdc);
+        Sfdc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               SFDC s = new SFDC(p);
+                try {
+                    s.sfdcLeker();
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SAXException ex) {
+                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
 }

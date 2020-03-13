@@ -5,26 +5,42 @@
  */
 package bt;
 
-import java.awt.Color;
+import com.toedter.calendar.JDateChooserCellEditor;
+import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.List;
+import static java.lang.reflect.Array.set;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
-import static java.util.concurrent.TimeUnit.DAYS;
+import java.sql.Statement;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 
 /**
  *
@@ -33,16 +49,25 @@ import org.joda.time.LocalDate;
 public class ControlPanel extends javax.swing.JDialog {
 
     /**
-     * Creates new form ControlPanel
+     * Creates new form LoaderPanel
      */
     int x;
     int y;
+    //a besheethez tartozó adatok
+    ArrayList<String[]> adatok = new ArrayList<>();
+    //berakjuk az adatokat egy arraybe, ha nincs benne
+    ArrayList<String> pnlist = new ArrayList<>();
+    ArrayList<String> wslist = new ArrayList<>();
     MainWindow m;
 
     public ControlPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
         super(parent, modal);
-        this.m = m;
+
         initComponents();
+        this.jTable1.setDefaultRenderer(Object.class, new LoaderRenderer(this));
+        jScrollPane1.getViewport().setOpaque(false);
+        jScrollPane2.getViewport().setOpaque(false);
+        this.m = m;
 
     }
 
@@ -56,26 +81,43 @@ public class ControlPanel extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel2 = new ControlPanelBackground();
-        UIManager.put("TabbedPane.contentOpaque", false);
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel4 = new LoaderPanelBackground();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
-        jLabel4 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jPanel1 = new LoaderPanelBackground();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new LoaderPanelBackground();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Control panel");
         setUndecorated(true);
-        setOpacity(0.95F);
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 formMouseDragged(evt);
@@ -89,30 +131,271 @@ public class ControlPanel extends javax.swing.JDialog {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Control Panel", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP));
 
-        jPanel1.setOpaque(false);
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         jList1.setToolTipText("Jelöld ki a cellákat, majd a nyillal egyszerre tedd át őket!");
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane3.setViewportView(jList1);
 
-        jScrollPane2.setViewportView(jList2);
+        jLabel5.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText(">>");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
 
-        jLabel2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jScrollPane4.setViewportView(jList2);
+
+        jDateChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tól"));
+
+        jDateChooser2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ig"));
+
+        jLabel6.setText("Lekérdez");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+
+        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder("Kereső"));
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jCheckBox1.setText("SFDC, JOB figyelés!");
+        jCheckBox1.setToolTipText("Ha be van kapcsolva, a megvalósulás kitöltésénél figyelembe vesszük a JOB számot is!");
+
+        jCheckBox2.setText("SFDC, first pass only!");
+        jCheckBox2.setToolTipText("Ha be van kapcsolva, csak a first pass mennyiséget vesszük figyelembe!");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jSeparator3)
+                    .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                    .addComponent(jTextField1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(327, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox2)))
+                .addGap(0, 132, Short.MAX_VALUE))
+            .addComponent(jSeparator2)
+        );
+
+        jTabbedPane1.addTab("Lekérdezések", jPanel4);
+
+        jScrollPane1.setOpaque(false);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "JOB", "PartNumber", "WorkStation", "Qty", "Start date", "CT (DB/h)", "Komment", "M"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setOpaque(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(135);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(135);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(135);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(135);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(80);
+            jTable1.getColumnModel().getColumn(6).setPreferredWidth(135);
+            jTable1.getColumnModel().getColumn(7).setResizable(false);
+            jTable1.getColumnModel().getColumn(7).setPreferredWidth(5);
+        }
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 51, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText(">>");
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/tervplus.png"))); // NOI18N
+        jLabel2.setToolTipText("Tervek hozzáadása");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 51, 51));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Jogosultságod: Nem vagy bejelentkezve!");
-
-        jLabel4.setText("Lekérdez");
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/tablatorles.png"))); // NOI18N
+        jLabel3.setToolTipText("Tábla törlése!");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                jLabel3MouseClicked(evt);
             }
         });
 
@@ -120,95 +403,146 @@ public class ControlPanel extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(233, 233, 233))
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(252, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("Lekérdezési beállítások", jPanel1);
+        jTabbedPane1.addTab("Tervek hozzáadása", jPanel1);
 
-        jPanel3.setOpaque(false);
+        jScrollPane2.setOpaque(false);
 
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "JOB", "TAB", "TAB", "PN", "TAB", "TAB", "QTY", "TAB", "RELEASED", "TAB", "DATETIME", "*DN"
             }
-        });
+        ));
+        jTable2.setOpaque(false);
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(557, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(423, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab2", jPanel3);
+        jTabbedPane1.addTab("Data loader", jPanel3);
 
-        jLabel1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Műszakvezetői komment:"));
+        jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyReleased(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jTextArea1);
+
+        jScrollPane6.setBorder(javax.swing.BorderFactory.createTitledBorder("Adatok a szakban:"));
+
+        jTextPane1.setContentType("text/html"); // NOI18N
+        jScrollPane6.setViewportView(jTextPane1);
+        jTextPane1.getAccessibleContext().setAccessibleDescription("");
+
+        jScrollPane7.setBorder(javax.swing.BorderFactory.createTitledBorder("Címlista:"));
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane7.setViewportView(jTextArea2);
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/sendmail.gif"))); // NOI18N
+        jLabel7.setToolTipText("Levél küldése!");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane7)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 538, Short.MAX_VALUE))))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel7)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jTabbedPane1.addTab("Műszakjelentés", jPanel5);
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 51, 51));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/close_1.png"))); // NOI18N
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Jogosultságod: Nem vagy bejelentkezve!");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(179, 179, 179)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(215, 215, 215)
+                .addComponent(jLabel1))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jTabbedPane1))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -222,17 +556,197 @@ public class ControlPanel extends javax.swing.JDialog {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(881, 472));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-//felülírjuk a setvisible metódust, hogy frissíteni tudjuk az adatokat
-    @Override
-    public void setVisible(boolean b) {
-        super.setVisible(b);
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        // TODO add your handling code here:
+        this.setLocation(evt.getXOnScreen() - x, evt.getYOnScreen() - y);
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        // TODO add your handling code here:
+        x = evt.getX();
+        y = evt.getY();
+    }//GEN-LAST:event_formMousePressed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        // ha kiválaztjuk a dateloader fület
+        if (jTabbedPane1.getSelectedIndex() == 2) {
+            DateTime now = new org.joda.time.DateTime();
+            String pattern = "dd-MMM-yyyy 00:00:00";
+            org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
+            String most = formatter.print(now);
+//kiszedjuk a betervezett teteleket egy modellbe
+            DefaultTableModel adatmodel = new DefaultTableModel();
+            adatmodel = (DefaultTableModel) jTable1.getModel();
+//csinálunk egy másik modellt a dataloader adatoknak
+            DefaultTableModel loadermodel = new DefaultTableModel();
+            loadermodel = (DefaultTableModel) jTable2.getModel();
+//kinullázzuk bizos ami fix
+            loadermodel.setRowCount(0);
+//elindulunk bejárni az adatmodellt
+            for (int r = 0; r < adatmodel.getRowCount(); r++) {
+//megnezzuk, hogy van e valami irva a JOB helyere, a pn helyere és a qty helyere
+                try {
+                    if (!adatmodel.getValueAt(r, 0).equals("") && !adatmodel.getValueAt(r, 1).equals("") && !adatmodel.getValueAt(r, 3).equals("")) {
+//betesszuk a job ot az elso helyre a loadermodellbe
+                        loadermodel.addRow(new Object[]{adatmodel.getValueAt(r, 0).toString(), "TAB", "TAB", adatmodel.getValueAt(r, 1).toString(), "TAB", "TAB", adatmodel.getValueAt(r, 3).toString(), "TAB", "RELEASED", "TAB", most, "*DN"});
+
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            jTable2.setModel(loadermodel);
+
+        } //ha kiválasztjuk a műszakjelentés fület
+        else if (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Műszakjelentés")) {
+            //bekerjuk a cimlistat
+            try {
+                cimlistabeker();
+                muszakjelentesToControlPanel();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    public void sendMail() {
+        //a muszakjelentes elkuldese
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        //megszerkesztjuk a targyat
+        String subject = "Műszakjelentés " + m.jTabbedPane1.getTitleAt(m.jTabbedPane1.getSelectedIndex()) + " " + b.vtstartime;
+        //kell egy levelkuldo
+        Levelkuldes l = new Levelkuldes(subject, jTextPane1.getText() + b.muszakjelentes, jTextArea2.getText(), "Muszakjelentes@sanmina.com" , m);
+        l.start();
+
     }
 
-    //cella adatok lekérdezése
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        //tervek hozzáadása
+//csak azokat adjuk hozzá, amik benne vannak az adatokban!! (pn,ws,ciklusidő)
+        addTerv();
+
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // ha ráklikkelünk a plusz gombra, adatok felvitele
+
+        if (jTable1.getSelectedColumn() == 7) {
+            PlanConnect pc = null;
+            try {
+                pc = new PlanConnect();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//fel kell tolteni a pn-t a ws-t , ciklusidőt és a kommentet majd
+//pn feltoltese
+            String insertquery = "";
+            try {
+                insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+                m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
+                return;
+            }
+//ws feltoltese
+            try {
+                insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+                m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
+                return;
+            }
+//prodmatrix feltoltese
+            try {
+                insertquery = "insert ignore tc_prodmatrix (id_tc_bepns,id_tc_becells,id_tc_bestations,ciklusido,pk) values ((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'), '" + Double.parseDouble(jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString()) + "',(concat((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'))))\n"
+                        + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+
+                m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
+                return;
+
+            }
+//updatelni kell a kommentet is
+            try {
+                insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
+                pc.st.executeUpdate(insertquery);
+            } catch (Exception e) {
+            }
+            try {
+                adatleker();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                MainWindow.pnCommentLeker();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jTable1.repaint();
+            pc.kinyir();
+            m.okpanel.setVisible(true, "Az adatokat felvittük!");
+        }
+
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        tablaTorol();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        try {
+            //kiszedjuk a listabol a kivalasztott elemeket
+
+            int[] selectedIx = jList1.getSelectedIndices();
+            //létrehozunk egy másik listmodelt
+            DefaultListModel lm = new DefaultListModel();
+            // Get all the selected items using the indices
+            String adattoquery = "";
+            for (int i = 0; i < selectedIx.length; i++) {
+                lm.addElement(jList1.getModel().getElementAt(selectedIx[i]));
+                adattoquery += "'" + jList1.getModel().getElementAt(selectedIx[i]) + "',";
+            }
+            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
+            jList2.setModel(lm);
+            //feltöltjük az adatbázisba
+            //összeszedjük , vel elválasztva
+            PlanConnect pc = new PlanConnect();
+            String query = "select tc_becells.idtc_cells from tc_becells where tc_becells.cellname in (" + adattoquery + ")";
+            pc.lekerdez(query);
+            adattoquery = "";
+            while (pc.rs.next()) {
+
+                adattoquery += pc.rs.getString(1) + ",";
+            }
+            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
+            query = "insert ignore tc_users (tc_users.username , tc_users.cellaids) values ('" + Variables.user + "' , '" + adattoquery + "') on duplicate key update tc_users.cellaids = values(tc_users.cellaids)";
+
+            pc.feltolt(query);
+        } catch (SQLException ex) {
+
+        } catch (ClassNotFoundException ex) {
+
+        }
+    }//GEN-LAST:event_jLabel5MouseClicked
+
     public void getCellas() throws SQLException {
 //lekérdezzük, hogy egyáltalán milyen celláink vannak
         String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
@@ -248,9 +762,9 @@ public class ControlPanel extends javax.swing.JDialog {
             jList1.setModel(listModel);
 
         } catch (SQLException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+
         }
 //lekérdezzük a jelenleg a userhez tartozókat, id val tároljuk!
         query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
@@ -264,70 +778,34 @@ public class ControlPanel extends javax.swing.JDialog {
 
             jList2.setModel(list2);
         } catch (SQLException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+
         }
         pc.kinyir();
     }
 
+    public void muszakjelentesToBesheets() {
+//a muszakjelentes szoveget eltaroljuk a sheeten
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        b.muszakjelentes = "<html><br><h2>További megjegyzés: </h2><br>" + jTextArea1.getText() + "</html>";
 
-    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        // a mozgatáshoz kell
-        x = evt.getX();
-        y = evt.getY();
-    }//GEN-LAST:event_formMousePressed
+    }
 
-    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        // a mozgatás
-        this.setLocation(evt.getXOnScreen() - x, evt.getYOnScreen() - y);
-    }//GEN-LAST:event_formMouseDragged
-
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        // TODO add your handling code here:
-        this.setVisible(false);
-    }//GEN-LAST:event_jLabel1MouseClicked
-
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+    //a muszakjelentes szoveget visszakerjuk a sheetrol
+    public void muszakjelentesToControlPanel() {
         try {
-            //kiszedjuk a listabol a kivalasztott elemeket
-
-            int[] selectedIx = jList1.getSelectedIndices();
-            //létrehozunk egy másik listmodelt
-            DefaultListModel lm = new DefaultListModel();
-            // Get all the selected items using the indices
-            String adattoquery = "";
-            for (int i = 0; i < selectedIx.length; i++) {
-                lm.addElement(jList1.getModel().getElementAt(selectedIx[i]));
-                adattoquery += "'" + jList1.getModel().getElementAt(selectedIx[i]) + "',";
-            }
-            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
-            jList2.setModel(lm);
-//feltöltjük az adatbázisba
-//összeszedjük , vel elválasztva
-            PlanConnect pc = new PlanConnect();
-            String query = "select tc_becells.idtc_cells from tc_becells where tc_becells.cellname in (" + adattoquery + ")";
-            pc.lekerdez(query);
-            adattoquery = "";
-            while (pc.rs.next()) {
-
-                adattoquery += pc.rs.getString(1) + ",";
-            }
-            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
-            query = "insert ignore tc_users (tc_users.username , tc_users.cellaids) values ('" + Variables.user + "' , '" + adattoquery + "') on duplicate key update tc_users.cellaids = values(tc_users.cellaids)";
-
-            pc.feltolt(query);
-        } catch (SQLException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+            jTextArea1.setText(b.muszakjelentes);
+        } catch (Exception e) {
         }
 
-    }//GEN-LAST:event_jLabel2MouseClicked
+    }
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         // terv lekérése
-//lecsekkoljuk, hogy va e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
+        //lecsekkoljuk, hogy va e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
         try {
 
             int diff = Days.daysBetween(new LocalDate(jDateChooser1.getDate()), new LocalDate(jDateChooser2.getDate())).getDays();
@@ -343,43 +821,223 @@ public class ControlPanel extends javax.swing.JDialog {
         }
 
         //annyi besheetet adunk hozzá amennyi a control panel jlist2 ben van
-//        ArrayList<String> tabok = new ArrayList<>();
+        //        ArrayList<String> tabok = new ArrayList<>();
         m.jTabbedPane1.removeAll();
-        for (int i = 0; i < ControlPanel.jList2.getModel().getSize(); i++) {
+        for (int i = 0; i < this.jList2.getModel().getSize(); i++) {
 
             BeSheet b = new BeSheet(m);
-            b.setName(ControlPanel.jList2.getModel().getElementAt(i));
+            b.setName(this.jList2.getModel().getElementAt(i));
             try {
-                b.getTerv(ControlPanel.jDateChooser1.getDate(), ControlPanel.jDateChooser2.getDate());
+                b.getTerv(this.jDateChooser1.getDate(), this.jDateChooser2.getDate());
             } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             m.jTabbedPane1.add(b, b.getName());
 
         }
-
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        //kereső
-        BeSheet b = (BeSheet) m.jTabbedPane1.getSelectedComponent();
-        for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+        // kereső
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        Component[] components = b.jPanel1.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] instanceof PlannObject) {
 
-            if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+                PlannObject po = (PlannObject) components[i];
+                if (!po.getJob().contains(jTextField1.getText()) && !po.getPn().contains(jTextField1.getText())) {
 
-                PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
-                if (!po.getPn().contains(jTextField1.getText()) && !po.getJob().contains(jTextField1.getText())) {
                     po.setVisible(false);
-
                 } else {
                     po.setVisible(true);
-
                 }
 
             }
 
         }
     }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextArea1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyReleased
+        // a muszakjelentes szoveget eltaroljuk a besheeten
+        muszakjelentesToBesheets();
+    }//GEN-LAST:event_jTextArea1KeyReleased
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        //muszakjlelentes elkuldese
+        sendMail();
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    public void cimlistabeker() throws SQLException {
+
+        //behuzzuk a cimlistat
+        String query = "SELECT Muszakjelentes.Cím FROM planningdb.Muszakjelentes";
+        PlanConnect pc = new PlanConnect();
+
+        try {
+            pc.lekerdez(query);
+        } catch (ClassNotFoundException ex) {
+
+        }
+
+        //cimlista string
+        String cimlista = "";
+
+        while (pc.rs.next()) {
+
+            cimlista += pc.rs.getString(1) + ",\n";
+        }
+
+        pc.kinyir();
+
+        //levagjuk az utolso biszbaszt
+        cimlista = cimlista.substring(0, cimlista.length() - 1);
+        //beallitjuk a műszakjelentés szövegeként
+        jTextArea2.setText(cimlista);
+
+    }
+
+    public void tablaTorol() {
+        //kinullázunk mindent a táblán
+        DefaultTableModel model = new DefaultTableModel();
+        model = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+
+            for (int o = 0; o < model.getColumnCount(); o++) {
+
+                model.setValueAt(null, i, o);
+            }
+        }
+
+        jTable1.setModel(model);
+
+    }
+
+    public void addTerv() {
+//a tervek hozzáadása a loaderből
+        //végigmegyünk a loader táblán
+        outerloop:
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            try {
+//azokkal a sorokkal foglalkozunk ahol nem nulla  pn ws qty
+                if (!jTable1.getValueAt(i, 1).toString().equals("") && !jTable1.getValueAt(i, 2).toString().equals("") && Integer.parseInt(jTable1.getValueAt(i, 3).toString()) > 0) {
+//kiszedjük a pn-t és leellenőrizzük, hogy fel van e vive az adatok közé
+                    String pn = jTable1.getValueAt(i, 1).toString().trim();
+                    String ws = jTable1.getValueAt(i, 2).toString().trim();
+                    String job = "";
+                    String startdate = "";
+                    try {
+                        job = jTable1.getValueAt(i, 3).toString().trim();
+                    } catch (Exception e) {
+
+                    }
+                    try {
+                        startdate = jTable1.getValueAt(i, 4).toString().trim();
+                    } catch (Exception e) {
+                    }
+                    for (int c = 0; c < adatok.size(); c++) {
+
+                        if (adatok.get(c)[0].equals(pn) && adatok.get(c)[1].equals(ws)) {
+
+                            BeSheet b = (BeSheet) m.jTabbedPane1.getSelectedComponent();
+                            //System.out.print(b.getName());
+
+//ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
+                            try {
+                                PlannObject po = new PlannObject(b, 200, 75, pn, job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws, Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                b.jPanel1.add(po);
+                                b.repaint();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+
+                            continue outerloop;
+                        }
+
+                    }
+//ha ide eljutunk akkor nem szerepelt ilyen adat, kiirjuk a hibát
+                    m.error.setVisible(true, "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>");
+
+                }
+
+            } catch (Exception e) {
+                // e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void adatleker() throws SQLException, ClassNotFoundException {
+        //a terv hozzáadásához kell
+        new ExcelAdapter(jTable1, this);
+        adatok.clear();
+        pnlist.clear();
+        wslist.clear();
+        try {
+//ki kell deríteni, hogy melyik tab adataira vagyunk kiváncsiak, a selected tab lesz az
+            String tabneve = MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex());
+//kell egy query ami összeszedi az ehhez a tabhoz tartozó pn eket, és állomásokat
+            String query = "select tc_bepns.partnumber , tc_bestations.workstation ,tc_prodmatrix.ciklusido from tc_becells\n"
+                    + "left join tc_prodmatrix on tc_prodmatrix.id_tc_becells = tc_becells.idtc_cells\n"
+                    + "left join tc_bepns on tc_bepns.idtc_bepns = tc_prodmatrix.id_tc_bepns\n"
+                    + "left join tc_bestations on tc_bestations.idtc_bestations = tc_prodmatrix.id_tc_bestations\n"
+                    + "where tc_becells.cellname = '" + tabneve + "' and partnumber is not null and workstation is not null and tc_prodmatrix.pk is not null order by tc_bepns.partnumber asc,  tc_bestations.workstation asc";
+
+            PlanConnect pc = new PlanConnect();
+            pc.lekerdez(query);
+
+            while (pc.rs.next()) {
+
+                if (!pnlist.contains(pc.rs.getString(1))) {
+
+                    pnlist.add(pc.rs.getString(1));
+
+                }
+
+                if (!wslist.contains(pc.rs.getString(2))) {
+
+                    wslist.add(pc.rs.getString(2));
+
+                }
+
+                String[] adatok = new String[3];
+                adatok[0] = pc.rs.getString(1);
+                adatok[1] = pc.rs.getString(2);
+                adatok[2] = pc.rs.getString(3);
+                this.adatok.add(adatok);
+
+            }
+
+            pc.kinyir();
+
+////hozzáadjuk egy comboboxhoz az adatokat
+            JComboBox<String> PncomboBox = new AutoCompleteComboBox(pnlist.toArray());
+            JComboBox<String> WscomboBox = new AutoCompleteComboBox(wslist.toArray());
+            TableColumn pncolumn = jTable1.getColumnModel().getColumn(1);
+            pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
+            TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);
+            wscolumn.setCellEditor(new DefaultCellEditor(WscomboBox));
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        try {
+            adatleker();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ControlPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControlPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -395,37 +1053,71 @@ public class ControlPanel extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControlPanel.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControlPanel.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControlPanel.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControlPanel.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JCheckBox jCheckBox1;
+    public static javax.swing.JCheckBox jCheckBox2;
     public static com.toedter.calendar.JDateChooser jDateChooser1;
     public static com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    public static javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel3;
+    public static javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JList<String> jList1;
     public static javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    public static javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
-
 }

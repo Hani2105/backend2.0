@@ -5,8 +5,7 @@
  */
 package bt;
 
-import static bt.ControlPanel.jDateChooser1;
-import static bt.ControlPanel.jDateChooser2;
+
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +43,11 @@ public class BeSheet extends javax.swing.JPanel {
     //a gyartasi ido adatai
     public double idozold;
     public double idopiros;
+    //a műszakjelentés szövege legyen itt tárolva , ez amit a muszakvezeto ir
+    public String muszakjelentes = "";
+    //kell a vt ideje, hogy melyik adatokat kuldtuk el
+    public String vtstartime = "";
+
 
     //a tab neve lesz, és egyben a terv lekérdezéséhez kell
 //    private String tabneve = "";
@@ -113,7 +117,7 @@ public class BeSheet extends javax.swing.JPanel {
         String stol = dateFormat.format(tol);
         String sig = dateFormat.format(ig);
         //ki kell tenni a vt ket, annyit amennyi a két dátum között van *2 és beállítani a dátumukat
-        int diff = Days.daysBetween(new LocalDate(jDateChooser1.getDate()), new LocalDate(jDateChooser2.getDate())).getDays();
+        int diff = Days.daysBetween(new LocalDate(m.cp.jDateChooser1.getDate()), new LocalDate(m.cp.jDateChooser2.getDate())).getDays();
         c.setTime(tol);
         int x = 0;
 

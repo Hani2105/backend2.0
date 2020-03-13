@@ -23,13 +23,13 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public ControlPanel cp = new ControlPanel(this, false, this);
+    //public ControlPanel cp = new ControlPanel(this, false, this);
     public SetPlannObjectData spo = new SetPlannObjectData(this, false);
     public ErrorPanel error = new ErrorPanel(this, true);
     public OkPanel okpanel = new OkPanel(this, false);
     public InfoPanel info = new InfoPanel(this, true);
     public LoginScreen ls = new LoginScreen(this, rootPaneCheckingEnabled, this);
-    public LoaderPanel lp = new LoaderPanel(this, false, this);
+    public ControlPanel cp = new ControlPanel(this, false, this);
 
     //a panel szelessege es magassaga
 //inicializálás
@@ -60,7 +60,6 @@ public class MainWindow extends javax.swing.JFrame {
         jTabbedPane1 = new TabbedPaneWithCloseIcons();
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -85,17 +84,8 @@ public class MainWindow extends javax.swing.JFrame {
         jMenu3.setText("Menü");
         jMenu3.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
 
-        jMenuItem1.setBackground(new java.awt.Color(102, 153, 255));
-        jMenuItem1.setText("Control Panel");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem1);
-
         jMenuItem4.setBackground(new java.awt.Color(102, 153, 255));
-        jMenuItem4.setText("Loader panel");
+        jMenuItem4.setText("Control panel");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -148,11 +138,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     }
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // controlpanel előszedése
-        cp.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         //login screen
         ls.setVisible(true);
@@ -160,14 +145,18 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // loader panel
-        lp.setVisible(true);
+        cp.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         //változik a seleted tab
-        lp.tablaTorol();
+        cp.tablaTorol();
         try {
-            lp.adatleker();
+            cp.adatleker();
+//a control panelen kitoltjuk a muszakjelentest
+            cp.muszakjelentesToControlPanel();
+//kitoroljuk az adatokat h ne legyen zavaro
+            cp.jTextPane1.setText("");
         } catch (SQLException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -222,7 +211,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     public static javax.swing.JTabbedPane jTabbedPane1;

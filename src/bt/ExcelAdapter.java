@@ -19,13 +19,13 @@ public class ExcelAdapter implements ActionListener {
     private Clipboard system;
     private StringSelection stsel;
     private JTable jTable1;
-    private LoaderPanel l;
+    private ControlPanel l;
 
 /// ** 
 //* The Excel Adapter is constructed with a JTable on which it enables 
 //* Copy-Paste and acts as a Clipboard listener. 
 //* / 
-    public ExcelAdapter(JTable myJTable, LoaderPanel l) {
+    public ExcelAdapter(JTable myJTable, ControlPanel l) {
         jTable1 = myJTable;
         this.l = l;
         KeyStroke copy = KeyStroke.getKeyStroke(KeyEvent.VK_C,

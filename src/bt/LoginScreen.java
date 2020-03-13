@@ -5,7 +5,7 @@
  */
 package bt;
 
-import static bt.ControlPanel.jList2;
+
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -77,7 +77,7 @@ public class LoginScreen extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 51, 51));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("X");
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/close_1.png"))); // NOI18N
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
@@ -141,7 +141,7 @@ public class LoginScreen extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(424, 140));
@@ -174,7 +174,7 @@ public class LoginScreen extends javax.swing.JDialog {
                 if (!universal.equals("true")) {
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/zartlakat.jpg")));
                     m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
-                    m.cp.jLabel3.setText("Jogosultságod: Nem vagy bejelentkezve!");
+                    m.cp.jLabel4.setText("Jogosultságod: Nem vagy bejelentkezve!");
                     Variables.planner = 0;
 
                     return;
@@ -197,7 +197,7 @@ public class LoginScreen extends javax.swing.JDialog {
                 if (poz == 1 || poz == 2 || poz == 4) {
                     Variables.planner = 1;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel3.setText("Bejelentkezve: " + Variables.user + " mint planner!");
+                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint planner!");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     t.start();
 //ha nincs az adatbázisban de az universal login jó (perm adatázis)
@@ -205,7 +205,7 @@ public class LoginScreen extends javax.swing.JDialog {
 
                     Variables.planner = 0;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel3.setText("Bejelentkezve: " + Variables.user + " csak megtekintésre!");
+                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " csak megtekintésre!");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     t.start();
 
@@ -213,7 +213,7 @@ public class LoginScreen extends javax.swing.JDialog {
 //ha bennt van a permben de nem 0 és nem 1 ,2 ,4 es a pizija
                     Variables.planner = 2;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel3.setText("Bejelentkezve: " + Variables.user + " mint műszakvezető!");
+                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint műszakvezető!");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     t.start();
                 }
