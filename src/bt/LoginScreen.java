@@ -176,7 +176,7 @@ public class LoginScreen extends javax.swing.JDialog {
                     m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
                     m.cp.jLabel4.setText("Jogosultságod: Nem vagy bejelentkezve!");
                     Variables.planner = 0;
-
+                    MainWindow.j.kezel();
                     return;
 
                 }
@@ -198,6 +198,7 @@ public class LoginScreen extends javax.swing.JDialog {
                     Variables.planner = 1;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
                     m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint planner!");
+                    MainWindow.j.kezel();
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     t.start();
 //ha nincs az adatbázisban de az universal login jó (perm adatázis)
@@ -207,6 +208,7 @@ public class LoginScreen extends javax.swing.JDialog {
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
                     m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " csak megtekintésre!");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
+                    MainWindow.j.kezel();
                     t.start();
 
                 } else {
@@ -215,6 +217,7 @@ public class LoginScreen extends javax.swing.JDialog {
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
                     m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint műszakvezető!");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
+                    MainWindow.j.kezel();
                     t.start();
                 }
 
@@ -223,6 +226,7 @@ public class LoginScreen extends javax.swing.JDialog {
             } catch (Exception e) {
 //                m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
                 Variables.planner = 0;
+                MainWindow.j.kezel();
                 return;
 
             }

@@ -30,6 +30,7 @@ public class MainWindow extends javax.swing.JFrame {
     public InfoPanel info = new InfoPanel(this, true);
     public LoginScreen ls = new LoginScreen(this, rootPaneCheckingEnabled, this);
     public ControlPanel cp = new ControlPanel(this, false, this);
+    public static JogosultsagKezelo j;
 
     //a panel szelessege es magassaga
 //inicializálás
@@ -38,6 +39,7 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         pnCommentLeker();
         new IniKezel().iniOlvas(this);
+        j = new JogosultsagKezelo(cp, spo);
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
         this.setVisible(true);

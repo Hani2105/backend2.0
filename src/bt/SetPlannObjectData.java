@@ -29,10 +29,11 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         
     }
     
-    public void setVisible(boolean b, PlannObject p, Point point) {
+    public void setVisible(boolean b, PlannObject p/*, Point point*/) {
         super.setVisible(b);
-//visszaállítjuk az összes plannobkectet az eredeti színre
 
+//beállítjuk hogy ki van jelölve a po
+        p.repaint();
         jTextField1.setText(p.getPn());
         jTextField2.setText(p.getJob());
         jTextField3.setText(String.valueOf(p.getTerv()));
@@ -42,12 +43,10 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         jTextField6.setText(new DecimalFormat("#.##").format((p.getGyartasiido())));
         jTextField8.setText(p.getWorkStation());
         jSlider1.setValue((int) p.getEngineer());
-
-
-     
         
         this.p = p;
         this.setLocation(p.getLocationOnScreen().x + 200, p.getLocationOnScreen().y);
+
         //this.p.setBackground(Variables.plannObjectSelectedColor);
 
     }
@@ -177,13 +176,12 @@ public class SetPlannObjectData extends javax.swing.JDialog {
                     .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -304,9 +302,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
 //a mérnöki beállítása
         p.setEngineer(jSlider1.getValue());
 
-       
 //gyártási idő beállítása
-
         try {
             p.setOsszGyartasiIdo(Double.parseDouble(jTextField6.getText()));
         } catch (Exception e) {
@@ -338,9 +334,13 @@ public class SetPlannObjectData extends javax.swing.JDialog {
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         // TODO add your handling code here:
+
         this.setVisible(false);
+
     }//GEN-LAST:event_jLabel4MouseClicked
 
+ 
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //terv törlése
         p.getbackendSheet().jPanel1.remove(p);
@@ -363,7 +363,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    public static javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -375,14 +375,14 @@ public class SetPlannObjectData extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSlider jSlider1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    public static javax.swing.JSlider jSlider1;
+    public static javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextField jTextField2;
+    public static javax.swing.JTextField jTextField3;
+    public static javax.swing.JTextField jTextField4;
+    public static javax.swing.JTextField jTextField5;
+    public static javax.swing.JTextField jTextField6;
+    public static javax.swing.JTextField jTextField7;
+    public static javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 }

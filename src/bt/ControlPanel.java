@@ -626,7 +626,7 @@ public class ControlPanel extends javax.swing.JDialog {
         //megszerkesztjuk a targyat
         String subject = "Műszakjelentés " + m.jTabbedPane1.getTitleAt(m.jTabbedPane1.getSelectedIndex()) + " " + b.vtstartime;
         //kell egy levelkuldo
-        Levelkuldes l = new Levelkuldes(subject, jTextPane1.getText() + b.muszakjelentes, jTextArea2.getText(), "Muszakjelentes@sanmina.com" , m);
+        Levelkuldes l = new Levelkuldes(subject, jTextPane1.getText() + b.muszakjelentes, jTextArea2.getText(), "Muszakjelentes@sanmina.com", m);
         l.start();
 
     }
@@ -635,7 +635,9 @@ public class ControlPanel extends javax.swing.JDialog {
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         //tervek hozzáadása
 //csak azokat adjuk hozzá, amik benne vannak az adatokban!! (pn,ws,ciklusidő)
-        addTerv();
+        if (jLabel2.isEnabled()) {
+            addTerv();
+        }
 
     }//GEN-LAST:event_jLabel2MouseClicked
 
@@ -1089,7 +1091,7 @@ public class ControlPanel extends javax.swing.JDialog {
     public static com.toedter.calendar.JDateChooser jDateChooser1;
     public static com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    public static javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     public static javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

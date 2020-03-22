@@ -39,7 +39,7 @@ public class PlannPopup extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                m.spo.setVisible(true, p, p.getLocation());
+                m.spo.setVisible(true, p);
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
