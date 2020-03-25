@@ -66,8 +66,10 @@ public class PlannObject extends JLabel {
     private String workStation = "";
     private BeSheet backendSheet;
     private ImageIcon img;
+    private ImageIcon selectedimage;
     private MainWindow m;
     private double ciklusido = 0.00;
+    private boolean selected = false;
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -97,8 +99,10 @@ public class PlannObject extends JLabel {
             public void mouseDragged(MouseEvent e) {
 
                 if (e.getComponent() instanceof JLabel) {
-//a plannobject mozgatása
-                    e.getComponent().setLocation(e.getXOnScreen() - (int) getParent().getLocationOnScreen().getX() - mousepozx, e.getYOnScreen() - (int) getParent().getLocationOnScreen().getY() - mousepozy);
+//a plannobject mozgatása/ ha planner
+                    if (Variables.planner == 1) {
+                        e.getComponent().setLocation(e.getXOnScreen() - (int) getParent().getLocationOnScreen().getX() - mousepozx, e.getYOnScreen() - (int) getParent().getLocationOnScreen().getY() - mousepozy);
+                    }
 //helyetcserélünk ha kell
                     //helycsere();
 
@@ -141,6 +145,8 @@ public class PlannObject extends JLabel {
                     }
 
                 }
+//kijelölünk
+                kijelol();
             }
 
             @Override
@@ -168,6 +174,8 @@ public class PlannObject extends JLabel {
         });
 //a háttér beállítása
         img = new javax.swing.ImageIcon(getClass().getResource("/pictures/poback.jpg"));
+//a háttér beállítása ha ki van jlölve
+        selectedimage = new javax.swing.ImageIcon(getClass().getResource("/pictures/csutortok.jpg"));
 
 //popupmenu csinálása
         JPopupMenu popupMenu = new PlannPopup(this, m);
@@ -190,6 +198,39 @@ public class PlannObject extends JLabel {
 //keresse meg a helyét
         setStartLocation();
 
+    }
+//kijelöli a po-t és a többin megszünteti a kijelölest
+
+    public void kijelol() {
+//összeszedjük az összes po-t az összes sheeten és false ra állítjuk a kijelölést
+        for (int i = 0; i < m.jTabbedPane1.getTabCount(); i++) {
+//kiszedjük a besheeteket
+            BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(i);
+//bejárjuk a komponenseit és ha po a selectedet false ra állítom
+            for (int p = 0; p < b.jPanel1.getComponentCount(); p++) {
+                if (b.jPanel1.getComponent(p) instanceof PlannObject) {
+                    PlannObject po = (PlannObject) b.jPanel1.getComponent(p);
+                    po.setSelected(false);
+
+                }
+
+            }
+
+        }
+        //a thist pedig beállítom true ra
+        this.setSelected(true);
+//a po setupot panelt újrahívjuk, de csak akkor ha most is visible
+        if (m.spo.isVisible()) {
+            m.spo.setVisible(true, this);
+        }
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public BeSheet getbackendSheet() {
@@ -516,7 +557,12 @@ public class PlannObject extends JLabel {
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        g.drawImage(img.getImage(), 0, 0, null);
+        if (!this.isSelected()) {
+            g.drawImage(img.getImage(), 0, 0, null);
+        } else if (this.isSelected()) {
+
+            g.drawImage(selectedimage.getImage(), 0, 0, null);
+        }
         Graphics2D g2d = (Graphics2D) g;
 // a darabszám indikátor megrajzolása
 //zöld

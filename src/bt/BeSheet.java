@@ -142,10 +142,10 @@ public class BeSheet extends javax.swing.JPanel {
                 + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
                 + "left join tc_prodmatrix on tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns\n"
                 + "where tc_terv.active = 2 \n"
-                + "and tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns \n"
-                + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
+//                + "and tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns \n"
+//                + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
                 + "and tc_terv.date between '" + stol + "' and '" + sig + "'\n"
-                + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
+//                + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
                 + "and tc_becells.cellname = '" + getName() + "'";
         PlanConnect pc = new PlanConnect();
         try {

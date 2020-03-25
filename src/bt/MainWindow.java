@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 /**
  *
@@ -28,14 +30,14 @@ public class MainWindow extends javax.swing.JFrame {
     public ErrorPanel error = new ErrorPanel(this, true);
     public OkPanel okpanel = new OkPanel(this, false);
     public InfoPanel info = new InfoPanel(this, true);
-    public LoginScreen ls = new LoginScreen(this, rootPaneCheckingEnabled, this);
+    public LoginScreen ls = new LoginScreen(this, false, this);
     public ControlPanel cp = new ControlPanel(this, false, this);
     public static JogosultsagKezelo j;
 
     //a panel szelessege es magassaga
 //inicializálás
-    public MainWindow() throws IOException, SQLException, ClassNotFoundException {
-       
+    public MainWindow() throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new MetalLookAndFeel());
         initComponents();
         pnCommentLeker();
         new IniKezel().iniOlvas(this);
@@ -203,6 +205,8 @@ public class MainWindow extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
