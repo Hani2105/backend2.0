@@ -109,4 +109,43 @@ public class RePlann {
 
     }
 
+    public void eloreGyartas(PlannObject p) {
+//felszedjük az összes po-t a sheetről
+        ArrayList<PlannObject> polista = new ArrayList<>();
+//ezt az egészet addig csináljuk míg p tény nagyobb p terv vagy végig nem érünk az összes vt-n
+        while (p.getTeny() > p.getTerv()) {
+            //megnézzük, hogy mi a következő vt tőle jobbra
+            for (int i = p.getLocation().x + p.getWidth(); i < p.getbackendSheet().jPanel2.getPreferredSize().width; i++) {
+//ha megtaláljuk a következő vt-t
+                if (p.getbackendSheet().jPanel2.getComponentAt(i, 0) instanceof VerticalTimeline) {
+                    VerticalTimeline vt = (VerticalTimeline) p.getbackendSheet().jPanel2.getComponentAt(i, 0);
+//megkeressük a hozzá tartozó po-kat
+                    for (int n = 0; n < p.getbackendSheet().jPanel1.getComponentCount(); n++) {
+                        if (p.getbackendSheet().jPanel1.getComponent(n) instanceof PlannObject) {
+                            PlannObject po = (PlannObject) p.getbackendSheet().jPanel1.getComponent(n);
+                            //kiszedtünk egy po-t, most meg kell vizsgálni, hogy ez a jövőben van e, és egyeznek e az adatok és van visszamaradt mennyiség (terv-tény) > 0
+                            if (p.getLocation().x < po.getLocation().x && po.getPn().equals(p.getPn()) && po.getJob().equals(p.getJob()) && po.getWorkStation().equals(p.getWorkStation()) && ((po.getTerv() - po.getTeny()) > 0) && po.getStartdate().contains(vt.getVtstartdate())) {
+//indítunk egy ciklust és elkezdjük növelni a p tervét amíg el nem éri a tényt, közben csökkentjük a po tervét, de megállunk akkor is ha po terve eléri a po tényét vagy a nullát
+                                while (p.getTerv() != p.getTeny() || po.getTerv() != po.getTeny() || po.getTerv() == 0) {
+
+                                    p.setTerv(p.getTerv() + 1);
+                                    po.setTerv(po.getTerv() - 1);
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+            }
+            //végigértünk a teljes backend sheeten
+            p.getbackendSheet().repaint();
+            return;
+
+        }
+
+        p.getbackendSheet().repaint();
+
+    }
+
 }

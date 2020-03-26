@@ -54,10 +54,10 @@ public class ControlPanel extends javax.swing.JDialog {
     int x;
     int y;
     //a besheethez tartozó adatok
-    ArrayList<String[]> adatok = new ArrayList<>();
+//    ArrayList<String[]> adatok = new ArrayList<>();
     //berakjuk az adatokat egy arraybe, ha nincs benne
-    ArrayList<String> pnlist = new ArrayList<>();
-    ArrayList<String> wslist = new ArrayList<>();
+//    ArrayList<String> pnlist = new ArrayList<>();
+//    ArrayList<String> wslist = new ArrayList<>();
     MainWindow m;
 
     public ControlPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
@@ -609,12 +609,8 @@ public class ControlPanel extends javax.swing.JDialog {
         } //ha kiválasztjuk a műszakjelentés fület
         else if (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Műszakjelentés")) {
             //bekerjuk a cimlistat
-            try {
-                cimlistabeker();
-                muszakjelentesToControlPanel();
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            cimlistabeker();
+            muszakjelentesToControlPanel();
 
         }
 
@@ -648,62 +644,56 @@ public class ControlPanel extends javax.swing.JDialog {
             PlanConnect pc = null;
             try {
                 pc = new PlanConnect();
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
 //fel kell tolteni a pn-t a ws-t , ciklusidőt és a kommentet majd
 //pn feltoltese
-            String insertquery = "";
-            try {
-                insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
-                pc.st.executeUpdate(insertquery);
-            } catch (Exception e) {
-                m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
-                return;
-            }
+                String insertquery = "";
+                try {
+                    insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
+                    pc.st.executeUpdate(insertquery);
+                } catch (Exception e) {
+                    m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
+                    return;
+                }
 //ws feltoltese
-            try {
-                insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
-                pc.st.executeUpdate(insertquery);
-            } catch (Exception e) {
-                m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
-                return;
-            }
+                try {
+                    insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
+                    pc.st.executeUpdate(insertquery);
+                } catch (Exception e) {
+                    m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
+                    return;
+                }
 //prodmatrix feltoltese
-            try {
-                insertquery = "insert ignore tc_prodmatrix (id_tc_bepns,id_tc_becells,id_tc_bestations,ciklusido,pk) values ((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'), '" + Double.parseDouble(jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString()) + "',(concat((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'))))\n"
-                        + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
-                pc.st.executeUpdate(insertquery);
-            } catch (Exception e) {
+                try {
+                    insertquery = "insert ignore tc_prodmatrix (id_tc_bepns,id_tc_becells,id_tc_bestations,ciklusido,pk) values ((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'), '" + Double.parseDouble(jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString()) + "',(concat((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'))))\n"
+                            + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
+                    pc.st.executeUpdate(insertquery);
+                } catch (Exception e) {
 
-                m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
-                return;
+                    m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
+                    return;
 
-            }
+                }
 //updatelni kell a kommentet is
-            try {
-                insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
-                pc.st.executeUpdate(insertquery);
-            } catch (Exception e) {
-            }
-            try {
-                adatleker();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
+                try {
+                    insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
+                    pc.st.executeUpdate(insertquery);
+                } catch (Exception e) {
+                }
+                adatlekerBeSheetrol();
                 MainWindow.pnCommentLeker();
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+                jTable1.repaint();
+
+                m.okpanel.setVisible(true, "Az adatokat felvittük!");
+            } catch (Exception e) {
+            } finally {
+                pc.kinyir();
+
             }
-            jTable1.repaint();
-            pc.kinyir();
-            m.okpanel.setVisible(true, "Az adatokat felvittük!");
+            //frissítjük az adatokat a backendsheeten
+            BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+            b.adatleker(b.getName());
+            
         }
 
 
@@ -714,6 +704,7 @@ public class ControlPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        PlanConnect pc = null;
         try {
             //kiszedjuk a listabol a kivalasztott elemeket
 
@@ -730,7 +721,7 @@ public class ControlPanel extends javax.swing.JDialog {
             jList2.setModel(lm);
             //feltöltjük az adatbázisba
             //összeszedjük , vel elválasztva
-            PlanConnect pc = new PlanConnect();
+            pc = new PlanConnect();
             String query = "select tc_becells.idtc_cells from tc_becells where tc_becells.cellname in (" + adattoquery + ")";
             pc.lekerdez(query);
             adattoquery = "";
@@ -742,49 +733,60 @@ public class ControlPanel extends javax.swing.JDialog {
             query = "insert ignore tc_users (tc_users.username , tc_users.cellaids) values ('" + Variables.user + "' , '" + adattoquery + "') on duplicate key update tc_users.cellaids = values(tc_users.cellaids)";
 
             pc.feltolt(query);
+
         } catch (SQLException ex) {
 
         } catch (ClassNotFoundException ex) {
 
+        } finally {
+            pc.kinyir();
         }
+
     }//GEN-LAST:event_jLabel5MouseClicked
 
-    public void getCellas() throws SQLException {
+    public void getCellas() {
 //lekérdezzük, hogy egyáltalán milyen celláink vannak
         String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
-        PlanConnect pc = new PlanConnect();
+        PlanConnect pc = null;
         try {
-            pc.lekerdez(query);
-            DefaultListModel listModel = new DefaultListModel();
-            while (pc.rs.next()) {
+            pc = new PlanConnect();
 
-                listModel.addElement(pc.rs.getString(1));
+            try {
+                pc.lekerdez(query);
+                DefaultListModel listModel = new DefaultListModel();
+                while (pc.rs.next()) {
+
+                    listModel.addElement(pc.rs.getString(1));
+                }
+
+                jList1.setModel(listModel);
+
+            } catch (SQLException ex) {
+
+            } catch (ClassNotFoundException ex) {
+
             }
-
-            jList1.setModel(listModel);
-
-        } catch (SQLException ex) {
-
-        } catch (ClassNotFoundException ex) {
-
-        }
 //lekérdezzük a jelenleg a userhez tartozókat, id val tároljuk!
-        query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
-        try {
-            pc.lekerdez(query);
-            DefaultListModel list2 = new DefaultListModel();
-            while (pc.rs.next()) {
+            query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
+            try {
+                pc.lekerdez(query);
+                DefaultListModel list2 = new DefaultListModel();
+                while (pc.rs.next()) {
 
-                list2.addElement(pc.rs.getString(1));
+                    list2.addElement(pc.rs.getString(1));
+                }
+
+                jList2.setModel(list2);
+            } catch (SQLException ex) {
+
+            } catch (ClassNotFoundException ex) {
+
             }
-
-            jList2.setModel(list2);
-        } catch (SQLException ex) {
-
-        } catch (ClassNotFoundException ex) {
-
+        } catch (Exception e) {
+        } finally {
+            pc.kinyir();
         }
-        pc.kinyir();
+
     }
 
     public void muszakjelentesToBesheets() {
@@ -827,13 +829,9 @@ public class ControlPanel extends javax.swing.JDialog {
         m.jTabbedPane1.removeAll();
         for (int i = 0; i < this.jList2.getModel().getSize(); i++) {
 
-            BeSheet b = new BeSheet(m);
+            BeSheet b = new BeSheet(m,this.jList2.getModel().getElementAt(i));
             b.setName(this.jList2.getModel().getElementAt(i));
-            try {
-                b.getTerv(this.jDateChooser1.getDate(), this.jDateChooser2.getDate());
-            } catch (SQLException ex) {
-//                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            b.getTerv(this.jDateChooser1.getDate(), this.jDateChooser2.getDate());//                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
             m.jTabbedPane1.add(b, b.getName());
 
         }
@@ -869,27 +867,36 @@ public class ControlPanel extends javax.swing.JDialog {
         sendMail();
     }//GEN-LAST:event_jLabel7MouseClicked
 
-    public void cimlistabeker() throws SQLException {
+    public void cimlistabeker() {
 
         //behuzzuk a cimlistat
         String query = "SELECT Muszakjelentes.Cím FROM planningdb.Muszakjelentes";
-        PlanConnect pc = new PlanConnect();
-
-        try {
-            pc.lekerdez(query);
-        } catch (ClassNotFoundException ex) {
-
-        }
-
+        PlanConnect pc = null;
         //cimlista string
         String cimlista = "";
+        try {
+            pc = new PlanConnect();
 
-        while (pc.rs.next()) {
+            try {
+                pc.lekerdez(query);
+            } catch (ClassNotFoundException ex) {
 
-            cimlista += pc.rs.getString(1) + ",\n";
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                while (pc.rs.next()) {
+
+                    cimlista += pc.rs.getString(1) + ",\n";
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+        } finally {
+            pc.kinyir();
         }
-
-        pc.kinyir();
 
         //levagjuk az utolso biszbaszt
         cimlista = cimlista.substring(0, cimlista.length() - 1);
@@ -916,6 +923,7 @@ public class ControlPanel extends javax.swing.JDialog {
 
     public void addTerv() {
 //a tervek hozzáadása a loaderből
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
         //végigmegyünk a loader táblán
         outerloop:
         for (int i = 0; i < jTable1.getRowCount(); i++) {
@@ -936,12 +944,9 @@ public class ControlPanel extends javax.swing.JDialog {
                         startdate = jTable1.getValueAt(i, 4).toString().trim();
                     } catch (Exception e) {
                     }
-                    for (int c = 0; c < adatok.size(); c++) {
+                    for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
 
-                        if (adatok.get(c)[0].equals(pn) && adatok.get(c)[1].equals(ws)) {
-
-                            BeSheet b = (BeSheet) m.jTabbedPane1.getSelectedComponent();
-                            //System.out.print(b.getName());
+                        if (b.gyarthatosagiadatok.get(c)[0].equals(pn) && b.gyarthatosagiadatok.get(c)[1].equals(ws)) {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
@@ -968,76 +973,26 @@ public class ControlPanel extends javax.swing.JDialog {
 
     }
 
-    public void adatleker() throws SQLException, ClassNotFoundException {
+    public void adatlekerBeSheetrol() {
         //a terv hozzáadásához kell
         new ExcelAdapter(jTable1, this);
-        adatok.clear();
-        pnlist.clear();
-        wslist.clear();
         try {
-//ki kell deríteni, hogy melyik tab adataira vagyunk kiváncsiak, a selected tab lesz az
-            String tabneve = MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex());
-//kell egy query ami összeszedi az ehhez a tabhoz tartozó pn eket, és állomásokat
-            String query = "select tc_bepns.partnumber , tc_bestations.workstation ,tc_prodmatrix.ciklusido from tc_becells\n"
-                    + "left join tc_prodmatrix on tc_prodmatrix.id_tc_becells = tc_becells.idtc_cells\n"
-                    + "left join tc_bepns on tc_bepns.idtc_bepns = tc_prodmatrix.id_tc_bepns\n"
-                    + "left join tc_bestations on tc_bestations.idtc_bestations = tc_prodmatrix.id_tc_bestations\n"
-                    + "where tc_becells.cellname = '" + tabneve + "' and partnumber is not null and workstation is not null and tc_prodmatrix.pk is not null order by tc_bepns.partnumber asc,  tc_bestations.workstation asc";
-
-            PlanConnect pc = new PlanConnect();
-            pc.lekerdez(query);
-
-            while (pc.rs.next()) {
-
-                if (!pnlist.contains(pc.rs.getString(1))) {
-
-                    pnlist.add(pc.rs.getString(1));
-
-                }
-
-                if (!wslist.contains(pc.rs.getString(2))) {
-
-                    wslist.add(pc.rs.getString(2));
-
-                }
-
-                String[] adatok = new String[3];
-                adatok[0] = pc.rs.getString(1);
-                adatok[1] = pc.rs.getString(2);
-                adatok[2] = pc.rs.getString(3);
-                this.adatok.add(adatok);
-
-            }
-
-            pc.kinyir();
-
-////hozzáadjuk egy comboboxhoz az adatokat
-            JComboBox<String> PncomboBox = new AutoCompleteComboBox(pnlist.toArray());
-            JComboBox<String> WscomboBox = new AutoCompleteComboBox(wslist.toArray());
+//hozzáadjuk egy comboboxhoz az adatokat
+            BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+            JComboBox<String> PncomboBox = new AutoCompleteComboBox(b.pnlist.toArray());
+            JComboBox<String> WscomboBox = new AutoCompleteComboBox(b.wslist.toArray());
             TableColumn pncolumn = jTable1.getColumnModel().getColumn(1);
             pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
             TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);
             wscolumn.setCellEditor(new DefaultCellEditor(WscomboBox));
-
         } catch (Exception e) {
-            //e.printStackTrace();
         }
     }
 
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        try {
-            adatleker();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ControlPanel.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlPanel.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
+        adatlekerBeSheetrol();
 
     }
 

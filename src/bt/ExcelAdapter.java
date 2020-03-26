@@ -131,9 +131,10 @@ public class ExcelAdapter implements ActionListener {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex());
             //visszaállítjuk combora
-            JComboBox<String> PncomboBox = new AutoCompleteComboBox(l.pnlist.toArray());
-            JComboBox<String> WscomboBox = new AutoCompleteComboBox(l.wslist.toArray());
+            JComboBox<String> PncomboBox = new AutoCompleteComboBox(b.pnlist.toArray());
+            JComboBox<String> WscomboBox = new AutoCompleteComboBox(b.wslist.toArray());
             pncolumn = jTable1.getColumnModel().getColumn(1);
             pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
             wscolumn = jTable1.getColumnModel().getColumn(2);

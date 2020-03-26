@@ -35,13 +35,13 @@ public class LoaderRenderer extends DefaultTableCellRenderer {
             c.setIcon(null);
 
             if (column == 1 && !table.getValueAt(row, 1).equals("") && !table.getValueAt(row, 2).equals("")) {
-
-                for (int i = 0; i < lp.adatok.size(); i++) {
+            BeSheet bs = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex());
+                for (int i = 0; i < bs.gyarthatosagiadatok.size(); i++) {
 //megnézzük, hogy ugyan ez a felállás létezik e az adatok tömbben
-                    if (lp.adatok.get(i)[0].equals(table.getValueAt(row, 1)) && lp.adatok.get(i)[1].equals(table.getValueAt(row, 2))) {
+                    if (bs.gyarthatosagiadatok.get(i)[0].equals(table.getValueAt(row, 1)) && bs.gyarthatosagiadatok.get(i)[1].equals(table.getValueAt(row, 2))) {
 
                         c.setBackground(Color.green);
-                        table.setValueAt(lp.adatok.get(i)[2], row, 5);
+                        table.setValueAt(bs.gyarthatosagiadatok.get(i)[2], row, 5);
                         break;
                     } else {
                         table.setValueAt(null, row, 5);

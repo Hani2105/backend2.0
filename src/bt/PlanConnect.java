@@ -53,17 +53,21 @@ public class PlanConnect {
     public void kinyir() {
 
         try {
+
+            if (rs != null) {
+                this.rs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             if (conn != null) {
 
                 this.conn.close();
             }
 
-            if (rs != null) {
-                this.rs.close();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PlanConnect.class.getName()).log(Level.SEVERE, null, ex);
-
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
     }

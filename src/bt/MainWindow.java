@@ -125,19 +125,37 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void pnCommentLeker() throws SQLException, ClassNotFoundException {
+    public static void pnCommentLeker() {
         Variables.pnkomment.clear();
         //letároljuk az összes pnkommentet a variablesbe
         String query = "select pn_data.PartNumber,pn_data.Comment from pn_data";
-        PlanConnect pc = new PlanConnect();
-        pc.lekerdez(query);
-        while (pc.rs.next()) {
+        PlanConnect pc = null;
+        try {
+            pc = new PlanConnect();
 
-            String[] adatok = new String[2];
-            adatok[0] = pc.rs.getString(1);
-            adatok[1] = pc.rs.getString(2);
-            Variables.pnkomment.add(adatok);
+            try {
+                pc.lekerdez(query);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                while (pc.rs.next()) {
 
+                    String[] adatok = new String[2];
+                    adatok[0] = pc.rs.getString(1);
+                    adatok[1] = pc.rs.getString(2);
+                    Variables.pnkomment.add(adatok);
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+
+        } finally {
+            pc.kinyir();
         }
 
     }
@@ -155,17 +173,11 @@ public class MainWindow extends javax.swing.JFrame {
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         //változik a seleted tab
         cp.tablaTorol();
-        try {
-            cp.adatleker();
-//a control panelen kitoltjuk a muszakjelentest
-            cp.muszakjelentesToControlPanel();
-//kitoroljuk az adatokat h ne legyen zavaro
-            cp.jTextPane1.setText("");
-        } catch (SQLException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cp.adatlekerBeSheetrol();
+        //a control panelen kitoltjuk a muszakjelentest
+        cp.muszakjelentesToControlPanel();
+        //kitoroljuk az adatokat h ne legyen zavaro
+        cp.jTextPane1.setText("");
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**

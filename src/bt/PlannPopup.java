@@ -69,6 +69,22 @@ public class PlannPopup extends JPopupMenu {
                 rp.fullRePlann(p);
             }
         });
+        
+        //előregyártás
+        JMenuItem eloregyartasMenuItem = new JMenuItem("Előregyártás behúzása", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
+        eloregyartasMenuItem.setOpaque(true);
+        eloregyartasMenuItem.setBackground(Variables.plannObjectPopupColor);
+        this.add(eloregyartasMenuItem);
+        eloregyartasMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RePlann rp = new RePlann();
+                rp.eloreGyartas(p);
+            }
+        });
+        
+        
+        
 //SFDC
         JMenuItem Sfdc = new JMenuItem("SFDC lekérése", new javax.swing.ImageIcon(getClass().getResource("/pictures/sfdc.png")));
         Sfdc.setOpaque(true);

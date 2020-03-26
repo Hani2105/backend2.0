@@ -5,7 +5,6 @@
  */
 package bt;
 
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -151,12 +150,15 @@ public class LoginScreen extends javax.swing.JDialog {
     private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
         // login
         // jelszo ellenorzese
+
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            PlanConnect pc = null;
             Variables.user = jTextField1.getText();
             String password = String.valueOf(jPasswordField1.getPassword());
 
             //az universal login próba
             URL oracle = null;
+
             try {
                 oracle = new URL("http://143.116.140.120/api/auth/authlib.php?username=" + Variables.user + "&password=" + URLEncoder.encode(password, "UTF-8") + "");
                 BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
@@ -183,7 +185,7 @@ public class LoginScreen extends javax.swing.JDialog {
 
 //ha ide jutunk akkor meg kell vizsgálni, hogy a planning adatbázisban milyen jogosultséga van a mókusnak
                 String query = "SELECT job_positions_id as poz  FROM planningdb.perm where perm.system = '" + Variables.user + "'";
-                PlanConnect pc = new PlanConnect();
+                pc = new PlanConnect();
                 pc.lekerdez(query);
                 int poz = 0;
                 while (pc.rs.next()) {
@@ -191,8 +193,6 @@ public class LoginScreen extends javax.swing.JDialog {
                     poz = pc.rs.getInt("poz");
 
                 }
-
-                pc.kinyir();
 
                 if (poz == 1 || poz == 2 || poz == 4) {
                     Variables.planner = 1;
@@ -229,9 +229,14 @@ public class LoginScreen extends javax.swing.JDialog {
                 MainWindow.j.kezel();
                 return;
 
+            } finally {
+
+                pc.kinyir();
             }
 
         }
+
+
     }//GEN-LAST:event_jPasswordField1KeyPressed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked

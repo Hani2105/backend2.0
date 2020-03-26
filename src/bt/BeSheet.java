@@ -5,7 +5,6 @@
  */
 package bt;
 
-
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,9 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JScrollBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.TableColumn;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
@@ -37,6 +39,10 @@ public class BeSheet extends javax.swing.JPanel {
      */
     //kell egy lista az adatoknak amiben a gyártásra vonatkozó adatokat tároljuk
     public ArrayList<String[]> adatok = new ArrayList<>();
+    //a gyárthatósági adatokhoz kell
+    public ArrayList<String[]> gyarthatosagiadatok = new ArrayList<>();
+    public ArrayList<String> pnlist = new ArrayList<>();
+    public ArrayList<String> wslist = new ArrayList<>();
     //a statisztika grafikonok kirajzolásához kellenek
     public double zold;
     public double piros;
@@ -48,13 +54,12 @@ public class BeSheet extends javax.swing.JPanel {
     //kell a vt ideje, hogy melyik adatokat kuldtuk el
     public String vtstartime = "";
 
-
     //a tab neve lesz, és egyben a terv lekérdezéséhez kell
 //    private String tabneve = "";
 //    public SetPlannObjectData setPlannObjectData = new SetPlannObjectData(this);
     MainWindow m;
 
-    public BeSheet(MainWindow m) {
+    public BeSheet(MainWindow m, String neve) {
         this.m = m;
         initComponents();
         //beállítjuk a grafikát a viewportokhoz
@@ -64,10 +69,68 @@ public class BeSheet extends javax.swing.JPanel {
         jScrollPane2.setViewportView(jPanel1);
         //getTerv(ControlPanel.jDateChooser1.getDate(), ControlPanel.jDateChooser2.getDate());
         scrollListener();
+//lekérjük a gyárthatósági adatokat, milyen pn ek milyen ws milyen ciklusidok udnak itt menni
+        adatleker(neve);
+    }
+
+    //a gyárthatósági adatok
+    public void adatleker(String neve) {
+        //a terv hozzáadásához kell
+
+        gyarthatosagiadatok.clear();
+        pnlist.clear();
+        wslist.clear();
+        PlanConnect pc = null;
+        try {
+            pc = new PlanConnect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+
+//ki kell deríteni, hogy melyik tab adataira vagyunk kiváncsiak, a selected tab lesz az
+//kell egy query ami összeszedi az ehhez a tabhoz tartozó pn eket, és állomásokat
+            String query = "select tc_bepns.partnumber , tc_bestations.workstation ,tc_prodmatrix.ciklusido from tc_becells\n"
+                    + "left join tc_prodmatrix on tc_prodmatrix.id_tc_becells = tc_becells.idtc_cells\n"
+                    + "left join tc_bepns on tc_bepns.idtc_bepns = tc_prodmatrix.id_tc_bepns\n"
+                    + "left join tc_bestations on tc_bestations.idtc_bestations = tc_prodmatrix.id_tc_bestations\n"
+                    + "where tc_becells.cellname = '" + neve + "' and partnumber is not null and workstation is not null and tc_prodmatrix.pk is not null order by tc_bepns.partnumber asc,  tc_bestations.workstation asc";
+
+            pc = new PlanConnect();
+            pc.lekerdez(query);
+
+            while (pc.rs.next()) {
+
+                if (!pnlist.contains(pc.rs.getString(1))) {
+
+                    pnlist.add(pc.rs.getString(1));
+
+                }
+
+                if (!wslist.contains(pc.rs.getString(2))) {
+
+                    wslist.add(pc.rs.getString(2));
+
+                }
+
+                String[] adatok = new String[3];
+                adatok[0] = pc.rs.getString(1);
+                adatok[1] = pc.rs.getString(2);
+                adatok[2] = pc.rs.getString(3);
+                this.gyarthatosagiadatok.add(adatok);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pc.kinyir();
+
+        }
 
     }
-//a gyártási darabszám grafikonához a számolás
 
+//a gyártási darabszám grafikonához a számolás
     public void getGraphicon(int teny, int terv) {
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
@@ -110,7 +173,7 @@ public class BeSheet extends javax.swing.JPanel {
 
     }
 
-    public void getTerv(Date tol, Date ig) throws SQLException {
+    public void getTerv(Date tol, Date ig) {
         Calendar c = Calendar.getInstance();
         //a datumot be kell formazni stringe
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -142,30 +205,31 @@ public class BeSheet extends javax.swing.JPanel {
                 + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
                 + "left join tc_prodmatrix on tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns\n"
                 + "where tc_terv.active = 2 \n"
-//                + "and tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns \n"
-//                + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
+                //                + "and tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns \n"
+                //                + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
                 + "and tc_terv.date between '" + stol + "' and '" + sig + "'\n"
-//                + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
+                //                + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
                 + "and tc_becells.cellname = '" + getName() + "'";
-        PlanConnect pc = new PlanConnect();
+        PlanConnect pc = null;
         try {
+            pc = new PlanConnect();
             pc.lekerdez(query);
             while (pc.rs.next()) {
                 String plannerkomment = getKommentFromText(pc.rs.getString("qty"));
                 String komment = getKommentFromText(pc.rs.getString("qty_teny"));
                 int qty = getIntFromText(pc.rs.getString("qty"));
                 int qty_teny = getIntFromText(pc.rs.getString("qty_teny"));
-                
-                PlannObject po = new PlannObject(this, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment,  pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), m);
+
+                PlannObject po = new PlannObject(this, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), m);
                 jPanel1.add(po);
 
             }
+        } catch (Exception e) {
+        } finally {
 
-        } catch (SQLException ex) {
-            Logger.getLogger(BeSheet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BeSheet.class.getName()).log(Level.SEVERE, null, ex);
+            pc.kinyir();
         }
+
 //a darabszámok és gyártási idők összegyűjtése
         collectData();
 //a job státusok összegyűjtése egy külön szálban h ne tartsunk fel semmit
