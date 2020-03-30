@@ -67,10 +67,19 @@ public class BeSheet extends javax.swing.JPanel {
         jScrollPane2.setViewport(new ViewPortGraphics(Variables.viewports.plannpanel));
         jScrollPane1.setViewportView(jPanel2);
         jScrollPane2.setViewportView(jPanel1);
+        this.m = m;
         //getTerv(ControlPanel.jDateChooser1.getDate(), ControlPanel.jDateChooser2.getDate());
         scrollListener();
 //lekérjük a gyárthatósági adatokat, milyen pn ek milyen ws milyen ciklusidok udnak itt menni
         adatleker(neve);
+    }
+
+    public MainWindow getM() {
+        return m;
+    }
+
+    public void setM(MainWindow m) {
+        this.m = m;
     }
 
     //a gyárthatósági adatok
@@ -173,70 +182,6 @@ public class BeSheet extends javax.swing.JPanel {
 
     }
 
-    public void getTerv(Date tol, Date ig) {
-        Calendar c = Calendar.getInstance();
-        //a datumot be kell formazni stringe
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String stol = dateFormat.format(tol);
-        String sig = dateFormat.format(ig);
-        //ki kell tenni a vt ket, annyit amennyi a két dátum között van *2 és beállítani a dátumukat
-        int diff = Days.daysBetween(new LocalDate(m.cp.jDateChooser1.getDate()), new LocalDate(m.cp.jDateChooser2.getDate())).getDays();
-        c.setTime(tol);
-        int x = 0;
-
-        for (int i = 0; i < diff; i++) {
-
-            VerticalTimeline vt = new VerticalTimeline(this, dateFormat.format(c.getTime()) + " 06:00");
-            jPanel2.add(vt);
-            vt.setLocation(x, 0);
-            x += 210;
-            vt = new VerticalTimeline(this, dateFormat.format(c.getTime()) + " 18:00");
-            jPanel2.add(vt);
-            vt.setLocation(x, 0);
-            x += 210;
-            c.add(Calendar.DATE, 1);
-
-        }
-        //kell egy query ami lekérdezi az adatokat
-//        tabneve = "UBT";
-        String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
-                + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
-                + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
-                + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
-                + "left join tc_prodmatrix on tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns\n"
-                + "where tc_terv.active = 2 \n"
-                //                + "and tc_prodmatrix.id_tc_bepns = tc_terv.idtc_bepns \n"
-                //                + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
-                + "and tc_terv.date between '" + stol + "' and '" + sig + "'\n"
-                //                + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
-                + "and tc_becells.cellname = '" + getName() + "'";
-        PlanConnect pc = null;
-        try {
-            pc = new PlanConnect();
-            pc.lekerdez(query);
-            while (pc.rs.next()) {
-                String plannerkomment = getKommentFromText(pc.rs.getString("qty"));
-                String komment = getKommentFromText(pc.rs.getString("qty_teny"));
-                int qty = getIntFromText(pc.rs.getString("qty"));
-                int qty_teny = getIntFromText(pc.rs.getString("qty_teny"));
-
-                PlannObject po = new PlannObject(this, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), m);
-                jPanel1.add(po);
-
-            }
-        } catch (Exception e) {
-        } finally {
-
-            pc.kinyir();
-        }
-
-//a darabszámok és gyártási idők összegyűjtése
-        collectData();
-//a job státusok összegyűjtése egy külön szálban h ne tartsunk fel semmit
-        Thread t = new Thread(new JobStatusThread(this));
-        t.start();
-
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

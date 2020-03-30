@@ -36,30 +36,32 @@ public class AutoCompleteComboBox extends JComboBox {
 
     public void setEditor(ComboBoxEditor editor) {
         super.setEditor(editor);
-        if (editor.getEditorComponent() instanceof JTextField) {
-            tfield = (JTextField) editor.getEditorComponent();
-            tfield.addKeyListener(new KeyAdapter() {
-                public void keyReleased(KeyEvent ke) {
-                    char key = ke.getKeyChar();
-                    if (!(Character.isLetterOrDigit(key) || Character.isSpaceChar(key))) {
-                        return;
-                    }
-                    caretPos = tfield.getCaretPosition();
-                    String text = "";
-                    try {
-                        text = tfield.getText(0, caretPos);
-                    } catch (javax.swing.text.BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                    for (int i = 0; i < getItemCount(); i++) {
-                        String element = (String) getItemAt(i);
-                        if (element.startsWith(text)) {
-                            setSelectedIndex(i);
+        
+            if (editor.getEditorComponent() instanceof JTextField) {
+                tfield = (JTextField) editor.getEditorComponent();
+                tfield.addKeyListener(new KeyAdapter() {
+                    public void keyReleased(KeyEvent ke) {
+                        char key = ke.getKeyChar();
+                        if (!(Character.isLetterOrDigit(key) || Character.isSpaceChar(key))) {
                             return;
                         }
+                        caretPos = tfield.getCaretPosition();
+                        String text = "";
+                        try {
+                            text = tfield.getText(0, caretPos);
+                        } catch (javax.swing.text.BadLocationException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i < getItemCount(); i++) {
+                            String element = (String) getItemAt(i);
+                            if (element.startsWith(text)) {
+                                setSelectedIndex(i);
+                                return;
+                            }
+                        }
                     }
-                }
-            });
+                });
+            }
         }
-    }
+    
 }
