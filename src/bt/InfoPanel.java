@@ -48,6 +48,7 @@ public class InfoPanel extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
+        setOpacity(0.9F);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));

@@ -123,7 +123,7 @@ public class TervLeker implements Runnable {
 
         }
 //visszaállítjuk a gombot semmire
-         ControlPanel.jButton1.setIcon(null);
+         ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png")));
     }
 
 }

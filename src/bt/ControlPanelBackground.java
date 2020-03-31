@@ -19,7 +19,7 @@ public class ControlPanelBackground extends JPanel{
     ImageIcon img;
 
     public ControlPanelBackground() {
-        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/adatokback.jpg"));
+        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/controlblue.jpg"));
 
     }
 

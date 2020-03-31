@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -19,7 +21,7 @@ import org.xml.sax.SAXException;
  *
  * @author gabor_hanacsek
  */
-public class SFDC {
+public class SFDC implements Runnable {
 
     PlannObject p;
 
@@ -144,7 +146,24 @@ public class SFDC {
         }
 //frissitjuk az adatokat
         p.getbackendSheet().collectData();
+        try {
+            p.getMainWindow().ss.setVisible(false);
+        } catch (Exception e) {
+        }
 
+    }
+
+    @Override
+    public void run() {
+        try {
+            sfdcLeker();
+        } catch (IOException ex) {
+            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

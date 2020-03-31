@@ -69,7 +69,7 @@ public class PlannPopup extends JPopupMenu {
                 rp.fullRePlann(p);
             }
         });
-        
+
         //előregyártás
         JMenuItem eloregyartasMenuItem = new JMenuItem("Előregyártás behúzása", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
         eloregyartasMenuItem.setOpaque(true);
@@ -82,9 +82,7 @@ public class PlannPopup extends JPopupMenu {
                 rp.eloreGyartas(p);
             }
         });
-        
-        
-        
+
 //SFDC
         JMenuItem Sfdc = new JMenuItem("SFDC lekérése", new javax.swing.ImageIcon(getClass().getResource("/pictures/sfdc.png")));
         Sfdc.setOpaque(true);
@@ -93,18 +91,10 @@ public class PlannPopup extends JPopupMenu {
         Sfdc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               SFDC s = new SFDC(p);
-                try {
-                    s.sfdcLeker();
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ParserConfigurationException ex) {
-                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SAXException ex) {
-                    Logger.getLogger(PlannPopup.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                Thread t = new Thread(new SFDC(p));
+                t.start();
+                p.getMainWindow().ss.setVisible(true);
+
             }
         });
     }

@@ -173,6 +173,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jCheckBox2.setText("SFDC, first pass only!");
         jCheckBox2.setToolTipText("Ha be van kapcsolva, csak a first pass mennyiséget vesszük figyelembe!");
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png"))); // NOI18N
         jButton1.setText("Lekérdez");
         jButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jButton1.addActionListener(new java.awt.event.ActionListener() {

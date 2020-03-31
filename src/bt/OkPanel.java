@@ -49,6 +49,7 @@ public  class OkPanel extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setUndecorated(true);
+        setOpacity(0.9F);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));

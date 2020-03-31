@@ -33,6 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
     public LoginScreen ls = new LoginScreen(this, false, this);
     public ControlPanel cp = new ControlPanel(this, false, this);
     public static JogosultsagKezelo j;
+    public ScreenSaver ss = new ScreenSaver(this, true);
 
     //a panel szelessege es magassaga
 //inicializálás

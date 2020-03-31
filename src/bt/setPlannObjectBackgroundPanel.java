@@ -18,7 +18,7 @@ public class setPlannObjectBackgroundPanel extends JPanel {
     ImageIcon img;
 
     public setPlannObjectBackgroundPanel() {
-        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/adatokback.jpg"));
+        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/controlblue.jpg"));
     }
 
     @Override

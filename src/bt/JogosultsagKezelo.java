@@ -79,9 +79,9 @@ public class JogosultsagKezelo {
 
         } else {
             cp.jLabel2.setEnabled(true);
-            sp.jTextField1.setEditable(true);
+            sp.jTextField1.setEditable(false);
             sp.jTextField2.setEditable(true);
-            sp.jTextField8.setEditable(true);
+            sp.jTextField8.setEditable(false);
             sp.jTextField3.setEditable(true);
             sp.jTextField5.setEditable(true);
             sp.jTextField7.setEditable(false);
