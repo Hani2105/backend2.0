@@ -917,7 +917,7 @@ public class ControlPanel extends javax.swing.JDialog {
                     String job = "";
                     String startdate = "";
                     try {
-                        job = jTable1.getValueAt(i, 3).toString().trim();
+                        job = jTable1.getValueAt(i, 0).toString().trim();
                     } catch (Exception e) {
 
                     }

@@ -66,7 +66,7 @@ public class TervLeker implements Runnable {
             //ki kell tenni a vt ket, annyit amennyi a két dátum között van *2 és beállítani a dátumukat
             int diff = Days.daysBetween(new LocalDate(ControlPanel.jDateChooser1.getDate()), new LocalDate(ControlPanel.jDateChooser2.getDate())).getDays();
             c.setTime(ControlPanel.jDateChooser1.getDate());
-            int x = 0;
+            int x = 50;
 
             for (int n = 0; n < diff; n++) {
 

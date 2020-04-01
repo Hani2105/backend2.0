@@ -126,10 +126,17 @@ public class RePlann {
                             //kiszedtünk egy po-t, most meg kell vizsgálni, hogy ez a jövőben van e, és egyeznek e az adatok és van visszamaradt mennyiség (terv-tény) > 0
                             if (p.getLocation().x < po.getLocation().x && po.getPn().equals(p.getPn()) && po.getJob().equals(p.getJob()) && po.getWorkStation().equals(p.getWorkStation()) && ((po.getTerv() - po.getTeny()) > 0) && po.getStartdate().contains(vt.getVtstartdate())) {
 //indítunk egy ciklust és elkezdjük növelni a p tervét amíg el nem éri a tényt, közben csökkentjük a po tervét, de megállunk akkor is ha po terve eléri a po tényét vagy a nullát
-                                while (p.getTerv() != p.getTeny() || po.getTerv() != po.getTeny() || po.getTerv() == 0) {
+                                while (p.getTerv() != p.getTeny() && po.getTerv() != po.getTeny()) {
 
                                     p.setTerv(p.getTerv() + 1);
                                     po.setTerv(po.getTerv() - 1);
+//ha eléri a terv a nullát, töröljük is
+                                    if (po.getTerv() == 0) {
+
+                                        p.getbackendSheet().jPanel1.remove(n);
+                                        break;
+                                    }
+
                                 }
 
                             }

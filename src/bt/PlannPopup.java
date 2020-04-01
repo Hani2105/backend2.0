@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import static javax.swing.SwingConstants.CENTER;
@@ -32,7 +33,7 @@ public class PlannPopup extends JPopupMenu {
         this.setBackground(new Color(251, 255, 222));
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(), "Menü", CENTER, 1));
 //setup
-        JMenuItem setupMenuItem = new JMenuItem("Beállítások", new javax.swing.ImageIcon(getClass().getResource("/pictures/setup.png")));
+        JMenuItem setupMenuItem = new JMenuItem("Adatok módosítása", new javax.swing.ImageIcon(getClass().getResource("/pictures/setup.png")));
         setupMenuItem.setOpaque(true);
         setupMenuItem.setBackground(Variables.plannObjectPopupColor);
         setupMenuItem.addActionListener(new ActionListener() {
@@ -44,11 +45,16 @@ public class PlannPopup extends JPopupMenu {
             }
         });
         this.add(setupMenuItem);
+ //submenu       
+        JMenu attervez = new JMenu("Áttervez");
+        this.add(attervez);
+        
+        
 //áttervez
-        JMenuItem attervezMenuItem = new JMenuItem("Áttervez", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
+        JMenuItem attervezMenuItem = new JMenuItem("Előre tervez", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
         attervezMenuItem.setOpaque(true);
         attervezMenuItem.setBackground(Variables.plannObjectPopupColor);
-        this.add(attervezMenuItem);
+        attervez.add(attervezMenuItem);
         attervezMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,10 +64,10 @@ public class PlannPopup extends JPopupMenu {
         });
 
 //összeset áttervez
-        JMenuItem fullattervezMenuItem = new JMenuItem("Teljes áttervezés", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
+        JMenuItem fullattervezMenuItem = new JMenuItem("Minden elmaradást előre tervez", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
         fullattervezMenuItem.setOpaque(true);
         fullattervezMenuItem.setBackground(Variables.plannObjectPopupColor);
-        this.add(fullattervezMenuItem);
+        attervez.add(fullattervezMenuItem);
         fullattervezMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,11 +76,11 @@ public class PlannPopup extends JPopupMenu {
             }
         });
 
-        //előregyártás
+//előregyártás behúzása
         JMenuItem eloregyartasMenuItem = new JMenuItem("Előregyártás behúzása", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
         eloregyartasMenuItem.setOpaque(true);
         eloregyartasMenuItem.setBackground(Variables.plannObjectPopupColor);
-        this.add(eloregyartasMenuItem);
+        attervez.add(eloregyartasMenuItem);
         eloregyartasMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,6 +103,42 @@ public class PlannPopup extends JPopupMenu {
 
             }
         });
+
+ //terv törlése
+        JMenuItem Delete = new JMenuItem("Terv törlése", new javax.swing.ImageIcon(getClass().getResource("/pictures/delete.png")));
+        Delete.setOpaque(true);
+        Delete.setBackground(Variables.plannObjectPopupColor);
+        this.add(Delete);
+        Delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //csináljunk valamit
+                p.getbackendSheet().jPanel1.remove(p);
+                p.getbackendSheet().jPanel1.revalidate();
+                p.getbackendSheet().jPanel1.repaint();
+
+            }
+        });
+        
+//terv másolása
+        JMenuItem Copy = new JMenuItem("Terv másolása", new javax.swing.ImageIcon(getClass().getResource("/pictures/copy.png")));
+        Copy.setOpaque(true);
+        Copy.setBackground(Variables.plannObjectPopupColor);
+        this.add(Copy);
+        Copy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //csináljunk valamit
+               PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(),p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m);
+               po.setStat(p.getStat());
+               p.getbackendSheet().jPanel1.add(po);
+               p.getbackendSheet().jPanel1.revalidate();
+               p.getbackendSheet().jPanel1.repaint();
+
+            }
+        });
+        
+
     }
 
 }

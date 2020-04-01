@@ -67,6 +67,7 @@ public class PlannObject extends JLabel {
     private BeSheet backendSheet;
     private ImageIcon img;
     private ImageIcon selectedimage;
+    private ImageIcon nostartimeimage;
     private MainWindow m;
     private double ciklusido = 0.00;
     private boolean selected = false;
@@ -176,6 +177,8 @@ public class PlannObject extends JLabel {
         img = new javax.swing.ImageIcon(getClass().getResource("/pictures/poback.jpg"));
 //a háttér beállítása ha ki van jlölve
         selectedimage = new javax.swing.ImageIcon(getClass().getResource("/pictures/csutortok.jpg"));
+//nincs startime background
+        nostartimeimage = new javax.swing.ImageIcon(getClass().getResource("/pictures/nostarttime.jpg"));
 
 //popupmenu csinálása
         JPopupMenu popupMenu = new PlannPopup(this, m);
@@ -455,7 +458,9 @@ public class PlannObject extends JLabel {
 
     public void setTerv(int qty) {
         this.terv = qty;
+        //beállítjuk az indikátor vonalakat
         setProducted();
+        setGyartasiido(getCiklusido());
     }
 //teny beallitasa
 
@@ -562,6 +567,11 @@ public class PlannObject extends JLabel {
         } else if (this.isSelected()) {
 
             g.drawImage(selectedimage.getImage(), 0, 0, null);
+        }
+
+        if (getStartdate().equals("")) {
+            g.drawImage(nostartimeimage.getImage(), 0, 0, null);
+
         }
         Graphics2D g2d = (Graphics2D) g;
 // a darabszám indikátor megrajzolása
