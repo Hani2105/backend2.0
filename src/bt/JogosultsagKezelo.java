@@ -49,8 +49,24 @@ public class JogosultsagKezelo {
             sp.jButton2.setEnabled(false);
             //a tény szerkesztése
             sp.jTextField4.setEditable(true);
-            //az áttervezés letiltása
-            
+            //a plannobjectek menuitemek letiltasa
+            for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
+
+                BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(i);
+                for (int n = 0; n < b.jPanel1.getComponentCount(); n++) {
+
+                    if (b.jPanel1.getComponent(n) instanceof PlannObject) {
+                        PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
+                        p.getComponentPopupMenu().getComponent(1).setEnabled(false);
+                        p.getComponentPopupMenu().getComponent(3).setEnabled(false);
+                        p.getComponentPopupMenu().getComponent(4).setEnabled(false);
+
+                    }
+
+                }
+
+            }
+
         } //sima megtekintő
         else if (Variables.planner == 0) {
 //semmit nem csinálhat
@@ -76,7 +92,24 @@ public class JogosultsagKezelo {
             sp.jButton2.setEnabled(false);
             //a tény szerkesztése
             sp.jTextField4.setEditable(false);
+            //a plannobjectek menuitemek letiltasa
+            for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 
+                BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(i);
+                for (int n = 0; n < b.jPanel1.getComponentCount(); n++) {
+
+                    if (b.jPanel1.getComponent(n) instanceof PlannObject) {
+                        PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
+                        p.getComponentPopupMenu().getComponent(1).setEnabled(false);
+                        p.getComponentPopupMenu().getComponent(3).setEnabled(false);
+                        p.getComponentPopupMenu().getComponent(4).setEnabled(false);
+
+                    }
+
+                }
+
+            }
+//ha planner
         } else {
             cp.jLabel2.setEnabled(true);
             sp.jTextField1.setEditable(false);
@@ -89,6 +122,23 @@ public class JogosultsagKezelo {
             sp.jSlider1.setEnabled(true);
             sp.jButton2.setEnabled(true);
             sp.jTextField4.setEditable(true);
+            //a plannobjectek menuitemek letiltasa
+            for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
+
+                BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(i);
+                for (int n = 0; n < b.jPanel1.getComponentCount(); n++) {
+
+                    if (b.jPanel1.getComponent(n) instanceof PlannObject) {
+                        PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
+                        p.getComponentPopupMenu().getComponent(1).setEnabled(true);
+                        p.getComponentPopupMenu().getComponent(3).setEnabled(true);
+                        p.getComponentPopupMenu().getComponent(4).setEnabled(true);
+
+                    }
+
+                }
+
+            }
         }
 
     }

@@ -193,7 +193,7 @@ public class LoginScreen extends javax.swing.JDialog {
                     poz = pc.rs.getInt("poz");
 
                 }
-
+//ha planner
                 if (poz == 1 || poz == 2 || poz == 4) {
                     Variables.planner = 1;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
@@ -230,8 +230,10 @@ public class LoginScreen extends javax.swing.JDialog {
                 return;
 
             } finally {
-
-                pc.kinyir();
+                try {
+                    pc.kinyir();
+                } catch (Exception e) {
+                }
             }
 
         }
