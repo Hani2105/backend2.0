@@ -61,6 +61,7 @@ public class RePlann {
                     PlannObject po = new PlannObject(p.getbackendSheet(), p.getWidth(), p.getHeight(), p.getPn(), p.getJob(), vt.getVtstartdate(), p.getTerv() - p.getTeny(), 0, p.getPlannerkomment(), p.getKomment(), p.getEngineer(), 0, p.getWorkStation(), p.getCiklusido(), p.getMainWindow());
 //hozzáadjuk a panelhoz oda ahol a tobbi van
                     po.setStat(p.getStat());
+                    po.setMikorment(p.getMikorment());
                     p.getbackendSheet().jPanel1.add(po);
                     po.setLocation(vt.getLocation().x + 10, 0);
 

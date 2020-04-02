@@ -48,6 +48,7 @@ public class SFDC implements Runnable {
             tol = tol.replace(" ", "%20");
         } catch (Exception e) {
             p.getMainWindow().error.setVisible(true, "Hiba a dátum kiválasztásánál!");
+            p.getMainWindow().ss.setVisible(false);
         }
 //az url beállítása
         xmlfeldolg xxx = new xmlfeldolg();

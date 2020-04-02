@@ -71,6 +71,8 @@ public class PlannObject extends JLabel {
     private MainWindow m;
     private double ciklusido = 0.00;
     private boolean selected = false;
+//mikor gyartottuk utoljara
+    private int mikorment = -1;
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -228,6 +230,14 @@ public class PlannObject extends JLabel {
         }
     }
 
+    public int getMikorment() {
+        return mikorment;
+    }
+
+    public void setMikorment(int mikorment) {
+        this.mikorment = mikorment;
+    }
+
     public boolean isSelected() {
         return selected;
     }
@@ -363,7 +373,7 @@ public class PlannObject extends JLabel {
     public void resetStartTime() {
         //elindulunk szépen a this lokációtól balra és megkeressük az elő verticaltimelinet és felvesszük az ő idejét
         boolean c = true;
-        int x = this.getLocation().x;
+        int x = this.getLocation().x + 50;
 
         while (c) {
 
@@ -634,6 +644,21 @@ public class PlannObject extends JLabel {
         g2d.drawString("Terv/Tény:", 30, 65);
         g2d.setColor(Color.BLACK);
         g2d.drawString(getTerv() + " / " + getTeny(), 90, 65);
+//mikor gyártottuk utoljára kiírása
+
+        if (getMikorment() == -1) {
+            g2d.setColor(Variables.piros);
+            g2d.drawString("NEW", 5, 65);
+
+        } else if (getMikorment() > 90) {
+            g2d.setColor(Variables.piros);
+            g2d.drawString(String.valueOf(getMikorment()), 10, 65);
+
+        } else {
+            g2d.setColor(Variables.zold);
+            g2d.drawString(String.valueOf(getMikorment()), 10, 65);
+            g2d.setColor(Color.BLACK);
+        }
 
 //a mainicon beállítása
         switch (stat) {

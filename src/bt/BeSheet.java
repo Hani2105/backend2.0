@@ -53,6 +53,8 @@ public class BeSheet extends javax.swing.JPanel {
     public String muszakjelentes = "";
     //kell a vt ideje, hogy melyik adatokat kuldtuk el
     public String vtstartime = "";
+    //ki mentett utoljara az oldalon
+    private String utolsomodisito = "";
 
     //a tab neve lesz, és egyben a terv lekérdezéséhez kell
 //    private String tabneve = "";
@@ -73,6 +75,17 @@ public class BeSheet extends javax.swing.JPanel {
 //lekérjük a gyárthatósági adatokat, milyen pn ek milyen ws milyen ciklusidok udnak itt menni
         adatleker(neve);
     }
+
+    public String getUtolsomodisito() {
+        return utolsomodisito;
+    }
+
+    public void setUtolsomodisito(String utolsomodisito) {
+        this.utolsomodisito = utolsomodisito;
+    }
+    
+    
+    
 
     public MainWindow getM() {
         return m;

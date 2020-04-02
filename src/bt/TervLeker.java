@@ -83,7 +83,7 @@ public class TervLeker implements Runnable {
             }
             //kell egy query ami lekérdezi az adatokat
 //        tabneve = "UBT";
-            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
+            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.user FROM tc_terv\n"
                     + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
                     + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
                     + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
@@ -106,6 +106,8 @@ public class TervLeker implements Runnable {
 
                     PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
                     b.jPanel1.add(po);
+                    //beállítjuk a sheeten, hogy ki módosította utoljára
+                    b.setUtolsomodisito(pc.rs.getString("user"));
 
                 }
             } catch (Exception e) {
@@ -122,6 +124,9 @@ public class TervLeker implements Runnable {
             m.jTabbedPane1.add(b, b.getName());
 
         }
+//elindítjuk a mikor gyártottuk futását
+             Thread mikor = new Thread(new Mikorgyartottuk());
+             mikor.start();
 //visszaállítjuk a gombot semmire
          ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png")));
     }
