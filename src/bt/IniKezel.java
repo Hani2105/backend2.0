@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import org.ini4j.Wini;
 
 /**
@@ -27,8 +28,8 @@ public class IniKezel {
             Variables.plannObjectPopupColor = new Color(ini.get("colors", "plannObjectPopupColor", int.class));
             Variables.zold = new Color(ini.get("colors", "zold", int.class));
             Variables.piros = new Color(ini.get("colors", "piros", int.class));
-            Variables.tabcolor=new Color(ini.get("colors", "tabcolor", int.class));
-            Variables.selectedtabcolor=new Color(ini.get("colors", "selectedtabcolor", int.class));
+            Variables.tabcolor = new Color(ini.get("colors", "tabcolor", int.class));
+            Variables.selectedtabcolor = new Color(ini.get("colors", "selectedtabcolor", int.class));
 
 //            int age = ini.get("owner", "age", int.class);
 //            double height = ini.get("owner", "height", double.class);
@@ -41,7 +42,11 @@ public class IniKezel {
             // (The system cannot find the file specified)
         } catch (Exception e) {
 //ha nem létezik akkor létrehozunk egyet
-            m.info.setVisible(true, "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini</html>");
+            //m.info.setVisible(true, "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini</html>");
+            JOptionPane.showMessageDialog(m,
+                    "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini</html>",
+                    "Figyelem!",
+                    JOptionPane.WARNING_MESSAGE);
             ArrayList<String> sorok = new ArrayList<>();
             sorok.add("[colors]");
             sorok.add("//a terv popupjának háttérszíne");

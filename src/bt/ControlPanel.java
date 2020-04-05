@@ -32,6 +32,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -97,6 +98,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel1 = new LoaderPanelBackground();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -182,6 +184,13 @@ public class ControlPanel extends javax.swing.JDialog {
             }
         });
 
+        jButton2.setText("Ment");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -189,33 +198,36 @@ public class ControlPanel extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(3, 3, 3)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addComponent(jButton1)))
+                        .addGap(109, 109, 109)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jSeparator3)
                     .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
+                    .addComponent(jTextField1)
+                    .addComponent(jSeparator3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(327, Short.MAX_VALUE))
+                .addContainerGap(343, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
+            .addComponent(jSeparator2)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -230,18 +242,19 @@ public class ControlPanel extends javax.swing.JDialog {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addGap(0, 137, Short.MAX_VALUE))
-            .addComponent(jSeparator2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addGap(0, 106, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Lekérdezések", jPanel4);
+        jTabbedPane1.addTab("Tervek kezelése", jPanel4);
 
         jScrollPane1.setOpaque(false);
 
@@ -653,7 +666,11 @@ public class ControlPanel extends javax.swing.JDialog {
                     insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
-                    m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
+                    // m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
+                    JOptionPane.showMessageDialog(m,
+                            "Nem adtál meg PN-t, így nem tudjuk feltölteni!",
+                            "Feltöltési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 //ws feltoltese
@@ -661,7 +678,11 @@ public class ControlPanel extends javax.swing.JDialog {
                     insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
-                    m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
+//                    m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
+                    JOptionPane.showMessageDialog(m,
+                            "Nem adtál meg WS-t, így nem tudjuk feltölteni!",
+                            "Feltöltési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 //prodmatrix feltoltese
@@ -671,7 +692,11 @@ public class ControlPanel extends javax.swing.JDialog {
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
 
-                    m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
+//                    m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
+                    JOptionPane.showMessageDialog(m,
+                            "Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!",
+                            "Feltöltési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
 
                 }
@@ -685,7 +710,9 @@ public class ControlPanel extends javax.swing.JDialog {
                 MainWindow.pnCommentLeker();
                 jTable1.repaint();
 
-                m.okpanel.setVisible(true, "Az adatokat felvittük!");
+//                m.okpanel.setVisible(true, "Az adatokat felvittük!");
+                JOptionPane.showMessageDialog(m,
+                        "Az adatokat felvittük!");
             } catch (Exception e) {
             } finally {
                 pc.kinyir();
@@ -847,6 +874,12 @@ public class ControlPanel extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //mentés
+        TervMent m = new TervMent((BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()));
+        m.ment();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     public void cimlistabeker() {
 
         //behuzzuk a cimlistat
@@ -942,7 +975,11 @@ public class ControlPanel extends javax.swing.JDialog {
 
                     }
 //ha ide eljutunk akkor nem szerepelt ilyen adat, kiirjuk a hibát
-                    m.error.setVisible(true, "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>");
+//                    m.error.setVisible(true, "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>");
+                    JOptionPane.showMessageDialog(m,
+                            "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>",
+                            "Feltöltési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
 
                 }
 
@@ -1022,6 +1059,7 @@ public class ControlPanel extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     public static javax.swing.JCheckBox jCheckBox1;
     public static javax.swing.JCheckBox jCheckBox2;
     public static com.toedter.calendar.JDateChooser jDateChooser1;

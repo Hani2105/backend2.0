@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -47,7 +48,12 @@ public class SFDC implements Runnable {
             ig = ig.replace(" ", "%20");
             tol = tol.replace(" ", "%20");
         } catch (Exception e) {
-            p.getMainWindow().error.setVisible(true, "Hiba a dátum kiválasztásánál!");
+//            p.getMainWindow().error.setVisible(true, "Hiba a dátum kiválasztásánál!");
+            JOptionPane.showMessageDialog(p.getMainWindow(),
+                    "<html>Hiba a dátum kiválasztásánál!</html>",
+                    "Lekérdezési hiba!",
+                    JOptionPane.ERROR_MESSAGE);
+
             p.getMainWindow().ss.setVisible(false);
         }
 //az url beállítása

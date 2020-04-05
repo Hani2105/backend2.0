@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
@@ -25,37 +26,45 @@ import org.joda.time.LocalDate;
  * @author gabor_hanacsek
  */
 public class TervLeker implements Runnable {
-
-
+    
     MainWindow m;
-
+    
     public TervLeker(MainWindow m) {
-
+        
         this.m = m;
     }
-
+    
     @Override
     public void run() {
         //lecsekkoljuk, hogy va e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
 
         try {
-
+            
             int diff = Days.daysBetween(new LocalDate(jDateChooser1.getDate()), new LocalDate(jDateChooser2.getDate())).getDays();
-
+            
             if (diff <= 0) {
-                m.error.setVisible(true, "Nem jó dátumokat választottál ki!");
+//                m.error.setVisible(true, "Nem jó dátumokat választottál ki!");
+                JOptionPane.showMessageDialog(m,
+                        "<html>Nem jó dátumot választottál ki!</html>",
+                        "Lekérdezési hiba!",
+                        JOptionPane.ERROR_MESSAGE);
+                
                 return;
-
+                
             }
         } catch (Exception e) {
-            m.error.setVisible(true, "Nem jó dátumokat választottál ki!");
+//            m.error.setVisible(true, "Nem jó dátumokat választottál ki!");
+            JOptionPane.showMessageDialog(m,
+                    "<html>Nem jó dátumot választottál ki!</html>",
+                    "Lekérdezési hiba!",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         //annyi besheetet adunk hozzá amennyi a control panel jlist2 ben van
         //        ArrayList<String> tabok = new ArrayList<>();
         m.jTabbedPane1.removeAll();
         for (int i = 0; i < ControlPanel.jList2.getModel().getSize(); i++) {
-
+            
             BeSheet b = new BeSheet(m, ControlPanel.jList2.getModel().getElementAt(i));
             b.setName(ControlPanel.jList2.getModel().getElementAt(i));
             Calendar c = Calendar.getInstance();
@@ -67,9 +76,9 @@ public class TervLeker implements Runnable {
             int diff = Days.daysBetween(new LocalDate(ControlPanel.jDateChooser1.getDate()), new LocalDate(ControlPanel.jDateChooser2.getDate())).getDays();
             c.setTime(ControlPanel.jDateChooser1.getDate());
             int x = 50;
-
+            
             for (int n = 0; n < diff; n++) {
-
+                
                 VerticalTimeline vt = new VerticalTimeline(b, dateFormat.format(c.getTime()) + " 06:00");
                 b.jPanel2.add(vt);
                 vt.setLocation(x, 0);
@@ -79,11 +88,11 @@ public class TervLeker implements Runnable {
                 vt.setLocation(x, 0);
                 x += 210;
                 c.add(Calendar.DATE, 1);
-
+                
             }
             //kell egy query ami lekérdezi az adatokat
 //        tabneve = "UBT";
-            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.user FROM tc_terv\n"
+            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
                     + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
                     + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
                     + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
@@ -103,16 +112,21 @@ public class TervLeker implements Runnable {
                     String komment = b.getKommentFromText(pc.rs.getString("qty_teny"));
                     int qty = b.getIntFromText(pc.rs.getString("qty"));
                     int qty_teny = b.getIntFromText(pc.rs.getString("qty_teny"));
-
+                    
                     PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
                     b.jPanel1.add(po);
-                    //beállítjuk a sheeten, hogy ki módosította utoljára
-                    b.setUtolsomodisito(pc.rs.getString("user"));
-
+                    
                 }
+                //le kell kérdezni a sheethez azt is, hogy ki és mikor módosította a tervet utoljára, és ezt eltesszük a sheet adataiba
+                query = "select valtozasok.ido from valtozasok where valtozasok.cella = '" + b.getName() + "'";
+                pc.lekerdez(query);
+                while (pc.rs.next()) {
+                    b.setUtolsotime(pc.rs.getString("ido"));
+                }
+                
             } catch (Exception e) {
             } finally {
-
+                
                 pc.kinyir();
             }
 
@@ -122,13 +136,13 @@ public class TervLeker implements Runnable {
             Thread t = new Thread(new JobStatusThread(b));
             t.start();
             m.jTabbedPane1.add(b, b.getName());
-
+            
         }
 //elindítjuk a mikor gyártottuk futását
-             Thread mikor = new Thread(new Mikorgyartottuk());
-             mikor.start();
+        Thread mikor = new Thread(new Mikorgyartottuk());
+        mikor.start();
 //visszaállítjuk a gombot semmire
-         ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png")));
+        ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png")));
     }
-
+    
 }

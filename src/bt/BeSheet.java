@@ -55,6 +55,8 @@ public class BeSheet extends javax.swing.JPanel {
     public String vtstartime = "";
     //ki mentett utoljara az oldalon
     private String utolsomodisito = "";
+    //az utolso id a sheeten
+    private String utolsotime = "";
 
     //a tab neve lesz, és egyben a terv lekérdezéséhez kell
 //    private String tabneve = "";
@@ -76,6 +78,18 @@ public class BeSheet extends javax.swing.JPanel {
         adatleker(neve);
     }
 
+    public String getUtolsotime() {
+        return utolsotime;
+    }
+
+    public void setUtolsotime(String utolsotime) {
+        this.utolsotime = utolsotime;
+    }
+
+ 
+
+    
+    
     public String getUtolsomodisito() {
         return utolsomodisito;
     }

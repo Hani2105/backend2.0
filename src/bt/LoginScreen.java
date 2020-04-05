@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 
 /**
@@ -175,7 +176,12 @@ public class LoginScreen extends javax.swing.JDialog {
 //ha nem true az universal login akkor kiirjuk
                 if (!universal.equals("true")) {
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/zartlakat.jpg")));
-                    m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
+//                    m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
+                    JOptionPane.showMessageDialog(m,
+                            "<html>Nem megfelelő login!<br>Próbáld újból!</html>",
+                            "Bejelentkezési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
+
                     m.cp.jLabel4.setText("Jogosultságod: Nem vagy bejelentkezve!");
                     Variables.planner = 0;
                     MainWindow.j.kezel();

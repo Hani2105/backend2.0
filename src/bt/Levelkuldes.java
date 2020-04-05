@@ -5,7 +5,6 @@
  */
 package bt;
 
-
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -13,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -60,7 +60,9 @@ public class Levelkuldes extends Thread {
             Transport.send(message);
             //System.out.println("message sent successfully....");
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elkuldtuk a levelet" + cimzett + szoveg, "gabor.hanacsek@sanmina.com");
-            m.okpanel.setVisible(true, "Sikeres levélküldés!");
+//            m.okpanel.setVisible(true, "Sikeres levélküldés!");
+            JOptionPane.showMessageDialog(m,
+                    "Sikeres levélküldés!");
         } catch (MessagingException mex) {
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elhasaltunk a Tc levelkuldes reszen" + mex, "gabor.hanacsek@sanmina.com");
         }

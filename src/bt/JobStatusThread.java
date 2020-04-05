@@ -8,6 +8,7 @@ package bt;
 import java.awt.Component;
 import java.net.URL;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,7 +58,12 @@ public class JobStatusThread implements Runnable {
                 try {
                     rowdata = (Object[][]) xxx.xmlfeldolg(url, nodelist, lista);
                 } catch (Exception e) {
-                    b.m.error.setVisible(true, "Nem sikerült a JOB adatok összegyűjtése!");
+//                    b.m.error.setVisible(true, "Nem sikerült a JOB adatok összegyűjtése!");
+                    JOptionPane.showMessageDialog(b.getM(),
+                            "Nem sikerült a JOB adatok összegyűjtése!",
+                            "Lekérdezési hiba!",
+                            JOptionPane.ERROR_MESSAGE);
+
                 }
 
             } catch (Exception e) {
