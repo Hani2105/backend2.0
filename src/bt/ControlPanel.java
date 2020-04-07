@@ -54,11 +54,7 @@ public class ControlPanel extends javax.swing.JDialog {
      */
     int x;
     int y;
-    //a besheethez tartozó adatok
-//    ArrayList<String[]> adatok = new ArrayList<>();
-    //berakjuk az adatokat egy arraybe, ha nincs benne
-//    ArrayList<String> pnlist = new ArrayList<>();
-//    ArrayList<String> wslist = new ArrayList<>();
+   
     MainWindow m;
 
     public ControlPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
@@ -241,8 +237,8 @@ public class ControlPanel extends javax.swing.JDialog {
                             .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -459,7 +455,7 @@ public class ControlPanel extends javax.swing.JDialog {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Data loader", jPanel3);
@@ -556,7 +552,7 @@ public class ControlPanel extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -959,11 +955,11 @@ public class ControlPanel extends javax.swing.JDialog {
                     }
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
 
-                        if (b.gyarthatosagiadatok.get(c)[0].equals(pn) && b.gyarthatosagiadatok.get(c)[1].equals(ws)) {
+                        if (b.gyarthatosagiadatok.get(c)[0].trim().equals(pn.trim()) && b.gyarthatosagiadatok.get(c)[1].trim().equals(ws.trim())) {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
-                                PlannObject po = new PlannObject(b, 200, 75, pn, job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws, Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
                                 b.repaint();
                             } catch (Exception ex) {
@@ -997,7 +993,9 @@ public class ControlPanel extends javax.swing.JDialog {
 //hozzáadjuk egy comboboxhoz az adatokat
             BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
             JComboBox<String> PncomboBox = new AutoCompleteComboBox(b.pnlist.toArray());
+
             JComboBox<String> WscomboBox = new AutoCompleteComboBox(b.wslist.toArray());
+
             TableColumn pncolumn = jTable1.getColumnModel().getColumn(1);
             pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
             TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);

@@ -38,7 +38,7 @@ public class LoaderRenderer extends DefaultTableCellRenderer {
             BeSheet bs = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex());
                 for (int i = 0; i < bs.gyarthatosagiadatok.size(); i++) {
 //megnézzük, hogy ugyan ez a felállás létezik e az adatok tömbben
-                    if (bs.gyarthatosagiadatok.get(i)[0].equals(table.getValueAt(row, 1)) && bs.gyarthatosagiadatok.get(i)[1].equals(table.getValueAt(row, 2))) {
+                    if (bs.gyarthatosagiadatok.get(i)[0].trim().equals(table.getValueAt(row, 1)) && bs.gyarthatosagiadatok.get(i)[1].trim().equals(table.getValueAt(row, 2))) {
 
                         c.setBackground(Color.green);
                         table.setValueAt(bs.gyarthatosagiadatok.get(i)[2], row, 5);

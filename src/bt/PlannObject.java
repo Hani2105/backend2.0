@@ -158,7 +158,8 @@ public class PlannObject extends JLabel {
                 //keressük az indulási idejét
                 resetStartTime();
 //osszerenezzuk
-                osszerendez();
+                b.osszerendez();
+                setScrollpanel();
                 b.repaint();
 
             }
@@ -250,65 +251,6 @@ public class PlannObject extends JLabel {
         return backendSheet;
     }
 
-//ez a metódus összerendezi a po-kat az adott jpanelen a vt jük mellé és egymás alá
-    public void osszerendez() {
-//begyüjtjük a vertical lineokat
-        Component[] vtcomponents = backendSheet.jPanel2.getComponents();
-        Component[] pocomponents = backendSheet.jPanel1.getComponents();
-//ha vt-t találunk
-        for (int i = 0; i < vtcomponents.length; i++) {
-            if (vtcomponents[i] instanceof VerticalTimeline) {
-                VerticalTimeline vt = (VerticalTimeline) vtcomponents[i];
-//csinálunk egy arrayt a po-knak amik ehhez a vt hez tartoznak
-                ArrayList<PlannObject> polist = new ArrayList<>();
-//az összes olyan po-t ami ehhez a vt hez tartozik betesszük ebbe a listába
-                for (int c = 0; c < pocomponents.length; c++) {
-
-                    if (pocomponents[c] instanceof PlannObject) {
-                        PlannObject po = (PlannObject) pocomponents[c];
-                        if (po.getStartdate().contains(vt.getVtstartdate())) {
-
-                            polist.add(po);
-
-                        }
-
-                    }
-
-                }
-
-//feltöltöttük a polistunket a megfelelő po-kkal, most be kéne buborékolni őket a lokációjuk alapján
-                class sortByLoc implements Comparator<PlannObject> {
-
-                    @Override
-                    public int compare(PlannObject a, PlannObject b) {
-                        return a.getLocation().y - b.getLocation().y;
-                    }
-
-                }
-//sorba rendezzük
-                Collections.sort(polist, new sortByLoc());
-
-//ha ez kész akkor relokáljuk őket ennek a sorrendnek megfelelően és beállítjuk a wtf et
-                int uccsohely = 10;
-                wtf = 0;
-                for (int c = 0; c < polist.size(); c++) {
-
-                    polist.get(c).setLocation(vt.getLocation().x, uccsohely);
-                    polist.get(c).setWtf(wtf);
-                    uccsohely = polist.get(c).getLocation().y + polist.get(c).getHeight() + 5;
-//beállítjuk az uj startdatet is
-                    resetStartTime();
-                    wtf++;
-
-                }
-
-            }
-
-        }
-
-        setScrollpanel();
-
-    }
 
     public String getWorkStation() {
         return workStation;

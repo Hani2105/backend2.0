@@ -98,7 +98,7 @@ public class ExcelAdapter implements ActionListener {
             pncolumn.setCellEditor(new DefaultCellEditor(new JTextField()));
             TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);
             wscolumn.setCellEditor(new DefaultCellEditor(new JTextField()));
-            
+
             //ystem.out.println("Trying to Paste");
             int startRow = (jTable1.getSelectedRows())[0];
             int startCol = (jTable1.getSelectedColumns())[0];
@@ -134,7 +134,9 @@ public class ExcelAdapter implements ActionListener {
             BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex());
             //visszaállítjuk combora
             JComboBox<String> PncomboBox = new AutoCompleteComboBox(b.pnlist.toArray());
+
             JComboBox<String> WscomboBox = new AutoCompleteComboBox(b.wslist.toArray());
+
             pncolumn = jTable1.getColumnModel().getColumn(1);
             pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
             wscolumn = jTable1.getColumnModel().getColumn(2);

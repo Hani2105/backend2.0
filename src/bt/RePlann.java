@@ -47,7 +47,7 @@ public class RePlann {
                                     p.setTerv(p.getTeny());
 
                                 }
-                                p.osszerendez();
+                                p.getbackendSheet().osszerendez();
                                 p.getbackendSheet().repaint();
                                 return;
 
@@ -75,7 +75,7 @@ public class RePlann {
                         p.setTerv(p.getTeny());
 
                     }
-                    p.osszerendez();
+                    p.getbackendSheet().osszerendez();
                     p.getbackendSheet().repaint();
                     return;
 

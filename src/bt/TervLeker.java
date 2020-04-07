@@ -102,7 +102,8 @@ public class TervLeker implements Runnable {
                     + "and tc_prodmatrix.id_tc_bestations = tc_terv.idtc_bestations \n"
                     + "and tc_terv.date between '" + stol + "' and '" + sig + "'\n"
                     + "and tc_prodmatrix.id_tc_becells = tc_terv.idtc_becells \n"
-                    + "and tc_becells.cellname = '" + b.getName() + "'";
+                    + "and tc_becells.cellname = '" + b.getName() + "'\n" 
+                    + "order by wtf asc";
             PlanConnect pc = null;
             try {
                 pc = new PlanConnect();

@@ -17,6 +17,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import javax.swing.DefaultCellEditor;
@@ -139,20 +141,20 @@ public class BeSheet extends javax.swing.JPanel {
 
                 if (!pnlist.contains(pc.rs.getString(1))) {
 
-                    pnlist.add(pc.rs.getString(1));
+                    pnlist.add(pc.rs.getString(1).trim());
 
                 }
 
                 if (!wslist.contains(pc.rs.getString(2))) {
 
-                    wslist.add(pc.rs.getString(2));
+                    wslist.add(pc.rs.getString(2).trim());
 
                 }
 
                 String[] adatok = new String[3];
-                adatok[0] = pc.rs.getString(1);
-                adatok[1] = pc.rs.getString(2);
-                adatok[2] = pc.rs.getString(3);
+                adatok[0] = pc.rs.getString(1).trim();
+                adatok[1] = pc.rs.getString(2).trim();
+                adatok[2] = pc.rs.getString(3).trim();
                 this.gyarthatosagiadatok.add(adatok);
 
             }
@@ -163,6 +165,71 @@ public class BeSheet extends javax.swing.JPanel {
             pc.kinyir();
 
         }
+
+    }
+    
+    
+    //a plannobjectek összerendezése
+    
+        public void osszerendez() {
+//begyüjtjük a vertical lineokat
+        Component[] vtcomponents = this.jPanel2.getComponents();
+        Component[] pocomponents = this.jPanel1.getComponents();
+//ha vt-t találunk
+        for (int i = 0; i < vtcomponents.length; i++) {
+            if (vtcomponents[i] instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) vtcomponents[i];
+//csinálunk egy arrayt a po-knak amik ehhez a vt hez tartoznak
+                ArrayList<PlannObject> polist = new ArrayList<>();
+//az összes olyan po-t ami ehhez a vt hez tartozik betesszük ebbe a listába
+                for (int c = 0; c < pocomponents.length; c++) {
+
+                    if (pocomponents[c] instanceof PlannObject) {
+                        PlannObject po = (PlannObject) pocomponents[c];
+                        if (po.getStartdate().contains(vt.getVtstartdate())) {
+
+                            polist.add(po);
+
+                        }
+
+                    }
+
+                }
+
+//feltöltöttük a polistunket a megfelelő po-kkal, most be kéne buborékolni őket a lokációjuk alapján
+                class sortByLoc implements Comparator<PlannObject> {
+
+                    @Override
+                    public int compare(PlannObject a, PlannObject b) {
+                        return a.getLocation().y - b.getLocation().y;
+                    }
+
+                }
+//sorba rendezzük
+                Collections.sort(polist, new sortByLoc());
+
+//ha ez kész akkor relokáljuk őket ennek a sorrendnek megfelelően és beállítjuk a wtf et
+                int uccsohely = 10;
+                int wtf = 0;
+                
+                for (int c = 0; c < polist.size(); c++) {
+
+                    polist.get(c).setLocation(vt.getLocation().x, uccsohely);
+                    polist.get(c).setWtf(wtf);
+                    uccsohely = polist.get(c).getLocation().y + polist.get(c).getHeight() + 5;
+//beállítjuk az uj startdatet is
+                    //resetStartTime();
+                    wtf++;
+                  
+                    
+
+                }
+
+            }
+
+        }
+
+        //setScrollpanel();
 
     }
 
