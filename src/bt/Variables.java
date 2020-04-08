@@ -31,11 +31,14 @@ public class Variables {
     
 //a felhasználó valaki_valaki
     public static String user = "";
-
+//a job státusainak lehetőségei
     public static enum status {
         NotReleased, Released, Complete,Skeleton,NotExists
     };
-
+//mit rajzoljon a screensaver
+    public static enum screensaver {
+        sfdc, tervmentese
+    };
     public static enum viewports {
         plannpanel, datapanel
     };

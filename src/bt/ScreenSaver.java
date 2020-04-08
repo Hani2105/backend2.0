@@ -6,7 +6,9 @@
 package bt;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 
 /**
@@ -18,18 +20,35 @@ public class ScreenSaver extends javax.swing.JDialog {
     /**
      * Creates new form ScreenSaver
      */
+    
+    Variables.screensaver s;
+    
+    
     public ScreenSaver(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    @Override
-    public void setVisible(boolean b) {
+    public Variables.screensaver getS() {
+        return s;
+    }
 
+    public void setS(Variables.screensaver s) {
+        this.s = s;
+    }
+
+   
+    
+    
+    
+    public void setVisible(boolean b, Variables.screensaver s) {
+        this.s = s;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(screenSize);
         super.setVisible(b);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,7 +59,7 @@ public class ScreenSaver extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new ScreenSaverPanel();
+        jPanel1 = new ScreenSaverPanel(this);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);

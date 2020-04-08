@@ -84,7 +84,7 @@ public class SFDC implements Runnable {
                     int osszterv = 0;
 //megvizsgáljuk, hogy szerepel e az sfdc ben
 //ha nem kell figyelni a job ot és a first passt sem
-                    if (!p.getMainWindow().cp.jCheckBox1.isSelected() && !p.getMainWindow().cp.jCheckBox2.isSelected()) {
+                    if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
 
                         for (int s = 0; s < sfdcadat.length; s++) {
 
@@ -100,7 +100,7 @@ public class SFDC implements Runnable {
                     }
 
 //ha kell a job ot figyelni de a first passt nem
-                    if (p.getMainWindow().cp.jCheckBox1.isSelected() && !p.getMainWindow().cp.jCheckBox2.isSelected()) {
+                    if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
 
                         for (int s = 0; s < sfdcadat.length; s++) {
 
@@ -116,7 +116,7 @@ public class SFDC implements Runnable {
                     }
 
 //ha kell a job ot figyelni és a first passt is
-                    if (p.getMainWindow().cp.jCheckBox1.isSelected() && p.getMainWindow().cp.jCheckBox2.isSelected()) {
+                    if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
 
                         for (int s = 0; s < sfdcadat.length; s++) {
 
@@ -132,7 +132,7 @@ public class SFDC implements Runnable {
                     }
 
 //ha a job ot nem kell figyelni de a first passt igen
-                    if (!p.getMainWindow().cp.jCheckBox1.isSelected() && p.getMainWindow().cp.jCheckBox2.isSelected()) {
+                    if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
 
                         for (int s = 0; s < sfdcadat.length; s++) {
 

@@ -32,6 +32,25 @@ public class PlannPopup extends JPopupMenu {
         this.setOpaque(true);
         this.setBackground(new Color(251, 255, 222));
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(), "Menü", CENTER, 1));
+        //terv mentése
+        JMenuItem Ment = new JMenuItem("Terv mentése", new javax.swing.ImageIcon(getClass().getResource("/pictures/save.png")));
+        Ment.setOpaque(true);
+        Ment.setBackground(Variables.plannObjectPopupColor);
+        this.add(Ment);
+        Ment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //csináljunk valamit
+                
+                Thread t = new Thread(new TervMent(p.getbackendSheet()));
+                t.start();
+                m.ss.setVisible(true, Variables.screensaver.tervmentese);
+
+            }
+        });
+
+        //szeparátor
+        this.addSeparator();
 //setup
         JMenuItem setupMenuItem = new JMenuItem("Adatok módosítása", new javax.swing.ImageIcon(getClass().getResource("/pictures/setup.png")));
         setupMenuItem.setOpaque(true);
@@ -45,11 +64,10 @@ public class PlannPopup extends JPopupMenu {
             }
         });
         this.add(setupMenuItem);
- //submenu       
+        //submenu       
         JMenu attervez = new JMenu("Áttervez");
         this.add(attervez);
-        
-        
+
 //áttervez
         JMenuItem attervezMenuItem = new JMenuItem("Előre tervez", new javax.swing.ImageIcon(getClass().getResource("/pictures/replann.png")));
         attervezMenuItem.setOpaque(true);
@@ -99,12 +117,12 @@ public class PlannPopup extends JPopupMenu {
             public void actionPerformed(ActionEvent e) {
                 Thread t = new Thread(new SFDC(p));
                 t.start();
-                p.getMainWindow().ss.setVisible(true);
+                p.getMainWindow().ss.setVisible(true, Variables.screensaver.sfdc);
 
             }
         });
 
- //terv törlése
+        //terv törlése
         JMenuItem Delete = new JMenuItem("Terv törlése", new javax.swing.ImageIcon(getClass().getResource("/pictures/delete.png")));
         Delete.setOpaque(true);
         Delete.setBackground(Variables.plannObjectPopupColor);
@@ -119,7 +137,7 @@ public class PlannPopup extends JPopupMenu {
 
             }
         });
-        
+
 //terv másolása
         JMenuItem Copy = new JMenuItem("Terv másolása", new javax.swing.ImageIcon(getClass().getResource("/pictures/copy.png")));
         Copy.setOpaque(true);
@@ -129,16 +147,15 @@ public class PlannPopup extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //csináljunk valamit
-               PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(),p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m);
-               po.setStat(p.getStat());
-               po.setMikorment(p.getMikorment());
-               p.getbackendSheet().jPanel1.add(po);
-               p.getbackendSheet().jPanel1.revalidate();
-               p.getbackendSheet().jPanel1.repaint();
+                PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(), p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m);
+                po.setStat(p.getStat());
+                po.setMikorment(p.getMikorment());
+                p.getbackendSheet().jPanel1.add(po);
+                p.getbackendSheet().jPanel1.revalidate();
+                p.getbackendSheet().jPanel1.repaint();
 
             }
         });
-        
 
     }
 

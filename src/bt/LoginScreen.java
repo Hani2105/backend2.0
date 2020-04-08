@@ -182,7 +182,7 @@ public class LoginScreen extends javax.swing.JDialog {
                             "Bejelentkezési hiba!",
                             JOptionPane.ERROR_MESSAGE);
 
-                    m.cp.jLabel4.setText("Jogosultságod: Nem vagy bejelentkezve!");
+                    m.jLabel5.setText("Jogosultságod: Nem vagy bejelentkezve!");
                     Variables.planner = 0;
                     MainWindow.j.kezel();
                     return;
@@ -203,7 +203,8 @@ public class LoginScreen extends javax.swing.JDialog {
                 if (poz == 1 || poz == 2 || poz == 4) {
                     Variables.planner = 1;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint planner!");
+                    m.jLabel6.setText( Variables.user);
+                    m.jLabel5.setText("Planner");
                     MainWindow.j.kezel();
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     t.start();
@@ -212,7 +213,8 @@ public class LoginScreen extends javax.swing.JDialog {
 
                     Variables.planner = 0;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " csak megtekintésre!");
+                    m.jLabel6.setText(Variables.user);
+                    m.jLabel5.setText("Vendég");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     MainWindow.j.kezel();
                     t.start();
@@ -221,7 +223,8 @@ public class LoginScreen extends javax.swing.JDialog {
 //ha bennt van a permben de nem 0 és nem 1 ,2 ,4 es a pizija
                     Variables.planner = 2;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.cp.jLabel4.setText("Bejelentkezve: " + Variables.user + " mint műszakvezető!");
+                    m.jLabel6.setText(Variables.user);
+                    m.jLabel5.setText("Műszakvezető");
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
                     MainWindow.j.kezel();
                     t.start();

@@ -7,6 +7,7 @@ package bt;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
@@ -15,22 +16,29 @@ import javax.swing.JPanel;
  */
 public class ScreenSaverPanel extends JPanel {
 
-    public ScreenSaverPanel() {
-        
-        
+    Variables.screensaver s;
+    ScreenSaver ss;
+
+    public ScreenSaverPanel(ScreenSaver ss) {
+        this.ss = ss;
+
     }
 
-    
-    
     @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
-        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 45));
-       // g.drawString("NYÁÁÁÁÁÁÁÁÁÁÁÁÁ", 200, 200);
-       g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sfdc_1.png")).getImage(), (this.getWidth()/2)-460, (this.getHeight()/2)-53 , this);
+
+        switch (ss.getS()) {
+            case sfdc:
+                g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 45));
+                g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sfdc_1.png")).getImage(), (this.getWidth() / 2) - 460, (this.getHeight() / 2) - 53, this);
+                break;
+            case tervmentese:
+                g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/bigsave.png")).getImage(), (this.getWidth() / 2) - 175, (this.getHeight() / 2) - 175, this);
+
+        }
 
     }
-    
-    
 
 }

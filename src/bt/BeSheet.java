@@ -68,6 +68,8 @@ public class BeSheet extends javax.swing.JPanel {
     public BeSheet(MainWindow m, String neve) {
         this.m = m;
         initComponents();
+        //a splitpane beállítása
+        
         //beállítjuk a grafikát a viewportokhoz
         jScrollPane1.setViewport(new ViewPortGraphics(Variables.viewports.datapanel));
         jScrollPane2.setViewport(new ViewPortGraphics(Variables.viewports.plannpanel));
@@ -333,11 +335,8 @@ public class BeSheet extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1140, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1152, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

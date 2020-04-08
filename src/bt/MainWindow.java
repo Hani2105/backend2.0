@@ -6,6 +6,9 @@
 package bt;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,6 +48,9 @@ public class MainWindow extends javax.swing.JFrame {
         j = new JogosultsagKezelo(cp, spo);
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
+        //a splitpane szélességének beállítása
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        jSplitPane1.setDividerLocation((screenSize.width / 100) * 95);
         this.setVisible(true);
         ls.setVisible(true);
 
@@ -62,7 +68,26 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new TabbedPaneWithCloseIcons();
+        jPanel1 = new javax.swing.JPanel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jTextField1 = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -74,6 +99,10 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Backend Tervező 2.0");
         setSize(new java.awt.Dimension(800, 600));
 
+        jSplitPane1.setDividerLocation(600);
+        jSplitPane1.setDividerSize(15);
+        jSplitPane1.setOneTouchExpandable(true);
+
         jTabbedPane1.setOpaque(true);
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(1000, 600));
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -81,6 +110,129 @@ public class MainWindow extends javax.swing.JFrame {
                 jTabbedPane1StateChanged(evt);
             }
         });
+        jSplitPane1.setLeftComponent(jTabbedPane1);
+
+        jPanel1.setMinimumSize(new java.awt.Dimension(150, 100));
+
+        jDateChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tól", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jDateChooser1.setPreferredSize(new java.awt.Dimension(100, 42));
+
+        jDateChooser2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ig", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        jLabel2.setText("Terv intervallum:");
+
+        jProgressBar1.setRequestFocusEnabled(false);
+        jProgressBar1.setString("Lekér!");
+        jProgressBar1.setStringPainted(true);
+        jProgressBar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jProgressBar1MouseClicked(evt);
+            }
+        });
+
+        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Kereső", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
+        jLabel3.setText("SFDC beállítások:");
+
+        jCheckBox1.setText("SFDC, JOB figyelés!");
+        jCheckBox1.setToolTipText("Ha be van kapcsolva, a megvalósulás kitöltésénél figyelembe vesszük a JOB számot is!");
+        jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        jCheckBox2.setText("SFDC, first pass only!");
+        jCheckBox2.setToolTipText("Ha be van kapcsolva, csak a first pass mennyiséget vesszük figyelembe!");
+        jCheckBox2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        jLabel5.setFont(new java.awt.Font("Magneto", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 204, 204));
+        jLabel5.setText("Ismeretlen!");
+
+        jLabel6.setFont(new java.awt.Font("Magneto", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 204, 204));
+        jLabel6.setText(" Idegen!");
+
+        jLabel7.setText("Üdv");
+
+        jLabel8.setText("Mint:");
+
+        jButton1.setText("Terv mentése");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTextField1)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(jSeparator3)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator4)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(1, 1, 1))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(136, Short.MAX_VALUE))
+        );
+
+        jSplitPane1.setRightComponent(jPanel1);
 
         jMenuBar2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
 
@@ -115,11 +267,11 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
 
         pack();
@@ -181,6 +333,33 @@ public class MainWindow extends javax.swing.JFrame {
         cp.jTextPane1.setText("");
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        // kereseő
+        BeSheet b = (BeSheet) this.jTabbedPane1.getComponentAt(this.jTabbedPane1.getSelectedIndex());
+        Component[] components = b.jPanel1.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] instanceof PlannObject) {
+
+                PlannObject po = (PlannObject) components[i];
+                if (!po.getJob().contains(jTextField1.getText()) && !po.getPn().contains(jTextField1.getText())) {
+
+                    po.setVisible(false);
+                } else {
+                    po.setVisible(true);
+                }
+
+            }
+
+        }
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jProgressBar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jProgressBar1MouseClicked
+        // terv lekérése
+        jProgressBar1.setString("Lekérés folyamatban!");
+        Thread t = new Thread(new TervLeker(this));
+        t.start();
+    }//GEN-LAST:event_jProgressBar1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -227,11 +406,30 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    public static javax.swing.JCheckBox jCheckBox1;
+    public static javax.swing.JCheckBox jCheckBox2;
+    public static com.toedter.calendar.JDateChooser jDateChooser1;
+    public static com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    public static javax.swing.JLabel jLabel5;
+    public static javax.swing.JLabel jLabel6;
+    public static javax.swing.JLabel jLabel7;
+    public static javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPanel jPanel1;
+    public static javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSplitPane jSplitPane1;
     public static javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
