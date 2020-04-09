@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import bt.MainWindow;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -69,7 +70,7 @@ public class BeSheet extends javax.swing.JPanel {
         this.m = m;
         initComponents();
         //a splitpane beállítása
-        
+
         //beállítjuk a grafikát a viewportokhoz
         jScrollPane1.setViewport(new ViewPortGraphics(Variables.viewports.datapanel));
         jScrollPane2.setViewport(new ViewPortGraphics(Variables.viewports.plannpanel));
@@ -90,10 +91,6 @@ public class BeSheet extends javax.swing.JPanel {
         this.utolsotime = utolsotime;
     }
 
- 
-
-    
-    
     public String getUtolsomodisito() {
         return utolsomodisito;
     }
@@ -101,9 +98,6 @@ public class BeSheet extends javax.swing.JPanel {
     public void setUtolsomodisito(String utolsomodisito) {
         this.utolsomodisito = utolsomodisito;
     }
-    
-    
-    
 
     public MainWindow getM() {
         return m;
@@ -169,11 +163,9 @@ public class BeSheet extends javax.swing.JPanel {
         }
 
     }
-    
-    
+
     //a plannobjectek összerendezése
-    
-        public void osszerendez() {
+    public void osszerendez() {
 //begyüjtjük a vertical lineokat
         Component[] vtcomponents = this.jPanel2.getComponents();
         Component[] pocomponents = this.jPanel1.getComponents();
@@ -213,7 +205,7 @@ public class BeSheet extends javax.swing.JPanel {
 //ha ez kész akkor relokáljuk őket ennek a sorrendnek megfelelően és beállítjuk a wtf et
                 int uccsohely = 10;
                 int wtf = 0;
-                
+
                 for (int c = 0; c < polist.size(); c++) {
 
                     polist.get(c).setLocation(vt.getLocation().x, uccsohely);
@@ -222,8 +214,6 @@ public class BeSheet extends javax.swing.JPanel {
 //beállítjuk az uj startdatet is
                     //resetStartTime();
                     wtf++;
-                  
-                    
 
                 }
 
@@ -232,7 +222,6 @@ public class BeSheet extends javax.swing.JPanel {
         }
 
         //setScrollpanel();
-
     }
 
 //a gyártási darabszám grafikonához a számolás
@@ -277,7 +266,6 @@ public class BeSheet extends javax.swing.JPanel {
         });
 
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.

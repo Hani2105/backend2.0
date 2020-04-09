@@ -70,7 +70,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new TabbedPaneWithCloseIcons();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new OldalMenuPanel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
@@ -87,7 +87,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -112,12 +111,14 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jSplitPane1.setLeftComponent(jTabbedPane1);
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(150, 100));
+        jPanel1.setMinimumSize(new java.awt.Dimension(160, 100));
 
         jDateChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tól", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jDateChooser1.setOpaque(false);
         jDateChooser1.setPreferredSize(new java.awt.Dimension(100, 42));
 
         jDateChooser2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ig", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jDateChooser2.setOpaque(false);
 
         jLabel2.setText("Terv intervallum:");
 
@@ -131,6 +132,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Kereső", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jTextField1.setOpaque(false);
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField1KeyReleased(evt);
@@ -142,10 +144,12 @@ public class MainWindow extends javax.swing.JFrame {
         jCheckBox1.setText("SFDC, JOB figyelés!");
         jCheckBox1.setToolTipText("Ha be van kapcsolva, a megvalósulás kitöltésénél figyelembe vesszük a JOB számot is!");
         jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jCheckBox1.setOpaque(false);
 
         jCheckBox2.setText("SFDC, first pass only!");
         jCheckBox2.setToolTipText("Ha be van kapcsolva, csak a first pass mennyiséget vesszük figyelembe!");
         jCheckBox2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jCheckBox2.setOpaque(false);
 
         jLabel5.setFont(new java.awt.Font("Magneto", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 204, 204));
@@ -158,8 +162,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel7.setText("Üdv");
 
         jLabel8.setText("Mint:");
-
-        jButton1.setText("Terv mentése");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -183,10 +185,9 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator4)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -227,9 +228,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jPanel1);
@@ -308,7 +307,10 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (Exception e) {
 
         } finally {
-            pc.kinyir();
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+            }
         }
 
     }
@@ -406,7 +408,6 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     public static javax.swing.JCheckBox jCheckBox1;
     public static javax.swing.JCheckBox jCheckBox2;
     public static com.toedter.calendar.JDateChooser jDateChooser1;

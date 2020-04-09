@@ -251,7 +251,6 @@ public class PlannObject extends JLabel {
         return backendSheet;
     }
 
-
     public String getWorkStation() {
         return workStation;
     }
@@ -282,7 +281,7 @@ public class PlannObject extends JLabel {
     public void setScrollpanel() {
 
         Component components[] = backendSheet.jPanel1.getComponents();
-        int maxx = 200;
+//        int maxx = 200;
         int maxy = 200;
         for (int i = 0; i < components.length; i++) {
 
@@ -290,11 +289,10 @@ public class PlannObject extends JLabel {
 
                 PlannObject po = (PlannObject) components[i];
 
-                if (po.getLocation().x + this.getWidth() > maxx) {
-
-                    maxx = po.getLocation().x + this.getWidth() + 100;
-                }
-
+//                if (po.getLocation().x + this.getWidth() > maxx) {
+//
+//                    maxx = po.getLocation().x + this.getWidth() + 100;
+//                }
                 if (po.getLocation().y + this.getHeight() > maxy) {
 
                     maxy = po.getLocation().y + this.getHeight() + 100;
@@ -304,8 +302,8 @@ public class PlannObject extends JLabel {
 
         }
 
-        backendSheet.jPanel1.setPreferredSize(new Dimension(maxx, maxy));
-        backendSheet.jPanel2.setPreferredSize(new Dimension(maxx, (int) backendSheet.jPanel2.getPreferredSize().getHeight()));
+        backendSheet.jPanel1.setPreferredSize(new Dimension((int) backendSheet.jPanel1.getPreferredSize().getWidth(), maxy));
+       // backendSheet.jPanel2.setPreferredSize(new Dimension((int) backendSheet.jPanel1.getPreferredSize().getWidth(), (int) backendSheet.jPanel2.getPreferredSize().getHeight()));
         backendSheet.jPanel1.revalidate();
         repaint();
 

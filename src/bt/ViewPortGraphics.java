@@ -25,10 +25,10 @@ public class ViewPortGraphics extends JViewport {
 
         switch (viewports) {
             case plannpanel:
-                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/17545.jpg"));
+                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/3298158.jpg"));
                 break;
             case datapanel:
-                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/3438857.jpg"));
+                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/3298158.jpg"));
 //                img = Variables.datapanelbackground;
                 break;
         }

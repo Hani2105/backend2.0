@@ -6,13 +6,17 @@
 package bt;
 
 import java.awt.Color;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import org.ini4j.Wini;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -23,57 +27,49 @@ public class IniKezel {
 //megprobáljuk beolvasni az ini filet
     public void iniOlvas(MainWindow m) throws IOException {
 
+        //könyvtár létrehozása
+        new File(System.getProperty("user.home") + "\\BT").mkdir();
+        //Picture könyvtár létrehozása
+        new File(System.getProperty("user.home") + "\\BT\\Pictures").mkdir();
+        //kiirjuk a filet
+
+        BufferedImage img =  ImageIO.read(getClass().getResource("/pictures/3298158.jpg"));
+        ImageIO.write(img, "jpg",new File(System.getProperty("user.home") + "\\BT\\Pictures\\valami.jpg"));
+        
+
+
         try {
-            Wini ini = new Wini(new File("C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini"));
+            Wini ini = new Wini(new File(System.getProperty("user.home") + "\\BT\\BT.ini"));
             Variables.plannObjectPopupColor = new Color(ini.get("colors", "plannObjectPopupColor", int.class));
             Variables.zold = new Color(ini.get("colors", "zold", int.class));
             Variables.piros = new Color(ini.get("colors", "piros", int.class));
             Variables.tabcolor = new Color(ini.get("colors", "tabcolor", int.class));
             Variables.selectedtabcolor = new Color(ini.get("colors", "selectedtabcolor", int.class));
 
-//            int age = ini.get("owner", "age", int.class);
-//            double height = ini.get("owner", "height", double.class);
-//            String neve = ini.get("owner", "name");
-//
-//            System.out.print("Age: " + age + "\n");
-//            System.out.print("Geight: " + height + "\n");
-//            System.out.print("Server IP: " + neve + "\n");
-            // To catch basically any error related to finding the file e.g
-            // (The system cannot find the file specified)
         } catch (Exception e) {
 //ha nem létezik akkor létrehozunk egyet
             //m.info.setVisible(true, "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini</html>");
             JOptionPane.showMessageDialog(m,
-                    "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini</html>",
+                    "<html>Jelenleg nem létezik ini file!<br>Most létrehozunk egyet a következő helyen:<br>C:\\Users\\" + System.getProperty("user.home") + "\\BT\\" + "BT.ini</html>",
                     "Figyelem!",
                     JOptionPane.WARNING_MESSAGE);
-            ArrayList<String> sorok = new ArrayList<>();
-            sorok.add("[colors]");
-            sorok.add("//a terv popupjának háttérszíne");
-            sorok.add("plannObjectPopupColor=16777195");
-            sorok.add("//a statisztikai piros és zöld");
-            sorok.add("zold=11468631");
-            sorok.add("piros=16544370");
-            sorok.add("//a tabok színei");
-            sorok.add("tabcolor=15775206");
-            sorok.add("selectedtabcolor=7191285");
-            sorok.add("//a panelek háttere");
-            sorok.add("datapanelbackground=C:\\Users\\" + System.getProperty("user.name") + "\\" + "valami.jpg");
 
-            //ki kell írni egy fileba az adatokat
-            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\" + "BT.ini");
-            file.createNewFile();
-            FileWriter writer = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(writer);
+            try {
 
-            for (int i = 0; i < sorok.size(); i++) {
+                //ini file létrehozása
+                File file = new File(System.getProperty("user.home") + "\\BT\\BT.ini");
+                file.createNewFile();
+                //ini file kezelése
+                Wini ini = new Wini(new File(System.getProperty("user.home") + "\\BT\\BT.ini"));
+                ini.put("colors", "plannObjectPopupColor", "16777195");
+                ini.put("colors", "zold", "11468631");
+                ini.put("colors", "piros", "16544370");
+                ini.put("colors", "tabcolor", "15775206");
+                ini.store();
 
-                bw.write(sorok.get(i));
-                bw.newLine();
-
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-            bw.close();
 
         }
 

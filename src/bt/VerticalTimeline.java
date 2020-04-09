@@ -2,6 +2,7 @@ package bt;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -107,7 +108,7 @@ public class VerticalTimeline extends JLabel {
         });
 
     }
-
+  
     public int getDayOfWeekFromVtStartdate(String vtstartdate) {
         int dayofweek = 100;
         try {
@@ -203,7 +204,6 @@ public class VerticalTimeline extends JLabel {
 
         be.m.cp.jTextPane1.setText("<html>Tervezett mennyiség a cellára nézve:<br><table border = \"4\"><tr><td><font color=\"red\">Össz terv: </td><td><font color=\"black\">" + osszterv + "</td><tr><td><font color=\"red\">Össz tény: <font color=\"black\"></td>" + osszteny + "</tr></table><br>"
                 + wsenkent + "</table><br>" + allomasido + "</table><br>" + jobonkentszoveg + "</table></html>");
-       
 
     }
 

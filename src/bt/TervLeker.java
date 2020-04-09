@@ -5,6 +5,7 @@
  */
 package bt;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -84,6 +85,9 @@ public class TervLeker implements Runnable {
                 vt = new VerticalTimeline(b, dateFormat.format(c.getTime()) + " 18:00");
                 b.jPanel2.add(vt);
                 vt.setLocation(x, 0);
+//hozzáállítjuk a panelek méretét is
+                b.jPanel1.setPreferredSize(new Dimension(x + 210, (int)b.jPanel1.getPreferredSize().getHeight()));
+                b.jPanel2.setPreferredSize(new Dimension(x+210, (int) b.jPanel2.getPreferredSize().getHeight()));
                 x += 210;
                 c.add(Calendar.DATE, 1);
 
@@ -107,8 +111,8 @@ public class TervLeker implements Runnable {
                 pc = new PlanConnect();
                 pc.lekerdez(query);
                 pc.rs.last();
-                int poszam = pc.rs.getRow() - 1;
-                int szamlalo = 0;
+                int poszam = pc.rs.getRow() ;
+                int szamlalo = 1;
                 pc.rs.beforeFirst();
                 while (pc.rs.next()) {
                     m.jProgressBar1.setMaximum(poszam);
