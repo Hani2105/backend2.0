@@ -17,18 +17,14 @@ import javax.swing.ImageIcon;
 public class Variables {
 
 //a popup menu szine
-    public static Color plannObjectPopupColor = new Color(16777195);
+    public static Color plannObjectPopupColor;
 //a statisztikai vonalak szinei       
-    public static Color zold = new Color(11468631);
-    public static Color piros = new Color(16544370);
+    public static Color zold;
+    public static Color piros;
 //a tab szinei
-    public static Color tabcolor = new Color(15775206);
-    public static Color selectedtabcolor = new Color(7191285);
+    public static Color tabcolor;
+    public static Color selectedtabcolor;
     public static ArrayList<String[]> pnkomment = new ArrayList<>();
-
-    
-    
-    
 //a felhasználó valaki_valaki
     public static String user = "";
 //a job státusainak lehetőségei
@@ -36,8 +32,8 @@ public class Variables {
         NotReleased, Released, Complete,Skeleton,NotExists
     };
 //mit rajzoljon a screensaver
-    public static enum screensaver {
-        sfdc, tervmentese
+    public static enum background {
+        sfdc, tervmentese, oldalmenu, controlpanelkulso, controlpanelbelso, setplannobjectback
     };
     public static enum viewports {
         plannpanel, datapanel

@@ -28,23 +28,21 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    //public ControlPanel cp = new ControlPanel(this, false, this);
+
     public SetPlannObjectData spo = new SetPlannObjectData(this, false);
-//    public ErrorPanel error = new ErrorPanel(this, true);
-//    public OkPanel okpanel = new OkPanel(this, false);
-//    public InfoPanel info = new InfoPanel(this, true);
     public LoginScreen ls = new LoginScreen(this, false, this);
     public ControlPanel cp = new ControlPanel(this, false, this);
     public static JogosultsagKezelo j;
-    public ScreenSaver ss = new ScreenSaver(this, true);
+    public SfdcHatter sfdchatter = new SfdcHatter(this, true);
+    public MentesHatter menteshatter = new MentesHatter(this, true);
 
     //a panel szelessege es magassaga
 //inicializálás
     public MainWindow() throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException {
+//        new IniKezel().iniOlvas();
         UIManager.setLookAndFeel(new MetalLookAndFeel());
         initComponents();
         pnCommentLeker();
-        new IniKezel().iniOlvas(this);
         j = new JogosultsagKezelo(cp, spo);
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
@@ -70,7 +68,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new TabbedPaneWithCloseIcons();
-        jPanel1 = new OldalMenuPanel();
+        jPanel1 = new BackgroundPanel(Variables.background.oldalmenu);
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();

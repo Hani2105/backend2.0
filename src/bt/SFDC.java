@@ -54,7 +54,7 @@ public class SFDC implements Runnable {
                     "Lekérdezési hiba!",
                     JOptionPane.ERROR_MESSAGE);
 
-            p.getMainWindow().ss.setVisible(false);
+            p.getMainWindow().sfdchatter.setVisible(false);
         }
 //az url beállítása
         xmlfeldolg xxx = new xmlfeldolg();
@@ -154,7 +154,7 @@ public class SFDC implements Runnable {
 //frissitjuk az adatokat
         p.getbackendSheet().collectData();
         try {
-            p.getMainWindow().ss.setVisible(false);
+            p.getMainWindow().sfdchatter.setVisible(false);
         } catch (Exception e) {
         }
 

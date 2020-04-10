@@ -38,7 +38,7 @@ public class TervMent implements Runnable {
                     "Változás a tervben!",
                     JOptionPane.WARNING_MESSAGE);
            
-            b.getM().ss.setVisible(false);
+            b.getM().menteshatter.setVisible(false);
             return;
         } else if (valtozas.equals("muszakvez")) {
 
@@ -61,12 +61,12 @@ public class TervMent implements Runnable {
                 mentes();
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
-                b.getM().ss.setVisible(false);
+                b.getM().menteshatter.setVisible(false);
                 JOptionPane.showMessageDialog(b.getM(),
                         "Sikeres mentés!");
 //ha nem mentem
             } else if (n == 1) {
-                b.getM().ss.setVisible(false);
+                b.getM().menteshatter.setVisible(false);
                 return;
             }
         } //ha egyezik az idő, menthetem
@@ -77,7 +77,7 @@ public class TervMent implements Runnable {
             mentes();
             //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
             valtozasFrissito();
-            b.getM().ss.setVisible(false);
+            b.getM().menteshatter.setVisible(false);
             JOptionPane.showMessageDialog(b.getM(),
                     "Sikeres mentés!");
 

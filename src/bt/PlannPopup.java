@@ -30,7 +30,7 @@ public class PlannPopup extends JPopupMenu {
     PlannPopup(PlannObject p, MainWindow m) {
 
         this.setOpaque(true);
-        this.setBackground(new Color(251, 255, 222));
+        this.setBackground(Variables.plannObjectPopupColor);
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(), "Menü", CENTER, 1));
         //terv mentése
         JMenuItem Ment = new JMenuItem("Terv mentése", new javax.swing.ImageIcon(getClass().getResource("/pictures/save.png")));
@@ -44,7 +44,7 @@ public class PlannPopup extends JPopupMenu {
                 
                 Thread t = new Thread(new TervMent(p.getbackendSheet()));
                 t.start();
-                m.ss.setVisible(true, Variables.screensaver.tervmentese);
+                m.menteshatter.setVisible(true);
 
             }
         });
@@ -117,7 +117,7 @@ public class PlannPopup extends JPopupMenu {
             public void actionPerformed(ActionEvent e) {
                 Thread t = new Thread(new SFDC(p));
                 t.start();
-                p.getMainWindow().ss.setVisible(true, Variables.screensaver.sfdc);
+                p.getMainWindow().sfdchatter.setVisible(true);
 
             }
         });

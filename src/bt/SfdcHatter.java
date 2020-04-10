@@ -15,40 +15,23 @@ import java.awt.Toolkit;
  *
  * @author gabor_hanacsek
  */
-public class ScreenSaver extends javax.swing.JDialog {
+public class SfdcHatter extends javax.swing.JDialog {
 
     /**
      * Creates new form ScreenSaver
      */
-    
-    Variables.screensaver s;
-    
-    
-    public ScreenSaver(java.awt.Frame parent, boolean modal) {
+    public SfdcHatter(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    public Variables.screensaver getS() {
-        return s;
-    }
+    @Override
+    public void setVisible(boolean b) {
 
-    public void setS(Variables.screensaver s) {
-        this.s = s;
-    }
-
-   
-    
-    
-    
-    public void setVisible(boolean b, Variables.screensaver s) {
-        this.s = s;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(screenSize);
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         super.setVisible(b);
+
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,7 +42,7 @@ public class ScreenSaver extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new ScreenSaverPanel(this);
+        jPanel1 = new BackgroundPanel(Variables.background.sfdc);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -107,20 +90,21 @@ public class ScreenSaver extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScreenSaver.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SfdcHatter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScreenSaver.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SfdcHatter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScreenSaver.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SfdcHatter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScreenSaver.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SfdcHatter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ScreenSaver dialog = new ScreenSaver(new javax.swing.JFrame(), true);
+                SfdcHatter dialog = new SfdcHatter(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -177,11 +177,11 @@ public class PlannObject extends JLabel {
             }
         });
 //a háttér beállítása
-        img = new javax.swing.ImageIcon(getClass().getResource("/pictures/poback.jpg"));
+        img = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\poback.jpg");
 //a háttér beállítása ha ki van jlölve
-        selectedimage = new javax.swing.ImageIcon(getClass().getResource("/pictures/csutortok.jpg"));
+        selectedimage = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\poselected.jpg");
 //nincs startime background
-        nostartimeimage = new javax.swing.ImageIcon(getClass().getResource("/pictures/nostarttime.jpg"));
+        nostartimeimage = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\nostarttime.jpg");
 
 //popupmenu csinálása
         JPopupMenu popupMenu = new PlannPopup(this, m);
@@ -289,10 +289,6 @@ public class PlannObject extends JLabel {
 
                 PlannObject po = (PlannObject) components[i];
 
-//                if (po.getLocation().x + this.getWidth() > maxx) {
-//
-//                    maxx = po.getLocation().x + this.getWidth() + 100;
-//                }
                 if (po.getLocation().y + this.getHeight() > maxy) {
 
                     maxy = po.getLocation().y + this.getHeight() + 100;

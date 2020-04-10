@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
@@ -20,16 +22,20 @@ import javax.swing.JViewport;
 public class ViewPortGraphics extends JViewport {
 
     ImageIcon img;
+    BeSheet b;
+    Variables.viewports viewports;
 
-    public ViewPortGraphics(Variables.viewports viewports) {
-
+    public ViewPortGraphics(Variables.viewports viewports, BeSheet b) {
+        this.b = b;
+        this.viewports = viewports;
         switch (viewports) {
             case plannpanel:
-                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/3298158.jpg"));
+//              img = new javax.swing.ImageIcon(getClass().getResource("/pictures/fopanelhatter.jpg"));
+                img = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\fopanelhatter.jpg");
                 break;
             case datapanel:
-                img = new javax.swing.ImageIcon(getClass().getResource("/pictures/3298158.jpg"));
-//                img = Variables.datapanelbackground;
+//              img = new javax.swing.ImageIcon(getClass().getResource("/pictures/fopanelhatter.jpg"));
+                img = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\adatpanelhatter.jpg");
                 break;
         }
     }
@@ -37,7 +43,15 @@ public class ViewPortGraphics extends JViewport {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(img.getImage(), 0, 0, this);
+        switch (viewports) {
+            case plannpanel:
+//                g.drawImage(img.getImage(), ((int) b.jPanel1.getSize().getWidth() / 2) - (img.getIconWidth() / 2), ((int) b.jPanel1.getSize().getHeight() / 2) - (img.getIconHeight() / 2), this);
+                g.drawImage(img.getImage(), (this.getSize().width / 2) - (img.getIconWidth() / 2), (this.getSize().height / 2) - (img.getIconHeight() / 2), this);
+                break;
+            case datapanel:
+                g.drawImage(img.getImage(), (this.getSize().width / 2) - (img.getIconWidth() / 2), (this.getSize().height/ 2) - (img.getIconHeight() / 2), this);
+                break;
+        }
     }
 
 }

@@ -72,8 +72,8 @@ public class BeSheet extends javax.swing.JPanel {
         //a splitpane beállítása
 
         //beállítjuk a grafikát a viewportokhoz
-        jScrollPane1.setViewport(new ViewPortGraphics(Variables.viewports.datapanel));
-        jScrollPane2.setViewport(new ViewPortGraphics(Variables.viewports.plannpanel));
+        jScrollPane1.setViewport(new ViewPortGraphics(Variables.viewports.datapanel, this));
+        jScrollPane2.setViewport(new ViewPortGraphics(Variables.viewports.plannpanel, this));
         jScrollPane1.setViewportView(jPanel2);
         jScrollPane2.setViewportView(jPanel1);
         this.m = m;

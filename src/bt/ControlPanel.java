@@ -77,9 +77,9 @@ public class ControlPanel extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new ControlPanelBackground();
+        jPanel2 = new BackgroundPanel(Variables.background.controlpanelkulso);
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel4 = new LoaderPanelBackground();
+        jPanel4 = new BackgroundPanel(Variables.background.controlpanelbelso);
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
@@ -90,17 +90,17 @@ public class ControlPanel extends javax.swing.JDialog {
         jSeparator3 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jPanel1 = new LoaderPanelBackground();
+        jPanel1 = new BackgroundPanel(Variables.background.controlpanelbelso);
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jPanel3 = new LoaderPanelBackground();
+        jPanel3 = new BackgroundPanel(Variables.background.controlpanelbelso);
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
+        jPanel5 = new BackgroundPanel(Variables.background.controlpanelbelso);
         jScrollPane5 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane6 = new javax.swing.JScrollPane();
