@@ -5,6 +5,7 @@
  */
 package bt;
 
+
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -183,7 +184,7 @@ public class LoginScreen extends javax.swing.JDialog {
                             JOptionPane.ERROR_MESSAGE);
 
                     m.jLabel5.setText("Jogosultságod: Nem vagy bejelentkezve!");
-                    Variables.planner = 0;
+                    Variables.jogosultsag = 0;
                     MainWindow.j.kezel();
                     return;
 
@@ -201,9 +202,9 @@ public class LoginScreen extends javax.swing.JDialog {
                 }
 //ha planner
                 if (poz == 1 || poz == 2 || poz == 4) {
-                    Variables.planner = 1;
+                    Variables.jogosultsag = 1;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
-                    m.jLabel6.setText( Variables.user);
+                    m.jLabel6.setText(Variables.user);
                     m.jLabel5.setText("Planner");
                     MainWindow.j.kezel();
                     Thread t = new Thread(new LoginZaro(this, 3000, m));
@@ -211,7 +212,7 @@ public class LoginScreen extends javax.swing.JDialog {
 //ha nincs az adatbázisban de az universal login jó (perm adatázis)
                 } else if (poz == 0) {
 
-                    Variables.planner = 0;
+                    Variables.jogosultsag = 0;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
                     m.jLabel6.setText(Variables.user);
                     m.jLabel5.setText("Vendég");
@@ -221,7 +222,7 @@ public class LoginScreen extends javax.swing.JDialog {
 
                 } else {
 //ha bennt van a permben de nem 0 és nem 1 ,2 ,4 es a pizija
-                    Variables.planner = 2;
+                    Variables.jogosultsag = 2;
                     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/lockjo3.gif")));
                     m.jLabel6.setText(Variables.user);
                     m.jLabel5.setText("Műszakvezető");
@@ -230,11 +231,11 @@ public class LoginScreen extends javax.swing.JDialog {
                     t.start();
                 }
 
-                m.cp.getCellas();
+              
 
             } catch (Exception e) {
-//                m.error.setVisible(true, "<html>Nem megfelelő login!<br>Próbáld újból!</html>");
-                Variables.planner = 0;
+                e.printStackTrace();
+                Variables.jogosultsag = 0;
                 MainWindow.j.kezel();
                 return;
 
@@ -242,9 +243,12 @@ public class LoginScreen extends javax.swing.JDialog {
                 try {
                     pc.kinyir();
                 } catch (Exception e) {
+
                 }
             }
 
+//az user celláinak lekérdezése
+            getCellas();
         }
 
 
@@ -254,6 +258,64 @@ public class LoginScreen extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_jLabel5MouseClicked
+
+    public void getCellas() {
+//lekérdezzük, hogy egyáltalán milyen celláink vannak
+        String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
+        PlanConnect pc = null;
+        DefaultListModel listModel = new DefaultListModel();
+        try {
+            pc = new PlanConnect();
+
+            try {
+                pc.lekerdez(query);
+
+                while (pc.rs.next()) {
+
+                    listModel.addElement(pc.rs.getString(1));
+                }
+
+                m.jList1.setModel(listModel);
+
+            } catch (SQLException ex) {
+
+            } catch (ClassNotFoundException ex) {
+
+            }
+//lekérdezzük a jelenleg a userhez tartozókat, id val tároljuk!
+            query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
+            try {
+                pc.lekerdez(query);
+                pc.rs.last();
+                int[] jeloltekszama = new int[pc.rs.getRow()];
+                pc.rs.beforeFirst();
+                int counter = 0;
+                while (pc.rs.next()) {
+//bejárjuk jlist 1 et és kijelöljük ha van egyezés
+                    for (int i = 0; i < listModel.size(); i++) {
+                        if (pc.rs.getString(1).equals(listModel.getElementAt(i))) {
+
+                            jeloltekszama[counter] = i;
+                            counter++;
+
+                        }
+                    }
+
+                }
+                
+                m.jList1.setSelectedIndices(jeloltekszama);
+
+            } catch (SQLException ex) {
+
+            } catch (ClassNotFoundException ex) {
+
+            }
+        } catch (Exception e) {
+        } finally {
+            pc.kinyir();
+        }
+
+    }
 
     /**
      * @param args the command line arguments

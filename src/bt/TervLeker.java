@@ -35,7 +35,9 @@ public class TervLeker implements Runnable {
 
     @Override
     public void run() {
-        //lecsekkoljuk, hogy va e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
+        //a megfelő dátum formátum a po starttimenak
+        DateFormat poformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //lecsekkoljuk, hogy van e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
 
         try {
 
@@ -62,10 +64,18 @@ public class TervLeker implements Runnable {
         //annyi besheetet adunk hozzá amennyi a control panel jlist2 ben van
         //        ArrayList<String> tabok = new ArrayList<>();
         m.jTabbedPane1.removeAll();
-        for (int i = 0; i < ControlPanel.jList2.getModel().getSize(); i++) {
+        //ki kell szedni a kijelölt elemeket a listából
+        // Get the index of all the selected items
+        int[] selectedIx = m.jList1.getSelectedIndices();
+        // Get all the selected items using the indices
+        String[] selectedItems = new String[selectedIx.length];
+        for (int i = 0; i < selectedIx.length; i++) {
+            selectedItems[i] = m.jList1.getModel().getElementAt(selectedIx[i]);
+        }
+        for (int i = 0; i <selectedItems.length ; i++) {
 
-            BeSheet b = new BeSheet(m, ControlPanel.jList2.getModel().getElementAt(i));
-            b.setName(ControlPanel.jList2.getModel().getElementAt(i));
+            BeSheet b = new BeSheet(m, selectedItems[i]);
+            b.setName(selectedItems[i]);
             Calendar c = Calendar.getInstance();
             //a datumot be kell formazni stringe
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -86,13 +96,15 @@ public class TervLeker implements Runnable {
                 b.jPanel2.add(vt);
                 vt.setLocation(x, 0);
 //hozzáállítjuk a panelek méretét is
-                b.jPanel1.setPreferredSize(new Dimension(x + 210, (int)b.jPanel1.getPreferredSize().getHeight()));
-                b.jPanel2.setPreferredSize(new Dimension(x+210, (int) b.jPanel2.getPreferredSize().getHeight()));
+                b.jPanel1.setPreferredSize(new Dimension(x + 210, (int) b.jPanel1.getPreferredSize().getHeight()));
+                b.jPanel2.setPreferredSize(new Dimension(x + 210, (int) b.jPanel2.getPreferredSize().getHeight()));
                 x += 210;
                 c.add(Calendar.DATE, 1);
 
             }
             //kell egy query ami lekérdezi az adatokat
+            //a formattert átalakítjuk a megfelelő formátummá
+
 //        tabneve = "UBT";
             String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
                     + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
@@ -111,7 +123,7 @@ public class TervLeker implements Runnable {
                 pc = new PlanConnect();
                 pc.lekerdez(query);
                 pc.rs.last();
-                int poszam = pc.rs.getRow() ;
+                int poszam = pc.rs.getRow();
                 int szamlalo = 1;
                 pc.rs.beforeFirst();
                 while (pc.rs.next()) {
@@ -123,7 +135,7 @@ public class TervLeker implements Runnable {
                     int qty = b.getIntFromText(pc.rs.getString("qty"));
                     int qty_teny = b.getIntFromText(pc.rs.getString("qty_teny"));
 
-                    PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), pc.rs.getString("date"), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
+                    PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), poformatter.format(pc.rs.getTimestamp("date")), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
                     b.jPanel1.add(po);
                     szamlalo++;
 
@@ -136,6 +148,7 @@ public class TervLeker implements Runnable {
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
 
                 pc.kinyir();
@@ -154,8 +167,7 @@ public class TervLeker implements Runnable {
 //elindítjuk a mikor gyártottuk futását
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
-//visszaállítjuk a gombot semmire
-        ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png")));
+
     }
 
 }

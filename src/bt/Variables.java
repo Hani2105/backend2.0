@@ -39,7 +39,11 @@ public class Variables {
         plannpanel, datapanel
     };
 //a felhasználó pozíciója, planner vagy műszakvezető vagy csak megtekintés, 1,2,0
-    public static int planner = 0;
-
+    public static int jogosultsag = 0;
+//a planner adatbázis változói
+    public static String plannurl;
+    public static String plannusername;
+    public static String plannpassword;
+    public static String planndriver;
 
 }

@@ -37,7 +37,7 @@ public class TervMent implements Runnable {
                     "<html>A tervedben planneri változtatás történt!<br>(" + valtozasuser + ")<br>A tervet újból le kell kérned mentés előtt!</html>",
                     "Változás a tervben!",
                     JOptionPane.WARNING_MESSAGE);
-           
+
             b.getM().menteshatter.setVisible(false);
             return;
         } else if (valtozas.equals("muszakvez")) {
@@ -55,15 +55,13 @@ public class TervMent implements Runnable {
                     options[1]);
             //ha folytatom a mentést
             if (n == 0) {
-               
+
                 //deaktiváljuk a régi tervet
                 deActivate();
                 mentes();
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
-                b.getM().menteshatter.setVisible(false);
-                JOptionPane.showMessageDialog(b.getM(),
-                        "Sikeres mentés!");
+       
 //ha nem mentem
             } else if (n == 1) {
                 b.getM().menteshatter.setVisible(false);
@@ -71,15 +69,12 @@ public class TervMent implements Runnable {
             }
         } //ha egyezik az idő, menthetem
         else if (valtozas.equals("mehet")) {
-          
+
             //deaktiváljuk az eddigi tervet
             deActivate();
             mentes();
             //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
             valtozasFrissito();
-            b.getM().menteshatter.setVisible(false);
-            JOptionPane.showMessageDialog(b.getM(),
-                    "Sikeres mentés!");
 
         }
 
@@ -125,6 +120,9 @@ public class TervMent implements Runnable {
         try {
             pc = new PlanConnect();
             pc.feltolt(query.toString());
+            b.getM().menteshatter.setVisible(false);
+            JOptionPane.showMessageDialog(b.getM(),
+                    "Sikeres mentés!");
 
         } catch (SQLException ex) {
             Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);

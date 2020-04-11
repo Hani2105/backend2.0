@@ -26,7 +26,7 @@ public class JogosultsagKezelo {
 
         //control panel beállításai
         //tervek hozzáadás letiltása a  2 es esetben műszakvezető
-        if (Variables.planner == 2) {
+        if (Variables.jogosultsag == 2) {
             cp.jLabel2.setEnabled(false);
             //setplannobject beállításai
             //ha műszakvezető akkor ne lehessen szerkeszteni a pn-t
@@ -68,7 +68,7 @@ public class JogosultsagKezelo {
             }
 
         } //sima megtekintő
-        else if (Variables.planner == 0) {
+        else if (Variables.jogosultsag == 0) {
 //semmit nem csinálhat
             cp.jLabel2.setEnabled(false);
             //setplannobject beállításai

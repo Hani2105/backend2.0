@@ -5,42 +5,17 @@
  */
 package bt;
 
-import com.toedter.calendar.JDateChooserCellEditor;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.List;
-import static java.lang.reflect.Array.set;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
 /**
@@ -54,7 +29,7 @@ public class ControlPanel extends javax.swing.JDialog {
      */
     int x;
     int y;
-   
+
     MainWindow m;
 
     public ControlPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
@@ -80,16 +55,9 @@ public class ControlPanel extends javax.swing.JDialog {
         jPanel2 = new BackgroundPanel(Variables.background.controlpanelkulso);
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new BackgroundPanel(Variables.background.controlpanelbelso);
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jPanel1 = new BackgroundPanel(Variables.background.controlpanelbelso);
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -132,58 +100,16 @@ public class ControlPanel extends javax.swing.JDialog {
             }
         });
 
-        jList1.setToolTipText("Jelöld ki a cellákat, majd a nyillal egyszerre tedd át őket!");
-        jScrollPane3.setViewportView(jList1);
-
-        jLabel5.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText(">>");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
-            }
-        });
-
-        jScrollPane4.setViewportView(jList2);
-
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocksstatic.png"))); // NOI18N
-        jButton1.setText("Lekérdez");
-        jButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Ment");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(303, 303, 303)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,18 +122,9 @@ public class ControlPanel extends javax.swing.JDialog {
             .addComponent(jSeparator1)
             .addComponent(jSeparator2)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(54, 54, 54)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addGap(0, 106, Short.MAX_VALUE))
+                .addGap(71, 71, 71)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 319, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Tervek kezelése", jPanel4);
@@ -703,91 +620,6 @@ public class ControlPanel extends javax.swing.JDialog {
         tablaTorol();
     }//GEN-LAST:event_jLabel3MouseClicked
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        PlanConnect pc = null;
-        try {
-            //kiszedjuk a listabol a kivalasztott elemeket
-
-            int[] selectedIx = jList1.getSelectedIndices();
-            //létrehozunk egy másik listmodelt
-            DefaultListModel lm = new DefaultListModel();
-            // Get all the selected items using the indices
-            String adattoquery = "";
-            for (int i = 0; i < selectedIx.length; i++) {
-                lm.addElement(jList1.getModel().getElementAt(selectedIx[i]));
-                adattoquery += "'" + jList1.getModel().getElementAt(selectedIx[i]) + "',";
-            }
-            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
-            jList2.setModel(lm);
-            //feltöltjük az adatbázisba
-            //összeszedjük , vel elválasztva
-            pc = new PlanConnect();
-            String query = "select tc_becells.idtc_cells from tc_becells where tc_becells.cellname in (" + adattoquery + ")";
-            pc.lekerdez(query);
-            adattoquery = "";
-            while (pc.rs.next()) {
-
-                adattoquery += pc.rs.getString(1) + ",";
-            }
-            adattoquery = adattoquery.substring(0, adattoquery.length() - 1);
-            query = "insert ignore tc_users (tc_users.username , tc_users.cellaids) values ('" + Variables.user + "' , '" + adattoquery + "') on duplicate key update tc_users.cellaids = values(tc_users.cellaids)";
-
-            pc.feltolt(query);
-
-        } catch (SQLException ex) {
-
-        } catch (ClassNotFoundException ex) {
-
-        } finally {
-            pc.kinyir();
-        }
-
-    }//GEN-LAST:event_jLabel5MouseClicked
-
-    public void getCellas() {
-//lekérdezzük, hogy egyáltalán milyen celláink vannak
-        String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
-        PlanConnect pc = null;
-        try {
-            pc = new PlanConnect();
-
-            try {
-                pc.lekerdez(query);
-                DefaultListModel listModel = new DefaultListModel();
-                while (pc.rs.next()) {
-
-                    listModel.addElement(pc.rs.getString(1));
-                }
-
-                jList1.setModel(listModel);
-
-            } catch (SQLException ex) {
-
-            } catch (ClassNotFoundException ex) {
-
-            }
-//lekérdezzük a jelenleg a userhez tartozókat, id val tároljuk!
-            query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
-            try {
-                pc.lekerdez(query);
-                DefaultListModel list2 = new DefaultListModel();
-                while (pc.rs.next()) {
-
-                    list2.addElement(pc.rs.getString(1));
-                }
-
-                jList2.setModel(list2);
-            } catch (SQLException ex) {
-
-            } catch (ClassNotFoundException ex) {
-
-            }
-        } catch (Exception e) {
-        } finally {
-            pc.kinyir();
-        }
-
-    }
 
     public void muszakjelentesToBesheets() {
 //a muszakjelentes szoveget eltaroljuk a sheeten
@@ -816,21 +648,6 @@ public class ControlPanel extends javax.swing.JDialog {
         //muszakjlelentes elkuldese
         sendMail();
     }//GEN-LAST:event_jLabel7MouseClicked
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // terv lekérése
-        //lecsekkoljuk, hogy va e valami kiválasztva a datechooserekben és, hogy a tol kisebb legyen mint az ig
-        ControlPanel.jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/blocks.gif")));
-        Thread t = new Thread(new TervLeker(m));
-        t.start();
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        //mentés
-//        TervMent m = new TervMent((BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()));
-//        m.ment();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -917,7 +734,17 @@ public class ControlPanel extends javax.swing.JDialog {
                     }
                     try {
                         startdate = jTable1.getValueAt(i, 4).toString().trim();
+                        //leellenőrizzük hogy a startdátum megfelelő formátumú e
+                        if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}[:][0-9]{2}", startdate)) {
+                            //custom title, error icon
+                            JOptionPane.showMessageDialog(m,
+                                    "A Strat dátumot nem a megfelelő formátumban adtad meg! Elvárt: yyyy-MM-dd hh:mm:ss",
+                                    "Hiba",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                     } catch (Exception e) {
+
                     }
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
 
@@ -1022,16 +849,11 @@ public class ControlPanel extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     public static javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
-    public static javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1039,8 +861,6 @@ public class ControlPanel extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;

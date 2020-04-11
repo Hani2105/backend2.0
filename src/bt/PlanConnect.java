@@ -26,10 +26,10 @@ public class PlanConnect {
 
     public ResultSet rs;
     public Connection conn;
-    String driver = "com.mysql.jdbc.driver";
-    String url = "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8";
-    String username = "plan";
-    String password = "plan500";
+    public String driver = Variables.planndriver;
+    public String url = Variables.plannurl;
+    public String username = Variables.plannusername;
+    public String password = Variables.plannpassword;
     public Statement st;
 
     public PlanConnect() throws SQLException {

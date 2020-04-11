@@ -16,24 +16,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.scene.layout.Border;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JToolTip;
 import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-import javax.swing.plaf.IconUIResource;
 
 /**
  *
@@ -103,7 +95,7 @@ public class PlannObject extends JLabel {
 
                 if (e.getComponent() instanceof JLabel) {
 //a plannobject mozgatása/ ha planner
-                    if (Variables.planner == 1) {
+                    if (Variables.jogosultsag == 1) {
                         e.getComponent().setLocation(e.getXOnScreen() - (int) getParent().getLocationOnScreen().getX() - mousepozx, e.getYOnScreen() - (int) getParent().getLocationOnScreen().getY() - mousepozy);
                     }
 //helyetcserélünk ha kell
@@ -307,6 +299,7 @@ public class PlannObject extends JLabel {
 
     //a starttime átírása a balról a legközelebbi vt nek megfelelően
     public void resetStartTime() {
+        
         //elindulunk szépen a this lokációtól balra és megkeressük az elő verticaltimelinet és felvesszük az ő idejét
         boolean c = true;
         int x = this.getLocation().x + 50;
@@ -316,7 +309,7 @@ public class PlannObject extends JLabel {
             if (backendSheet.jPanel2.getComponentAt(x, 0) instanceof VerticalTimeline) {
 
                 VerticalTimeline vt = (VerticalTimeline) backendSheet.jPanel2.getComponentAt(x, 0);
-                this.setStartdate(vt.getVtstartdate());
+                this.setStartdate(vt.getVtstartdate()+ ":00");
                 c = false;
 
             } else if (x <= 0) {

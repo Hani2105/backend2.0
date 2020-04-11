@@ -69,6 +69,10 @@ public class IniKezel {
         ini.put("colors", "piros", new Color(252, 73, 94).getRGB());
         ini.put("colors", "tabcolor", new Color(217, 219, 219).getRGB());
         ini.put("colors", "selectedtabcolor", new Color(50, 137, 168).getRGB());
+        ini.put("plannconnect", "url", "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8");
+        ini.put("plannconnect", "username", "plan");
+        ini.put("plannconnect", "password", "plan500");
+        ini.put("plannconnect", "driver", "com.mysql.jdbc.driver");
         ini.store();
 
     }
@@ -79,6 +83,10 @@ public class IniKezel {
         Variables.piros = new Color(ini.get("colors", "piros", int.class));
         Variables.tabcolor = new Color(ini.get("colors", "tabcolor", int.class));
         Variables.selectedtabcolor = new Color(ini.get("colors", "selectedtabcolor", int.class));
+        Variables.plannurl = ini.get("plannconnect", "url");
+        Variables.plannusername = ini.get("plannconnect", "username");
+        Variables.plannpassword = ini.get("plannconnect", "password");
+        Variables.planndriver = ini.get("plannconnect", "driver");
 
     }
 
@@ -164,8 +172,8 @@ public class IniKezel {
             img = ImageIO.read(getClass().getResource("/pictures/fopanelhatter.jpg"));
             ImageIO.write(img, "jpg", new File(System.getProperty("user.home") + "\\BT\\Pictures\\oldalmenuhatter.jpg"));
         }
-        
-         //controlpanel kulso
+
+        //controlpanel kulso
         try {
             img = ImageIO.read(new File(System.getProperty("user.home") + "\\BT\\Pictures\\controlpanelkulso.jpg"));
         } catch (Exception e) {
@@ -173,8 +181,8 @@ public class IniKezel {
             img = ImageIO.read(getClass().getResource("/pictures/fopanelhatter.jpg"));
             ImageIO.write(img, "jpg", new File(System.getProperty("user.home") + "\\BT\\Pictures\\controlpanelkulso.jpg"));
         }
-        
-         //controlpanel belso
+
+        //controlpanel belso
         try {
             img = ImageIO.read(new File(System.getProperty("user.home") + "\\BT\\Pictures\\controlpanelbelso.jpg"));
         } catch (Exception e) {
@@ -182,8 +190,8 @@ public class IniKezel {
             img = ImageIO.read(getClass().getResource("/pictures/controlpanelbelso.jpg"));
             ImageIO.write(img, "jpg", new File(System.getProperty("user.home") + "\\BT\\Pictures\\controlpanelbelso.jpg"));
         }
-        
-          //setplannobjectback
+
+        //setplannobjectback
         try {
             img = ImageIO.read(new File(System.getProperty("user.home") + "\\BT\\Pictures\\setplannobjectback.jpg"));
         } catch (Exception e) {
