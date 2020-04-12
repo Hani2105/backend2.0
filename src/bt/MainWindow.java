@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -28,36 +29,84 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-
     public SetPlannObjectData spo = new SetPlannObjectData(this, false);
-    public LoginScreen ls = new LoginScreen(this, false, this);
+    public LoginScreen ls = new LoginScreen(this, true, this);
     public ControlPanel cp = new ControlPanel(this, false, this);
     public static JogosultsagKezelo j;
     public SfdcHatter sfdchatter = new SfdcHatter(this, true);
     public MentesHatter menteshatter = new MentesHatter(this, true);
+    public SessionObject so;
 
     //a panel szelessege es magassaga
 //inicializálás
     public MainWindow() throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException {
-//        new IniKezel().iniOlvas();
+//a kinézet beállítása
         UIManager.setLookAndFeel(new MetalLookAndFeel());
+//komponensek inicializálása
         initComponents();
+
+//az ikon beállítása
         setIcon();
+//a pn kommentek lekérése
         pnCommentLeker();
+//a jgosultsági szintek beállítása
         j = new JogosultsagKezelo(cp, spo);
+//beállítjuk a jogosultságot nullára alapból
+        Variables.jogosultsag = 0;
+        j.kezel();
+//a sessionadatok beolvasása
+        new SessionKezelo(this).sessionOlvas();
+//a tabbedpanel kinézetének beállítása      
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
-        //a splitpane szélességének beállítása
+//a splitpane szélességének beállítása
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         jSplitPane1.setDividerLocation((screenSize.width / 100) * 95);
+//lekérdezzük, hogy milyen celláink vannak
+        getCellas();
+//kijeloljuk az user cellait
+        new SessionKezelo(this).cellakKijelolese();
+//láthatóvá tesszük a főablakot
         this.setVisible(true);
+//láthatóvá tesszük a loginscreent
         ls.setVisible(true);
 
     }
-    
-    public void setIcon(){
-    
-     setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/pictures/mainicon.png")));
+
+    public void setIcon() {
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/pictures/mainicon.png")));
+    }
+
+    public void getCellas() {
+//lekérdezzük, hogy egyáltalán milyen celláink vannak
+        String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
+        PlanConnect pc = null;
+        DefaultListModel listModel = new DefaultListModel();
+        try {
+            pc = new PlanConnect();
+
+            try {
+                pc.lekerdez(query);
+
+                while (pc.rs.next()) {
+
+                    listModel.addElement(pc.rs.getString(1));
+                }
+
+                this.jList1.setModel(listModel);
+
+            } catch (SQLException ex) {
+
+            } catch (ClassNotFoundException ex) {
+
+            }
+
+        } catch (Exception e) {
+        } finally {
+            pc.kinyir();
+        }
+
     }
 
     /**
@@ -378,6 +427,14 @@ public class MainWindow extends javax.swing.JFrame {
         jProgressBar1.setString("Lekérés folyamatban!");
         Thread t = new Thread(new TervLeker(this));
         t.start();
+        //beállítjuk az uj cellákat a sessionba
+        new SessionKezelo(this).cellakMentese();
+        try {
+            //mentjük a cellákat a session fileba
+            new SessionKezelo(this).sessionIr(so);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jProgressBar1MouseClicked
 
     /**

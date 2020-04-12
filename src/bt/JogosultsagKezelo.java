@@ -45,10 +45,11 @@ public class JogosultsagKezelo {
             sp.jTextField6.setEditable(false);
             //a mérnöki csúszka
             sp.jSlider1.setEnabled(false);
-            //terv törlése
-            sp.jButton2.setEnabled(false);
             //a tény szerkesztése
             sp.jTextField4.setEditable(true);
+            //a set gomb
+            sp.jButton1.setEnabled(true);
+
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 
@@ -57,9 +58,18 @@ public class JogosultsagKezelo {
 
                     if (b.jPanel1.getComponent(n) instanceof PlannObject) {
                         PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
-                        p.getComponentPopupMenu().getComponent(1).setEnabled(false);
+                        //terv mentése
+                        p.getComponentPopupMenu().getComponent(0).setEnabled(true);
+                        //adatok módosítása
+                        p.getComponentPopupMenu().getComponent(2).setEnabled(true);
+                        //áttervez
                         p.getComponentPopupMenu().getComponent(3).setEnabled(false);
-                        p.getComponentPopupMenu().getComponent(4).setEnabled(false);
+                        //sfdc lekérése
+                        p.getComponentPopupMenu().getComponent(4).setEnabled(true);
+                        //terv törlése
+                        p.getComponentPopupMenu().getComponent(5).setEnabled(false);
+                        //terv másolása
+                        p.getComponentPopupMenu().getComponent(6).setEnabled(false);
 
                     }
 
@@ -88,10 +98,11 @@ public class JogosultsagKezelo {
             sp.jTextField6.setEditable(false);
             //a mérnöki csúszka
             sp.jSlider1.setEnabled(false);
-            //terv törlése
-            sp.jButton2.setEnabled(false);
             //a tény szerkesztése
             sp.jTextField4.setEditable(false);
+            //a set gomb
+            sp.jButton1.setEnabled(false);
+            
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 
@@ -100,9 +111,18 @@ public class JogosultsagKezelo {
 
                     if (b.jPanel1.getComponent(n) instanceof PlannObject) {
                         PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
-                        p.getComponentPopupMenu().getComponent(1).setEnabled(false);
+                        //terv mentése
+                        p.getComponentPopupMenu().getComponent(0).setEnabled(false);
+                        //adatok módosítása
+                        p.getComponentPopupMenu().getComponent(2).setEnabled(true);
+                        //áttervez
                         p.getComponentPopupMenu().getComponent(3).setEnabled(false);
+                        //sfdc lekérése
                         p.getComponentPopupMenu().getComponent(4).setEnabled(false);
+                        //terv törlése
+                        p.getComponentPopupMenu().getComponent(5).setEnabled(false);
+                        //terv másolása
+                        p.getComponentPopupMenu().getComponent(6).setEnabled(false);
 
                     }
 
@@ -120,8 +140,9 @@ public class JogosultsagKezelo {
             sp.jTextField7.setEditable(false);
             sp.jTextField6.setEditable(true);
             sp.jSlider1.setEnabled(true);
-            sp.jButton2.setEnabled(true);
             sp.jTextField4.setEditable(true);
+            //a set gomb
+            sp.jButton1.setEnabled(true);
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 
@@ -130,9 +151,18 @@ public class JogosultsagKezelo {
 
                     if (b.jPanel1.getComponent(n) instanceof PlannObject) {
                         PlannObject p = (PlannObject) b.jPanel1.getComponent(n);
-                        p.getComponentPopupMenu().getComponent(1).setEnabled(true);
+                        //terv mentése
+                        p.getComponentPopupMenu().getComponent(0).setEnabled(true);
+                        //adatok módosítása
+                        p.getComponentPopupMenu().getComponent(2).setEnabled(true);
+                        //áttervez
                         p.getComponentPopupMenu().getComponent(3).setEnabled(true);
+                        //sfdc lekérése
                         p.getComponentPopupMenu().getComponent(4).setEnabled(true);
+                        //terv törlése
+                        p.getComponentPopupMenu().getComponent(5).setEnabled(true);
+                        //terv másolása
+                        p.getComponentPopupMenu().getComponent(6).setEnabled(true);
 
                     }
 

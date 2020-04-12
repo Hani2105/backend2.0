@@ -5,7 +5,6 @@
  */
 package bt;
 
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -231,8 +230,6 @@ public class LoginScreen extends javax.swing.JDialog {
                     t.start();
                 }
 
-              
-
             } catch (Exception e) {
                 e.printStackTrace();
                 Variables.jogosultsag = 0;
@@ -247,8 +244,6 @@ public class LoginScreen extends javax.swing.JDialog {
                 }
             }
 
-//az user celláinak lekérdezése
-            getCellas();
         }
 
 
@@ -257,65 +252,8 @@ public class LoginScreen extends javax.swing.JDialog {
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
         this.setVisible(false);
+        System.exit(0);
     }//GEN-LAST:event_jLabel5MouseClicked
-
-    public void getCellas() {
-//lekérdezzük, hogy egyáltalán milyen celláink vannak
-        String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
-        PlanConnect pc = null;
-        DefaultListModel listModel = new DefaultListModel();
-        try {
-            pc = new PlanConnect();
-
-            try {
-                pc.lekerdez(query);
-
-                while (pc.rs.next()) {
-
-                    listModel.addElement(pc.rs.getString(1));
-                }
-
-                m.jList1.setModel(listModel);
-
-            } catch (SQLException ex) {
-
-            } catch (ClassNotFoundException ex) {
-
-            }
-//lekérdezzük a jelenleg a userhez tartozókat, id val tároljuk!
-            query = "select tc_becells.cellname from tc_becells where find_in_set(tc_becells.idtc_cells,(select tc_users.cellaids from tc_users where tc_users.username = '" + Variables.user + "'))";
-            try {
-                pc.lekerdez(query);
-                pc.rs.last();
-                int[] jeloltekszama = new int[pc.rs.getRow()];
-                pc.rs.beforeFirst();
-                int counter = 0;
-                while (pc.rs.next()) {
-//bejárjuk jlist 1 et és kijelöljük ha van egyezés
-                    for (int i = 0; i < listModel.size(); i++) {
-                        if (pc.rs.getString(1).equals(listModel.getElementAt(i))) {
-
-                            jeloltekszama[counter] = i;
-                            counter++;
-
-                        }
-                    }
-
-                }
-                
-                m.jList1.setSelectedIndices(jeloltekszama);
-
-            } catch (SQLException ex) {
-
-            } catch (ClassNotFoundException ex) {
-
-            }
-        } catch (Exception e) {
-        } finally {
-            pc.kinyir();
-        }
-
-    }
 
     /**
      * @param args the command line arguments
@@ -344,19 +282,6 @@ public class LoginScreen extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                LoginScreen dialog = new LoginScreen(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

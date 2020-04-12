@@ -49,7 +49,7 @@ public class TervLeker implements Runnable {
                         "<html>Nem jó dátumot választottál ki!</html>",
                         "Lekérdezési hiba!",
                         JOptionPane.ERROR_MESSAGE);
-
+                m.jProgressBar1.setString("Lekér!");
                 return;
 
             }
@@ -59,6 +59,7 @@ public class TervLeker implements Runnable {
                     "<html>Nem jó dátumot választottál ki!</html>",
                     "Lekérdezési hiba!",
                     JOptionPane.ERROR_MESSAGE);
+            m.jProgressBar1.setString("Lekér!");
             return;
         }
         //annyi besheetet adunk hozzá amennyi a control panel jlist2 ben van
@@ -72,7 +73,7 @@ public class TervLeker implements Runnable {
         for (int i = 0; i < selectedIx.length; i++) {
             selectedItems[i] = m.jList1.getModel().getElementAt(selectedIx[i]);
         }
-        for (int i = 0; i <selectedItems.length ; i++) {
+        for (int i = 0; i < selectedItems.length; i++) {
 
             BeSheet b = new BeSheet(m, selectedItems[i]);
             b.setName(selectedItems[i]);
@@ -167,6 +168,8 @@ public class TervLeker implements Runnable {
 //elindítjuk a mikor gyártottuk futását
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
+//lefuttatjuk a jogosultság kezelőt, hogy az uj plannobjectek is rendben legyenek
+        m.j.kezel();
 
     }
 
