@@ -36,54 +36,19 @@ public class SessionKezelo {
         fos.close();
     }
 
-    public void sessionOlvas() {
+    public SessionObject sessionOlvas() {
+        SessionObject so = null;
         try {
             FileInputStream file = new FileInputStream(System.getProperty("user.home") + "\\BT\\session.dat");
             ObjectInputStream in = new ObjectInputStream(file);
-            m.so = (SessionObject) in.readObject();
+            so = (SessionObject) in.readObject();
         } catch (Exception e) {
             System.out.println("Hiba a session beolvasásánál!");
-            e.printStackTrace();
+           
         }
-
+        return so;
     }
 
-    public void cellakMentese() {
-        ArrayList<String> cellak = new ArrayList<>();
-        // Get the index of all the selected items
-        int[] selectedIx = jList1.getSelectedIndices();
-        // Get all the selected items using the indices
-        for (int i = 0; i < selectedIx.length; i++) {
-            cellak.add(jList1.getModel().getElementAt(selectedIx[i]));
-        }
-        m.so.setCellak(cellak);
-        try {
-            //kiirjuk az so-t
-            this.sessionIr(m.so);
-        } catch (IOException ex) {
-            Logger.getLogger(SessionKezelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
-    public void cellakKijelolese() {
-        int[] selected = new int[m.so.getCellak().size()];
-        int counter = 0;
-
-        for (int i = 0; i < m.so.getCellak().size(); i++) {
-
-            for (int l = 0; l < m.jList1.getModel().getSize(); l++) {
-
-                if (m.so.getCellak().get(i).equals(m.jList1.getModel().getElementAt(l))) {
-
-                    selected[counter] = l;
-                    counter++;
-
-                }
-            }
-        }
-        
-        m.jList1.setSelectedIndices(selected);
-
-    }
 
 }

@@ -81,6 +81,8 @@ public class BeSheet extends javax.swing.JPanel {
         scrollListener();
 //lekérjük a gyárthatósági adatokat, milyen pn ek milyen ws milyen ciklusidok udnak itt menni
         adatleker(neve);
+//a vertical scrollbar erősségének beállítása
+        jScrollPane2.getVerticalScrollBar().setUnitIncrement(16);
     }
 
     public String getUtolsotime() {

@@ -63,7 +63,8 @@ public class Levelkuldes extends Thread {
 //            m.okpanel.setVisible(true, "Sikeres levélküldés!");
             JOptionPane.showMessageDialog(m,
                     "Sikeres levélküldés!");
-        } catch (MessagingException mex) {
+        } catch (Exception e) {
+            e.printStackTrace();
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elhasaltunk a Tc levelkuldes reszen" + mex, "gabor.hanacsek@sanmina.com");
         }
 

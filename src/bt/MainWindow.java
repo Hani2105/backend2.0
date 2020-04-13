@@ -35,7 +35,7 @@ public class MainWindow extends javax.swing.JFrame {
     public static JogosultsagKezelo j;
     public SfdcHatter sfdchatter = new SfdcHatter(this, true);
     public MentesHatter menteshatter = new MentesHatter(this, true);
-    public SessionObject so;
+    public SessionObject so = new SessionObject();
 
     //a panel szelessege es magassaga
 //inicializálás
@@ -54,8 +54,6 @@ public class MainWindow extends javax.swing.JFrame {
 //beállítjuk a jogosultságot nullára alapból
         Variables.jogosultsag = 0;
         j.kezel();
-//a sessionadatok beolvasása
-        new SessionKezelo(this).sessionOlvas();
 //a tabbedpanel kinézetének beállítása      
         jTabbedPane1.setUI(new MyTabbedPaneUI(jTabbedPane1));
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
@@ -64,8 +62,16 @@ public class MainWindow extends javax.swing.JFrame {
         jSplitPane1.setDividerLocation((screenSize.width / 100) * 95);
 //lekérdezzük, hogy milyen celláink vannak
         getCellas();
-//kijeloljuk az user cellait
-        new SessionKezelo(this).cellakKijelolese();
+//a sessionadatok beolvasása, ha null írunk egyet
+        if (new SessionKezelo(this).sessionOlvas() == null) {
+            new SessionKezelo(this).sessionIr(this.so);
+            System.out.println("session.dat létrehozása..");
+        } else {
+            this.so = new SessionKezelo(this).sessionOlvas();
+            //kijeloljuk az user cellait
+            cellakKijelolese();
+        }
+
 //láthatóvá tesszük a főablakot
         this.setVisible(true);
 //láthatóvá tesszük a loginscreent
@@ -76,6 +82,50 @@ public class MainWindow extends javax.swing.JFrame {
     public void setIcon() {
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/pictures/mainicon.png")));
+    }
+
+    public void cellakMentese() {
+        ArrayList<String> cellak = new ArrayList<>();
+        // Get the index of all the selected items
+        int[] selectedIx = jList1.getSelectedIndices();
+        // Get all the selected items using the indices
+        for (int i = 0; i < selectedIx.length; i++) {
+            cellak.add(jList1.getModel().getElementAt(selectedIx[i]));
+        }
+        so.setCellak(cellak);
+        try {
+            //kiirjuk az so-t
+            new SessionKezelo(this).sessionIr(so);
+        } catch (IOException ex) {
+            Logger.getLogger(SessionKezelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void cellakKijelolese() {
+        try {
+            int[] selected = new int[so.getCellak().size()];
+            int counter = 0;
+
+            for (int i = 0; i < so.getCellak().size(); i++) {
+
+                for (int l = 0; l < jList1.getModel().getSize(); l++) {
+
+                    if (so.getCellak().get(i).equals(jList1.getModel().getElementAt(l))) {
+
+                        selected[counter] = l;
+                        counter++;
+
+                    }
+                }
+            }
+
+            jList1.setSelectedIndices(selected);
+
+        } catch (Exception e) {
+            System.out.println("Nem sikerült beolvasni a cella adatokat!");
+            e.printStackTrace();
+
+        }
     }
 
     public void getCellas() {
@@ -428,13 +478,8 @@ public class MainWindow extends javax.swing.JFrame {
         Thread t = new Thread(new TervLeker(this));
         t.start();
         //beállítjuk az uj cellákat a sessionba
-        new SessionKezelo(this).cellakMentese();
-        try {
-            //mentjük a cellákat a session fileba
-            new SessionKezelo(this).sessionIr(so);
-        } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cellakMentese();
+
     }//GEN-LAST:event_jProgressBar1MouseClicked
 
     /**

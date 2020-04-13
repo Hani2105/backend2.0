@@ -61,7 +61,7 @@ public class TervMent implements Runnable {
                 mentes();
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
-       
+
 //ha nem mentem
             } else if (n == 1) {
                 b.getM().menteshatter.setVisible(false);
@@ -123,6 +123,26 @@ public class TervMent implements Runnable {
             b.getM().menteshatter.setVisible(false);
             JOptionPane.showMessageDialog(b.getM(),
                     "Sikeres mentés!");
+//ha planner van bejelentkezve megkerdezzuk, hogy kuldjunk e levelet a valtozasrol
+            if (Variables.jogosultsag == 1) {
+                //Custom button text
+                Object[] options = {"Igen, küldjünk!",
+                    "Nem, ne küldjünk!"};
+                int n = JOptionPane.showOptionDialog(b.getM(),
+                        "<html>Küldjünk levelet a terv változásról?</html>",
+                        "Terv változás!",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+
+                if (n == 0) {
+
+                    new TervValtozasLevel(b.getM()).start();
+                }
+
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);

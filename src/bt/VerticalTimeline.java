@@ -215,6 +215,7 @@ public class VerticalTimeline extends JLabel {
         if (getDayOfWeekFromVtStartdate(vtstartdate) == 2) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/hetfo.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Hétfő", 30, 17);
+            this.setName(vtstartdate + " Hétfő");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -227,6 +228,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 3) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/kedd.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Kedd", 30, 17);
+            this.setName(vtstartdate + " Kedd");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -238,6 +240,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 4) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/szerda.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Szerda", 30, 17);
+            this.setName(vtstartdate + " Szerda");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -249,6 +252,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 5) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/csutortok.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Csütörtök", 30, 17);
+            this.setName(vtstartdate + " Csütörtök");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -260,6 +264,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 6) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/pentek.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Péntek", 30, 17);
+            this.setName(vtstartdate + " Péntek");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -271,6 +276,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 7) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/szombat.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Szombat", 30, 17);
+            this.setName(vtstartdate + " Szombat");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -282,6 +288,7 @@ public class VerticalTimeline extends JLabel {
         else if (getDayOfWeekFromVtStartdate(vtstartdate) == 1) {
             g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/vasarnap.jpg")).getImage(), 0, 0, null);
             g.drawString(vtstartdate + " Vasárnap", 30, 17);
+            this.setName(vtstartdate + " Vasárnap");
             if (vtstartdate.contains("06:")) {
                 g.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/sun.png")).getImage(), 0, 0, null);
 
@@ -293,26 +300,7 @@ public class VerticalTimeline extends JLabel {
 
     }
 
-//a vt hez tartozó plannobjectek áthelyezése ha mozgatjuk a timelinet
-//    public void setPlannObjectsPoz() {
-//
-//        components = be.jPanel1.getComponents();
-//
-//        for (int i = 0; i < components.length; i++) {
-//
-//            if (components[i] instanceof PlannObject) {
-//
-//                PlannObject po = (PlannObject) components[i];
-//                if (po.getStartdate().contains(this.getVtstartdate()) && !this.getVtstartdate().equals("")) {
-//
-//                    po.setLocation(this.getLocation().x, po.getLocation().y);
-//
-//                }
-//            }
-//
-//        }
-//
-//    }
+
 //a komponensek elhelyezkedese
     public void setMaxy(int maxy) {
         this.maxy = maxy;
