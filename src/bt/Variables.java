@@ -46,5 +46,4 @@ public class Variables {
     public static String plannpassword;
     public static String planndriver;
 
-
 }

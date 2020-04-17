@@ -450,33 +450,8 @@ public class ControlPanel extends javax.swing.JDialog {
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         // ha kiválaztjuk a dateloader fület
-        if (jTabbedPane1.getSelectedIndex() == 2) {
-            DateTime now = new org.joda.time.DateTime();
-            String pattern = "dd-MMM-yyyy 00:00:00";
-            org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
-            String most = formatter.print(now);
-//kiszedjuk a betervezett teteleket egy modellbe
-            DefaultTableModel adatmodel = new DefaultTableModel();
-            adatmodel = (DefaultTableModel) jTable1.getModel();
-//csinálunk egy másik modellt a dataloader adatoknak
-            DefaultTableModel loadermodel = new DefaultTableModel();
-            loadermodel = (DefaultTableModel) jTable2.getModel();
-//kinullázzuk bizos ami fix
-            loadermodel.setRowCount(0);
-//elindulunk bejárni az adatmodellt
-            for (int r = 0; r < adatmodel.getRowCount(); r++) {
-//megnezzuk, hogy van e valami irva a JOB helyere, a pn helyere és a qty helyere
-                try {
-                    if (!adatmodel.getValueAt(r, 0).equals("") && !adatmodel.getValueAt(r, 1).equals("") && !adatmodel.getValueAt(r, 3).equals("")) {
-//betesszuk a job ot az elso helyre a loadermodellbe
-                        loadermodel.addRow(new Object[]{adatmodel.getValueAt(r, 0).toString(), "TAB", "TAB", adatmodel.getValueAt(r, 1).toString(), "TAB", "TAB", adatmodel.getValueAt(r, 3).toString(), "TAB", "RELEASED", "TAB", most, "*DN"});
-
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            jTable2.setModel(loadermodel);
+        if (jTabbedPane1.getSelectedIndex() == 1) {
+           dataLoaderDataMaker();
 
         } //ha kiválasztjuk a műszakjelentés fület
         else if (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Műszakjelentés")) {
@@ -487,6 +462,38 @@ public class ControlPanel extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void dataLoaderDataMaker() {
+        DateTime now = new org.joda.time.DateTime();
+        String pattern = "dd-MMM-yyyy 00:00:00";
+        org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
+        String most = formatter.print(now);
+        //a dataloader adatokat állítja össze a backendsheeten található po-kbol ahol a státus a nem létezik 42 q ban
+        //kiszedjük a be sheetet
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        //kell egy táblamodell is és ki kel nullázni
+        DefaultTableModel model = new DefaultTableModel();
+        model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        //végigjárjuk az elemeit és ha po 
+        for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+
+            if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+
+                PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
+                //ha a po státusza notexist
+                if (po.getStat().equals(Variables.status.NotExists)) {
+
+                    model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", po.getTerv(), "TAB", "RELEASED", "TAB", most, "*DN"});
+                }
+
+            }
+
+        }
+        
+        jTable2.setModel(model);
+
+    }
 
     public void sendMail() {
         //a muszakjelentes elkuldese
@@ -588,7 +595,6 @@ public class ControlPanel extends javax.swing.JDialog {
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         tablaTorol();
     }//GEN-LAST:event_jLabel3MouseClicked
-
 
     public void muszakjelentesToBesheets() {
 //a muszakjelentes szoveget eltaroljuk a sheeten

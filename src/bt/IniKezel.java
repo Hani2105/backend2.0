@@ -77,17 +77,52 @@ public class IniKezel {
 
     }
 
-    private void setVariables() {
+    private void setVariables() throws NemletezoExeption {
         Variables.plannObjectPopupColor = new Color(ini.get("colors", "plannObjectPopupColor", int.class));
-        Variables.zold = new Color(ini.get("colors", "zold", int.class));
-        Variables.piros = new Color(ini.get("colors", "piros", int.class));
-        Variables.tabcolor = new Color(ini.get("colors", "tabcolor", int.class));
-        Variables.selectedtabcolor = new Color(ini.get("colors", "selectedtabcolor", int.class));
-        Variables.plannurl = ini.get("plannconnect", "url");
-        Variables.plannusername = ini.get("plannconnect", "username");
-        Variables.plannpassword = ini.get("plannconnect", "password");
-        Variables.planndriver = ini.get("plannconnect", "driver");
+        if (Variables.plannObjectPopupColor.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
 
+        Variables.zold = new Color(ini.get("colors", "zold", int.class));
+        if (Variables.zold.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
+        Variables.piros = new Color(ini.get("colors", "piros", int.class));
+        if (Variables.piros.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
+        Variables.tabcolor = new Color(ini.get("colors", "tabcolor", int.class));
+        if (Variables.tabcolor.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
+        Variables.selectedtabcolor = new Color(ini.get("colors", "selectedtabcolor", int.class));
+        if (Variables.selectedtabcolor.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
+        Variables.plannurl = ini.get("plannconnect", "url");
+        if (Variables.plannurl == null) {
+            throw new NemletezoExeption("");
+        }
+        Variables.plannusername = ini.get("plannconnect", "username");
+        if (Variables.plannusername == null) {
+            throw new NemletezoExeption("");
+        }
+        Variables.plannpassword = ini.get("plannconnect", "password");
+        if (Variables.plannpassword == null) {
+            throw new NemletezoExeption("");
+        }
+        Variables.planndriver = ini.get("plannconnect", "driver");
+        if (Variables.planndriver == null) {
+            throw new NemletezoExeption("");
+        }
+
+    }
+
+    class NemletezoExeption extends Exception {
+
+        public NemletezoExeption(String errorMessage) {
+            super(errorMessage);
+        }
     }
 
     private void setPictures() throws IOException {

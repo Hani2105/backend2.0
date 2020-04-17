@@ -6,6 +6,7 @@
 package bt;
 
 import java.awt.Point;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author gabor_hanacsek
  */
-public class TervValtozasLevel extends Thread{
+public class TervValtozasLevel extends Thread {
 
     String tabla;
     MainWindow m;
@@ -31,12 +32,33 @@ public class TervValtozasLevel extends Thread{
 
     @Override
     public void run() {
+        //lekérdezzük a címlistát
+        //behuzzuk a cimlistat
+        String query = "SELECT tc_tervvaltozas_cimlista.email FROM planningdb.tc_tervvaltozas_cimlista";
+        PlanConnect pc = null;
+        String cimlista = "";
+        try {
+            pc = new PlanConnect();
+            pc.lekerdez(query);
+            while (pc.rs.next()) {
+
+                cimlista += pc.rs.getString(1) + ",\n";
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+            }
+
+        }
 
         osszeallit();
         //a dátum beformázása
         Date date = new Date();
         String modifiedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
-        Levelkuldes l = new Levelkuldes("Terv változás a(z) " +  MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()).getName() + " cellában! " + modifiedDate, tabla, "gabor.hanacsek@sanmina.com", "BackendTervezo@sanmina.com", m);
+        Levelkuldes l = new Levelkuldes("Terv változás a(z) " + MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()).getName() + " cellában! " + modifiedDate, tabla, cimlista, "BackendTervezo@sanmina.com", m);
         l.start();
 
     }
@@ -72,7 +94,7 @@ public class TervValtozasLevel extends Thread{
 //tovább építjük a táblát
         for (int i = 0; i < polist.size(); i++) {
 
-            tabla += "<tr align=\"center\"><td>" + polist.get(i).getPn() + "</td><td>" + polist.get(i).getJob() + "</td><td>" + polist.get(i).getWorkStation() + "</td><td>" + polist.get(i).getTerv() +" / " + polist.get(i).getTeny()+ "</td><td>" + polist.get(i).getStartdate() + "</td></tr>";
+            tabla += "<tr align=\"center\"><td>" + polist.get(i).getPn() + "</td><td>" + polist.get(i).getJob() + "</td><td>" + polist.get(i).getWorkStation() + "</td><td>" + polist.get(i).getTerv() + " / " + polist.get(i).getTeny() + "</td><td>" + polist.get(i).getStartdate() + "</td></tr>";
 
         }
 //lezárjuk a táblát

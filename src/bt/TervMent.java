@@ -83,8 +83,45 @@ public class TervMent implements Runnable {
 
     private void deActivate() {
 //kell egy query a 
+        //kell a tol ig, ki kell szedni a vt-kből
+        boolean megvan = false;
+        int x = 0;
+        String tol = "";
+        String ig = "";
+        while (!megvan) {
+            if (b.jPanel2.getComponentAt(x, 0) instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) b.jPanel2.getComponentAt(x, 0);
+                tol = vt.getVtstartdate();
+                megvan = true;
+            }
+            //vagy ha végigérük a jpanelen
+            if (x >= b.jPanel2.getPreferredSize().width) {
+
+                megvan = true;
+            }
+            x++;
+        }
+
+        x = b.jPanel2.getPreferredSize().width;
+        megvan = false;
+
+        //megkeressük az utolsót is
+        while (!megvan) {
+            if (b.jPanel2.getComponentAt(x, 0) instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) b.jPanel2.getComponentAt(x, 0);
+                ig = vt.getVtstartdate();
+                megvan = true;
+            }
+            //vagy ha végigérük a jpanelen
+            if (x == 0) {
+
+                megvan = true;
+            }
+            x--;
+        }
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String query = "update tc_terv set active = CASE when tc_terv.active = 2 then 1 when tc_terv.active = 1 then 0 end where tc_terv.active in (2,1) and tc_terv.date between '" + dateFormat.format(b.getM().jDateChooser1.getDate()) + "' and '" + dateFormat.format(b.getM().jDateChooser2.getDate()) + "' and tc_terv.idtc_becells = (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname ='" + b.getName() + "')";
+        String query = "update tc_terv set active = CASE when tc_terv.active = 2 then 1 when tc_terv.active = 1 then 0 end where tc_terv.active in (2,1) and tc_terv.date between '" + /*dateFormat.format(b.getM().jDateChooser1.getDate())*/ tol + "' and '" + /*dateFormat.format(b.getM().jDateChooser2.getDate())*/ig + "' and tc_terv.idtc_becells = (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname ='" + b.getName() + "')";
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();
