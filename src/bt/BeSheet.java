@@ -49,9 +49,12 @@ public class BeSheet extends javax.swing.JPanel {
     //a statisztika grafikonok kirajzolásához kellenek
     public double zold;
     public double piros;
-    //a gyartasi ido adatai
+    //a tervezett ido adatai ido adatai
     public double idozold;
     public double idopiros;
+    //a gyartasi ido adatai
+    public double gyartasiidozold;
+    public double gyartasiidopiros;
     //a műszakjelentés szövege legyen itt tárolva , ez amit a muszakvezeto ir
     public String muszakjelentes = "";
     //kell a vt ideje, hogy melyik adatokat kuldtuk el
@@ -241,16 +244,31 @@ public class BeSheet extends javax.swing.JPanel {
 
     }
 
+//a tervezett idő grafikonjához a számolás
+    public void getGraphiconToPlannedTime(double tervezettido, int teljesido) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        df.setRoundingMode(RoundingMode.UP);
+        try {
+            this.idozold = 200 * Double.parseDouble(df.format((double) tervezettido / (double) teljesido));
+            if (this.idozold > 200) {
+                this.idozold = 200;
+            }
+            this.idopiros = 200 - this.idozold;
+        } catch (Exception e) {
+        }
+
+    }
+
 //a gyártási idő grafikonjához a számolás
     public void getGraphiconToProductTime(double gyartasiido, int teljesido) {
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
         try {
-            this.idozold = 200 * Double.parseDouble(df.format((double) gyartasiido / (double) teljesido));
-            if (this.idozold > 200) {
-                this.idozold = 200;
+            this.gyartasiidozold = 200 * Double.parseDouble(df.format((double) gyartasiido / (double) teljesido));
+            if (this.gyartasiidozold > 200) {
+                this.gyartasiidozold = 200;
             }
-            this.idopiros = 200 - this.idozold;
+            this.gyartasiidopiros = 200 - this.gyartasiidozold;
         } catch (Exception e) {
         }
 
@@ -395,20 +413,24 @@ public class BeSheet extends javax.swing.JPanel {
                         adatok.get(a)[2] = String.valueOf(Integer.parseInt(adatok.get(a)[2]) + po.getTerv());
 //addteny
                         adatok.get(a)[3] = String.valueOf(Integer.parseInt(adatok.get(a)[3]) + po.getTeny());
+//addtervezettido
+                        adatok.get(a)[4] = String.valueOf(Double.parseDouble(adatok.get(a)[4]) + po.getTervezettido());
+
 //addgyartasiido
-                        adatok.get(a)[4] = String.valueOf(Double.parseDouble(adatok.get(a)[4]) + po.getGyartasiido());
+                        adatok.get(a)[5] = String.valueOf(Double.parseDouble(adatok.get(a)[5]) + po.getGyartasiido());
                         //mehetunk a következő po-ra
                         continue nextpo;
                     }
 
                 }
                 //ha ide eljutunk az azt jelenti, hogy nincs még ilyen paraméterekkel rendelkező elem a listánkban, bele kell tenni
-                String[] adatok = new String[5];
+                String[] adatok = new String[6];
                 adatok[0] = po.getStartdate();
                 adatok[1] = po.getWorkStation();
                 adatok[2] = String.valueOf(po.getTerv());
                 adatok[3] = String.valueOf(po.getTeny());
-                adatok[4] = String.valueOf(po.getGyartasiido());
+                adatok[4] = String.valueOf(po.getTervezettido());
+                adatok[5] = String.valueOf(po.getGyartasiido());
                 this.adatok.add(adatok);
 
             }

@@ -56,8 +56,8 @@ public class UpperPanel extends JPanel {
 //kiirjuk az adatot betűvel
                         g.drawString("Terv/Tény: " + b.adatok.get(a)[2] + " / " + b.adatok.get(a)[3], vt.getLocation().x + 2, vt.getLocation().y + y);
                         y += 15;
-//kiszámoljuk az adatokat a gyártási idő rajzoláshoz
-                        b.getGraphiconToProductTime(Double.parseDouble(b.adatok.get(a)[4]), 12);
+//kiszámoljuk az adatokat a tervezett idő rajzoláshoz
+                        b.getGraphiconToPlannedTime(Double.parseDouble(b.adatok.get(a)[4]), 12);
                         //zöldre állítjuk a színt és rajzoljuk a zöldet
                         g.setColor(Variables.zold);
                         g.fillRect(vt.getLocation().x + 2, vt.getLocation().y + y - 11, (int) b.idozold, 13);
@@ -65,7 +65,20 @@ public class UpperPanel extends JPanel {
                         g.setColor(Variables.piros);
                         g.fillRect(vt.getLocation().x + 2 + (int) b.idozold, vt.getLocation().y + y - 11, (int) b.idopiros, 13);
                         g.setColor(Color.BLACK);
-                        g.drawString("Össz. gyártási idő: " + new DecimalFormat("#.##").format(Double.parseDouble(b.adatok.get(a)[4])), vt.getLocation().x + 2, vt.getLocation().y + y);
+                        g.drawString("Össz. tervezett idő: " + new DecimalFormat("#.##").format(Double.parseDouble(b.adatok.get(a)[4])), vt.getLocation().x + 2, vt.getLocation().y + y);
+                        y += 15;
+//kiszámoljuk az adatokat a gyártási idő rajzoláshoz
+                        b.getGraphiconToProductTime(Double.parseDouble(b.adatok.get(a)[5]), 12);
+                        //zöldre állítjuk a színt és rajzoljuk a zöldet
+                        g.setColor(Variables.zold);
+                        g.fillRect(vt.getLocation().x + 2, vt.getLocation().y + y - 11, (int) b.gyartasiidozold, 13);
+//pirosra állítjuk és rajzoljuk a pirosat
+                        g.setColor(Variables.piros);
+                        g.fillRect(vt.getLocation().x + 2 + (int) b.gyartasiidozold, vt.getLocation().y + y - 11, (int) b.gyartasiidopiros, 13);
+                        g.setColor(Color.BLACK);
+                        g.drawString("Össz. gyártási idő: " + new DecimalFormat("#.##").format(Double.parseDouble(b.adatok.get(a)[5])), vt.getLocation().x + 2, vt.getLocation().y + y);                       
+                        
+                        
                         y += 25;
 //beállítjuk a jpanel preferred sizejet ha az nagyobb mint a jelenlegi
                         if (y + 10 > b.jPanel2.getPreferredSize().height) {

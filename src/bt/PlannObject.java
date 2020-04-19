@@ -51,6 +51,8 @@ public class PlannObject extends JLabel {
     private double idozold = 0.00;
     private double idopiros = 0.00;
     //gyártási idő órában!
+    private double tervezettido = 0.00;
+    //ez a tenylegesen megvalosult gyartasi ido. teny*ciklusido
     private double gyartasiido = 0.00;
     private String starttime = "";
     //waterfall
@@ -184,7 +186,7 @@ public class PlannObject extends JLabel {
         setTerv(terv);
         setTeny(teny);
         //ez ki is szamolja a po ra vonatkozo ossz gyartasi idot
-        setGyartasiido(ciklusido);
+        setTervezettido(ciklusido);
         setPlannerKomment(plannerkomment);
         setKomment(komment);
         setEngineer(mernoki);
@@ -272,6 +274,20 @@ public class PlannObject extends JLabel {
     public double getCiklusido() {
         return ciklusido;
     }
+    
+    public double getGyartasiido() {
+        return gyartasiido;
+    }
+    
+    public void setGyartasiido(double gyartasiido) {
+        this.gyartasiido = gyartasiido;
+    }
+
+    //kiszamolja es beallitja a gyartai idot
+    public void calculateGyaratsiido() {
+        
+        setGyartasiido(60/ ciklusido * this.getTeny() /60);
+    }
 
 //scrollpanel ujrameretezese ha szukseges
     public void setScrollpanel() {
@@ -357,10 +373,10 @@ public class PlannObject extends JLabel {
     }
 
 //gyártási idő beállítása
-    public void setGyartasiido(double ciklusido) {
+    public void setTervezettido(double ciklusido) {
 
 //a gyartasi ido oraban van megadva, db/ora, tehat a gyartasi ido a telses po ra tekintve
-        this.gyartasiido = (60 / ciklusido * this.getTerv()) / 60;
+        this.tervezettido = (60 / ciklusido * this.getTerv()) / 60;
 //a grafikon szineinek kiszamitasa
         setProducTime();
         
@@ -369,7 +385,7 @@ public class PlannObject extends JLabel {
 
     public void setOsszGyartasiIdo(double ido) {
         
-        this.gyartasiido = ido;
+        this.tervezettido = ido;
         
     }
 
@@ -403,13 +419,15 @@ public class PlannObject extends JLabel {
         this.terv = qty;
         //beállítjuk az indikátor vonalakat
         setProducted();
-        setGyartasiido(getCiklusido());
+        setTervezettido(getCiklusido());
     }
 //teny beallitasa
 
     public void setTeny(int teny) {
         this.teny = teny;
         setProducted();
+        //kiszamoltatjuk a gyartasi idot
+        calculateGyaratsiido();
     }
 
 //a darabszám indikátor számainak kiszámítása
@@ -431,7 +449,7 @@ public class PlannObject extends JLabel {
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
         try {
-            idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) gyartasiido) / 12));
+            idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) tervezettido) / 12));
             idopiros = this.getSize().getWidth() - idozold;
         } catch (Exception e) {
             
@@ -475,8 +493,8 @@ public class PlannObject extends JLabel {
         return komment;
     }
     
-    public double getGyartasiido() {
-        return gyartasiido;
+    public double getTervezettido() {
+        return tervezettido;
     }
 
 //a startidő beállítása

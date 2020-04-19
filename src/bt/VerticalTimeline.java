@@ -108,7 +108,7 @@ public class VerticalTimeline extends JLabel {
         });
 
     }
-  
+
     public int getDayOfWeekFromVtStartdate(String vtstartdate) {
         int dayofweek = 100;
         try {
@@ -156,18 +156,21 @@ public class VerticalTimeline extends JLabel {
                     if (map.get(po.getWorkStation()) != null) {
                         Double eddigiterv = map.get(po.getWorkStation())[0] + po.getTerv();
                         Double eddigteny = map.get(po.getWorkStation())[1] + po.getTeny();
-                        Double eddigido = map.get(po.getWorkStation())[2] + po.getGyartasiido();
-                        Double[] eddigadat = new Double[3];
+                        Double eddigtervezettido = map.get(po.getWorkStation())[2] + po.getTervezettido();
+                        Double eddiggyartottido = map.get(po.getWorkStation())[2] + po.getGyartasiido();
+                        Double[] eddigadat = new Double[4];
                         eddigadat[0] = eddigiterv;
                         eddigadat[1] = eddigteny;
-                        eddigadat[2] = eddigido;
+                        eddigadat[2] = eddigtervezettido;
+                        eddigadat[3] = eddiggyartottido;
 
                         map.put(po.getWorkStation(), eddigadat);
                     } else {
-                        Double[] eddigadat = new Double[3];
+                        Double[] eddigadat = new Double[4];
                         eddigadat[0] = (double) po.getTerv();
                         eddigadat[1] = (double) po.getTeny();
-                        eddigadat[2] = (double) po.getGyartasiido();
+                        eddigadat[2] = (double) po.getTervezettido();
+                        eddigadat[3] = (double) po.getGyartasiido();
                         map.put(po.getWorkStation(), eddigadat);
 
                     }
@@ -194,7 +197,7 @@ public class VerticalTimeline extends JLabel {
         for (String key : keys) {
 
             wsenkent += "<tr><td><font color=\"red\">" + key + ": </td><td>Terv: " + (int) Math.round(map.get(key)[0]) + "</td><td> Tény: " + (int) Math.round(map.get(key)[1]) + "</td></tr>";
-            allomasido += "<tr><font color=\"red\">Gyártási idő az állomáson: <td>" + key + ": </td><td>" + df.format(map.get(key)[2]) + "h</td></tr>";
+            allomasido += "<tr><font color=\"red\">Tervezett/Gyártott idő az állomáson: <td>" + key + ": </td><td>" + df.format(map.get(key)[2]) +" / "+ df.format(map.get(key)[3]) + "h</td></tr>";
         }
 //összerakjuk a jobonkenti szoveget
         String jobonkentszoveg = "Tervenként: <br><table border = \"4\"><tr><td><font color=\"red\">Partnumber</td><td><font color=\"red\">Job</td><td><font color=\"red\">Workstation</td><td><font color=\"red\">Terv:</td><td><font color=\"red\">Tény:</td><td><font color=\"red\">Planner komment</td><td><font color=\"red\">Termelés komment</td></tr><font color=\"black\">";
@@ -299,7 +302,6 @@ public class VerticalTimeline extends JLabel {
         }
 
     }
-
 
 //a komponensek elhelyezkedese
     public void setMaxy(int maxy) {

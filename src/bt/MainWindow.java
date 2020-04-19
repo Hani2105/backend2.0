@@ -39,7 +39,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     //a panel szelessege es magassaga
 //inicializálás
-    public MainWindow() throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException {
+    public MainWindow() throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException, InterruptedException {
 //a kinézet beállítása
         UIManager.setLookAndFeel(new MetalLookAndFeel());
 //komponensek inicializálása
@@ -47,6 +47,7 @@ public class MainWindow extends javax.swing.JFrame {
 
 //az ikon beállítása
         setIcon();
+
 //a pn kommentek lekérése
         pnCommentLeker();
 //a jgosultsági szintek beállítása
@@ -74,6 +75,11 @@ public class MainWindow extends javax.swing.JFrame {
 
 //láthatóvá tesszük a főablakot
         this.setVisible(true);
+
+//lecsekkoljuk a verziót
+        Thread t = new Thread(new Versioncheck(this));
+        t.start();
+        t.join();
 //láthatóvá tesszük a loginscreent
         ls.setVisible(true);
 
@@ -536,6 +542,8 @@ public class MainWindow extends javax.swing.JFrame {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

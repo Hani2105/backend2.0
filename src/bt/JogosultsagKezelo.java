@@ -138,7 +138,7 @@ public class JogosultsagKezelo {
             sp.jTextField3.setEditable(true);
             sp.jTextField5.setEditable(true);
             sp.jTextField7.setEditable(false);
-            sp.jTextField6.setEditable(true);
+            sp.jTextField6.setEditable(false);
             sp.jSlider1.setEnabled(true);
             sp.jTextField4.setEditable(true);
             //a set gomb

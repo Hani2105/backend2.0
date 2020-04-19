@@ -15,7 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Starter {
 
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException {
+    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException, InterruptedException {
         new IniKezel().iniOlvas();
         MainWindow m = new MainWindow();
         m.setVisible(true);

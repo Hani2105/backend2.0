@@ -40,7 +40,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         jTextField4.setText(String.valueOf(p.getTeny()));
         jTextField5.setText(p.getPlannerkomment());
         jTextField7.setText(p.getKomment());
-        jTextField6.setText(new DecimalFormat("#.##").format((p.getGyartasiido())));
+        jTextField6.setText(new DecimalFormat("#.##").format((p.getTervezettido())));
         jTextField8.setText(p.getWorkStation());
         jSlider1.setValue((int) p.getEngineer());
         
@@ -291,10 +291,10 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         p.setEngineer(jSlider1.getValue());
 
 //gyártási idő beállítása
-        try {
-            p.setOsszGyartasiIdo(Double.parseDouble(jTextField6.getText()));
-        } catch (Exception e) {
-        }
+//        try {
+//            p.setOsszGyartasiIdo(Double.parseDouble(jTextField6.getText()));
+//        } catch (Exception e) {
+//        }
 //gyártási idő kiszámoltatása
         p.setProducTime();
 
