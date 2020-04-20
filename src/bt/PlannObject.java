@@ -211,8 +211,8 @@ public class PlannObject extends JLabel {
                 if (b.jPanel1.getComponent(p) instanceof PlannObject) {
                     PlannObject po = (PlannObject) b.jPanel1.getComponent(p);
                     po.setSelected(false);
-                    //de ha ugyan az a job akkor true ra
-                    if (po.getJob().equals(this.getJob())) {
+                    //de ha ugyan az a job akkor true ra és a pn is ugyan az!
+                    if (po.getJob().equals(this.getJob()) && po.getPn().equals(this.getPn())) {
                         po.setSelected(true);
                     }
                     

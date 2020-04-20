@@ -32,7 +32,6 @@ public class LoginZaro implements Runnable {
             Thread.sleep(alszik);
             ls.setVisible(false);
             m.cp.jTabbedPane1.setSelectedIndex(0);
-            m.cp.setVisible(true);
             
         } catch (InterruptedException ex) {
             Logger.getLogger(LoginZaro.class.getName()).log(Level.SEVERE, null, ex);
