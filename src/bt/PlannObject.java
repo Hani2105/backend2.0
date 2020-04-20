@@ -448,6 +448,7 @@ public class PlannObject extends JLabel {
         
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
+        
         try {
             idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) tervezettido) / 12));
             idopiros = this.getSize().getWidth() - idozold;
