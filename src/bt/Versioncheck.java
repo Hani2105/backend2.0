@@ -44,10 +44,14 @@ public class Versioncheck implements Runnable {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         } finally {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 

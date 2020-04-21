@@ -130,6 +130,7 @@ public class ExcelAdapter implements ActionListener {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                Starter.e.sendMessage(ex);
             }
             BeSheet b = (BeSheet) MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex());
             //visszaállítjuk combora

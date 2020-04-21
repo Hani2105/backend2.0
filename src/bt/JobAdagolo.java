@@ -36,6 +36,8 @@ public class JobAdagolo implements Runnable {
                             uccsofuto = pofuto;
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
+                        Starter.e.sendMessage(e);
                     }
 
                 }
@@ -51,6 +53,8 @@ public class JobAdagolo implements Runnable {
                     b.getM().cp.jTable1.setValueAt(b.getM().cp.jTextField1.getText() + uccsofuto, i, 0);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
     }

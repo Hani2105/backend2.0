@@ -103,7 +103,8 @@ public class MainWindow extends javax.swing.JFrame {
             //kiirjuk az so-t
             new SessionKezelo(this).sessionIr(so);
         } catch (IOException ex) {
-            Logger.getLogger(SessionKezelo.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         }
     }
 
@@ -130,6 +131,7 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Nem sikerült beolvasni a cella adatokat!");
             e.printStackTrace();
+            Starter.e.sendMessage(e);
 
         }
     }
@@ -153,14 +155,25 @@ public class MainWindow extends javax.swing.JFrame {
                 this.jList1.setModel(listModel);
 
             } catch (SQLException ex) {
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
 
             } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
 
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         } finally {
-            pc.kinyir();
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+            }
         }
 
     }
@@ -426,9 +439,11 @@ public class MainWindow extends javax.swing.JFrame {
             try {
                 pc.lekerdez(query);
             } catch (SQLException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
             }
             try {
                 while (pc.rs.next()) {
@@ -440,14 +455,19 @@ public class MainWindow extends javax.swing.JFrame {
 
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
 
         } finally {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 
@@ -519,14 +539,9 @@ public class MainWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         //</editor-fold>
 
@@ -535,16 +550,9 @@ public class MainWindow extends javax.swing.JFrame {
             public void run() {
                 try {
                     new MainWindow().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Starter.e.sendMessage(e);
                 }
             }
         });

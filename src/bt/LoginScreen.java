@@ -232,6 +232,7 @@ public class LoginScreen extends javax.swing.JDialog {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Starter.e.sendMessage(e);
                 Variables.jogosultsag = 0;
                 MainWindow.j.kezel();
                 return;
@@ -240,6 +241,8 @@ public class LoginScreen extends javax.swing.JDialog {
                 try {
                     pc.kinyir();
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    Starter.e.sendMessage(e);
 
                 }
             }
@@ -271,14 +274,9 @@ public class LoginScreen extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         //</editor-fold>
 

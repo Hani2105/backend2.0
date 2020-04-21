@@ -122,8 +122,9 @@ public class BeSheet extends javax.swing.JPanel {
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();
-        } catch (SQLException ex) {
-            Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+           e.printStackTrace();
+           Starter.e.sendMessage(e);
         }
         try {
 
@@ -162,6 +163,7 @@ public class BeSheet extends javax.swing.JPanel {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Starter.e.sendMessage(e);
         } finally {
             pc.kinyir();
 
@@ -240,6 +242,8 @@ public class BeSheet extends javax.swing.JPanel {
             }
             this.piros = 200 - this.zold;
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
     }
@@ -255,6 +259,8 @@ public class BeSheet extends javax.swing.JPanel {
             }
             this.idopiros = 200 - this.idozold;
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
     }
@@ -270,6 +276,8 @@ public class BeSheet extends javax.swing.JPanel {
             }
             this.gyartasiidopiros = 200 - this.gyartasiidozold;
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
     }
@@ -364,6 +372,7 @@ public class BeSheet extends javax.swing.JPanel {
 
                 szam = Integer.parseInt(szoveg.substring(0, i + 1));
             } catch (Exception e) {
+               
                 break;
             }
 

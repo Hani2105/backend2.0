@@ -33,8 +33,9 @@ public class LoginZaro implements Runnable {
             ls.setVisible(false);
             m.cp.jTabbedPane1.setSelectedIndex(0);
             
-        } catch (InterruptedException ex) {
-            Logger.getLogger(LoginZaro.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException e) {
+           e.printStackTrace();
+           Starter.e.sendMessage(e);
         }
         
     }

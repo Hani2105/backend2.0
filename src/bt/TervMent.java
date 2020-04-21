@@ -68,7 +68,7 @@ public class TervMent implements Runnable {
                 return;
             }
         } //ha egyezik az idő, menthetem
-        else if (valtozas.equals("mehet")) {
+        else if (valtozas.equals("mehet") || valtozas.equals("")) {
 
             //deaktiváljuk az eddigi tervet
             deActivate();
@@ -127,11 +127,14 @@ public class TervMent implements Runnable {
             pc = new PlanConnect();
             pc.feltolt(query);
         } catch (SQLException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 
@@ -182,7 +185,8 @@ public class TervMent implements Runnable {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
             //custom title, error icon
             JOptionPane.showMessageDialog(b.getM(),
                     "<html>A mentés nem sikerült!<br>" + ex.getMessage() + "<html>",
@@ -193,6 +197,8 @@ public class TervMent implements Runnable {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 
@@ -212,13 +218,17 @@ public class TervMent implements Runnable {
                 b.setUtolsomodisito(Variables.user);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 
@@ -243,14 +253,18 @@ public class TervMent implements Runnable {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TervMent.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } finally {
 
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 

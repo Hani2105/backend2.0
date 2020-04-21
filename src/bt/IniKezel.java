@@ -53,6 +53,7 @@ public class IniKezel {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
+                Starter.e.sendMessage(ex);
             }
 
         }

@@ -139,6 +139,8 @@ public class PlannObject extends JLabel {
                         mousepozy = (int) p.getY();
                         
                     } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Starter.e.sendMessage(ex);
                     }
                     
                 }
@@ -439,6 +441,8 @@ public class PlannObject extends JLabel {
             dbzold = this.getSize().getWidth() * Double.parseDouble(df.format((double) teny / (double) terv));
             dbpiros = this.getSize().getWidth() - dbzold;
         } catch (Exception e) {
+//            e.printStackTrace();
+//            Starter.e.sendMessage(e);
         }
         
     }
@@ -453,6 +457,8 @@ public class PlannObject extends JLabel {
             idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) tervezettido) / 12));
             idopiros = this.getSize().getWidth() - idozold;
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
             
         }
         

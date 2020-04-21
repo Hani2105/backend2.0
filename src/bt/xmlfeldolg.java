@@ -39,6 +39,8 @@ public class xmlfeldolg {
             connection = url.openConnection();
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory
                 .newInstance();
@@ -47,16 +49,22 @@ public class xmlfeldolg {
             dBuilder = dbFactory.newDocumentBuilder();
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         Document doc = null;
         try {
             doc = dBuilder.parse(connection.getInputStream());
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         try {
             doc.getDocumentElement().normalize();
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
         NodeList nList = doc.getElementsByTagName(nodelist);

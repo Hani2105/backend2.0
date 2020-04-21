@@ -117,7 +117,8 @@ public class VerticalTimeline extends JLabel {
             dayofweek = c.get(Calendar.DAY_OF_WEEK);
 
         } catch (ParseException ex) {
-            Logger.getLogger(VerticalTimeline.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         }
 
         return dayofweek;

@@ -46,10 +46,13 @@ public class TervValtozasLevel extends Thread {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
 
         }
@@ -58,7 +61,7 @@ public class TervValtozasLevel extends Thread {
         //a dátum beformázása
         Date date = new Date();
         String modifiedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
-        Levelkuldes l = new Levelkuldes("Terv változás a(z) " + MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()).getName() + " cellában! " + modifiedDate, tabla, cimlista, "BackendTervezo@sanmina.com", m);
+        Levelkuldes l = new Levelkuldes("Terv változás a(z) " + MainWindow.jTabbedPane1.getComponentAt(MainWindow.jTabbedPane1.getSelectedIndex()).getName() + " cellában! " + modifiedDate, tabla, cimlista, "BackendTervezo@sanmina.com");
         l.start();
 
     }

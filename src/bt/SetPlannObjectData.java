@@ -268,12 +268,16 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         try {
             p.setTerv(Integer.parseInt(this.jTextField3.getText()));
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
             
         }
 //tény darabszám beállítása
         try {
             p.setTeny(Integer.parseInt(this.jTextField4.getText()));
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
             
         }
 

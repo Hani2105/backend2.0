@@ -451,7 +451,7 @@ public class ControlPanel extends javax.swing.JDialog {
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         // ha kiválaztjuk a dateloader fület
         if (jTabbedPane1.getSelectedIndex() == 1) {
-           dataLoaderDataMaker();
+            dataLoaderDataMaker();
 
         } //ha kiválasztjuk a műszakjelentés fület
         else if (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Műszakjelentés")) {
@@ -490,7 +490,7 @@ public class ControlPanel extends javax.swing.JDialog {
             }
 
         }
-        
+
         jTable2.setModel(model);
 
     }
@@ -501,7 +501,7 @@ public class ControlPanel extends javax.swing.JDialog {
         //megszerkesztjuk a targyat
         String subject = "Műszakjelentés " + m.jTabbedPane1.getTitleAt(m.jTabbedPane1.getSelectedIndex()) + " " + b.vtstartime;
         //kell egy levelkuldo
-        Levelkuldes l = new Levelkuldes(subject, jTextPane1.getText() + b.muszakjelentes, jTextArea2.getText(), "Muszakjelentes@sanmina.com", m);
+        Levelkuldes l = new Levelkuldes(subject, jTextPane1.getText() + b.muszakjelentes, jTextArea2.getText(), "Muszakjelentes@sanmina.com");
         l.start();
 
     }
@@ -536,6 +536,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             "Nem adtál meg PN-t, így nem tudjuk feltölteni!",
                             "Feltöltési hiba!",
                             JOptionPane.ERROR_MESSAGE);
+                    Starter.e.sendMessage(e);
                     return;
                 }
 //ws feltoltese
@@ -543,6 +544,7 @@ public class ControlPanel extends javax.swing.JDialog {
                     insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
+                    Starter.e.sendMessage(e);
 //                    m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
                     JOptionPane.showMessageDialog(m,
                             "Nem adtál meg WS-t, így nem tudjuk feltölteni!",
@@ -556,7 +558,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
-
+                    Starter.e.sendMessage(e);
 //                    m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
                     JOptionPane.showMessageDialog(m,
                             "Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!",
@@ -570,6 +572,8 @@ public class ControlPanel extends javax.swing.JDialog {
                     insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
                     pc.st.executeUpdate(insertquery);
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    Starter.e.sendMessage(e);
                 }
                 adatlekerBeSheetrol();
                 MainWindow.pnCommentLeker();
@@ -579,6 +583,8 @@ public class ControlPanel extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(m,
                         "Az adatokat felvittük!");
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             } finally {
                 pc.kinyir();
 
@@ -609,6 +615,8 @@ public class ControlPanel extends javax.swing.JDialog {
             BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
             jTextArea1.setText(b.muszakjelentes);
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
     }
@@ -646,10 +654,10 @@ public class ControlPanel extends javax.swing.JDialog {
 
             try {
                 pc.lekerdez(query);
-            } catch (ClassNotFoundException ex) {
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
 
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             try {
@@ -657,10 +665,13 @@ public class ControlPanel extends javax.swing.JDialog {
 
                     cimlista += pc.rs.getString(1) + ",\n";
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(ControlPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         } finally {
             pc.kinyir();
         }
@@ -705,6 +716,8 @@ public class ControlPanel extends javax.swing.JDialog {
                     try {
                         job = jTable1.getValueAt(i, 0).toString().trim();
                     } catch (Exception e) {
+                        e.printStackTrace();
+                        Starter.e.sendMessage(e);
 
                     }
                     try {
@@ -719,6 +732,8 @@ public class ControlPanel extends javax.swing.JDialog {
                             return;
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
+                        Starter.e.sendMessage(e);
 
                     }
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
@@ -730,8 +745,9 @@ public class ControlPanel extends javax.swing.JDialog {
                                 PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
                                 b.repaint();
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Starter.e.sendMessage(e);
                             }
 
                             continue outerloop;
@@ -748,7 +764,7 @@ public class ControlPanel extends javax.swing.JDialog {
                 }
 
             } catch (Exception e) {
-                // e.printStackTrace();
+
             }
         }
 
@@ -769,6 +785,8 @@ public class ControlPanel extends javax.swing.JDialog {
             TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);
             wscolumn.setCellEditor(new DefaultCellEditor(WscomboBox));
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
     }
 
@@ -796,24 +814,10 @@ public class ControlPanel extends javax.swing.JDialog {
 
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ControlPanel.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (Exception e) {
+          e.printStackTrace();
+          Starter.e.sendMessage(e);
         }
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {

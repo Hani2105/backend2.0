@@ -37,7 +37,7 @@ public class SFDC implements Runnable {
 //az ig pedig +12 óra
         String tol = p.getStartdate();
 // kitalaljuk a meddiget
-        org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+        org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
         DateTime dt = null;
         String ig = "";
@@ -156,6 +156,8 @@ public class SFDC implements Runnable {
         try {
             p.getMainWindow().sfdchatter.setVisible(false);
         } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
 
     }
@@ -164,12 +166,9 @@ public class SFDC implements Runnable {
     public void run() {
         try {
             sfdcLeker();
-        } catch (IOException ex) {
-            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(SFDC.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
     }
 

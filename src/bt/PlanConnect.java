@@ -59,6 +59,7 @@ public class PlanConnect {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Starter.e.sendMessage(e);
         }
         try {
             if (conn != null) {
@@ -68,6 +69,7 @@ public class PlanConnect {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         }
 
     }

@@ -84,14 +84,18 @@ public class Mikorgyartottuk implements Runnable {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Mikorgyartottuk.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Mikorgyartottuk.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
+           Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
 
             } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
         }
 

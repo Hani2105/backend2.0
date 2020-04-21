@@ -162,6 +162,7 @@ public class TervLeker implements Runnable {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Starter.e.sendMessage(e);
             } finally {
 
                 pc.kinyir();
@@ -271,6 +272,7 @@ public class TervLeker implements Runnable {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Starter.e.sendMessage(e);
         } finally {
 
             pc.kinyir();

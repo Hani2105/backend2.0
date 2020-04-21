@@ -51,6 +51,7 @@ public class AutoCompleteComboBox extends JComboBox {
                             text = tfield.getText(0, caretPos);
                         } catch (javax.swing.text.BadLocationException e) {
                             e.printStackTrace();
+                            Starter.e.sendMessage(e);
                         }
                         for (int i = 0; i < getItemCount(); i++) {
                             String element = (String) getItemAt(i);

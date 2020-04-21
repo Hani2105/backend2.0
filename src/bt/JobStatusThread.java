@@ -68,6 +68,7 @@ public class JobStatusThread implements Runnable {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Starter.e.sendMessage(e);
             }
 
 //végigtekerjük a componenteket mégegyszer és az adatokat is hozzá

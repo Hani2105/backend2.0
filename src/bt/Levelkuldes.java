@@ -24,15 +24,15 @@ public class Levelkuldes extends Thread {
     String szoveg;
     String cimzett;
     String kuldo;
-    MainWindow m;
+    
 
-    public Levelkuldes(String Subject, String szoveg, String cimzett, String kuldo, MainWindow m) {
+    public Levelkuldes(String Subject, String szoveg, String cimzett, String kuldo) {
 
         this.Subject = Subject;
         this.szoveg = szoveg;
         this.cimzett = cimzett;
         this.kuldo = kuldo;
-        this.m = m;
+        
 
     }
 
@@ -61,10 +61,10 @@ public class Levelkuldes extends Thread {
             //System.out.println("message sent successfully....");
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elkuldtuk a levelet" + cimzett + szoveg, "gabor.hanacsek@sanmina.com");
 //            m.okpanel.setVisible(true, "Sikeres levélküldés!");
-            JOptionPane.showMessageDialog(m,
-                    "Sikeres levélküldés!");
+           
         } catch (Exception e) {
             e.printStackTrace();
+            Starter.e.sendMessage(e);
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elhasaltunk a Tc levelkuldes reszen" + mex, "gabor.hanacsek@sanmina.com");
         }
 

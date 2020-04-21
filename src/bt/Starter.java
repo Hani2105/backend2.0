@@ -15,6 +15,8 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Starter {
 
+    public static ErrorLogger e = new ErrorLogger();
+
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException, UnsupportedLookAndFeelException, InterruptedException {
         new IniKezel().iniOlvas();
         MainWindow m = new MainWindow();
