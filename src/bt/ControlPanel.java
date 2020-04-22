@@ -732,8 +732,8 @@ public class ControlPanel extends javax.swing.JDialog {
                             return;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        Starter.e.sendMessage(e);
+//                        e.printStackTrace();
+//                        Starter.e.sendMessage(e);
 
                     }
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {

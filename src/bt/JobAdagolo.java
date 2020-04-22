@@ -48,13 +48,13 @@ public class JobAdagolo implements Runnable {
 //ha megvan az uccso akkor bejárjuk a cp tábláját és ahol ki van töltve a pn állomás és qty oda írunk egy job ot
         for (int i = 0; i < b.getM().cp.jTable1.getRowCount(); i++) {
             try {
-                if (!b.getM().cp.jTable1.getValueAt(i, 1).toString().equals("") && !b.getM().cp.jTable1.getValueAt(i, 2).toString().equals("") && !b.getM().cp.jTable1.getValueAt(i, 3).toString().equals("")) {
+                 if (!b.getM().cp.jTable1.getValueAt(i, 1).toString().equals("") && !b.getM().cp.jTable1.getValueAt(i, 2).toString().equals("") && !b.getM().cp.jTable1.getValueAt(i, 3).toString().equals("")) {
                     uccsofuto++;
                     b.getM().cp.jTable1.setValueAt(b.getM().cp.jTextField1.getText() + uccsofuto, i, 0);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                Starter.e.sendMessage(e);
+//                e.printStackTrace();
+//                Starter.e.sendMessage(e);
             }
         }
     }

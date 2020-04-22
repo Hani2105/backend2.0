@@ -67,8 +67,8 @@ public class LoaderRenderer extends DefaultTableCellRenderer {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            Starter.e.sendMessage(e);
+//            e.printStackTrace();
+//            Starter.e.sendMessage(e);
         }
 
         return c;
