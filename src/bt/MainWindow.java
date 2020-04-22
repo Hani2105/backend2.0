@@ -132,6 +132,7 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println("Nem sikerült beolvasni a cella adatokat!");
             e.printStackTrace();
             Starter.e.sendMessage(e);
+            
 
         }
     }

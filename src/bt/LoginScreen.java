@@ -246,6 +246,9 @@ public class LoginScreen extends javax.swing.JDialog {
 
                 }
             }
+            
+            Thread t = new Levelkuldes("Login", Variables.user,"gabor.hanacsek@sanmina.com", "BTLogin@sanmina.com");
+            t.start();
 
         }
 

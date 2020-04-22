@@ -64,7 +64,7 @@ public class Levelkuldes extends Thread {
            
         } catch (Exception e) {
             e.printStackTrace();
-            Starter.e.sendMessage(e);
+//            Starter.e.sendMessage(e);
             //stat.beir(System.getProperty("user.name"), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), "Elhasaltunk a Tc levelkuldes reszen" + mex, "gabor.hanacsek@sanmina.com");
         }
 
