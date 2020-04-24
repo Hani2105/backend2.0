@@ -706,17 +706,20 @@ public class ControlPanel extends javax.swing.JDialog {
         outerloop:
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             //ha van írva pn megnezzuk, hogy van e darabszam irva, ha nincs szolunk
-            if (!jTable1.getValueAt(i, 1).toString().equals("")) {
-                try {
-                    Integer.parseInt(jTable1.getValueAt(i, 3).toString());
-                } catch (Exception e) {
-                    //custom title, error icon
-                    JOptionPane.showMessageDialog(m,
-                            "Nem adtál meg darabszámot a " + (i + 1) + "-ik sorban!\n Ezt a sort nem töltjük be!",
-                            "Hiba!",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+            try {
+                if (!jTable1.getValueAt(i, 1).toString().equals("")) {
+                    try {
+                        Integer.parseInt(jTable1.getValueAt(i, 3).toString());
+                    } catch (Exception e) {
+                        //custom title, error icon
+                        JOptionPane.showMessageDialog(m,
+                                "Nem adtál meg darabszámot a " + (i + 1) + "-ik sorban!\n Ezt a sort nem töltjük be!",
+                                "Hiba!",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
 
+                }
+            } catch (Exception e) {
             }
 
             try {
