@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
@@ -246,8 +247,8 @@ public class LoginScreen extends javax.swing.JDialog {
 
                 }
             }
-            
-            Thread t = new Levelkuldes("Login", Variables.user,"gabor.hanacsek@sanmina.com", "BTLogin@sanmina.com");
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            Thread t = new Levelkuldes("Login " + timeStamp, Variables.user,"gabor.hanacsek@sanmina.com", "BTLogin@sanmina.com");
             t.start();
 
         }

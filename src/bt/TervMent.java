@@ -155,7 +155,7 @@ public class TervMent implements Runnable {
 
         adatok.setLength(adatok.length() - 1);
         query.append(adatok);
-        query.append("on duplicate key update qty = values(qty), qty_teny = values(qty_teny), wtf = values(wtf), user = values(user), active = (2)");
+        query.append("on duplicate key update qty = values(qty), qty_teny = values(qty_teny), wtf = values(wtf), user = values(user), active = (2), mernokiido = values(mernokiido)");
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();

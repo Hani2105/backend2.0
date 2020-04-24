@@ -716,8 +716,8 @@ public class ControlPanel extends javax.swing.JDialog {
                     try {
                         job = jTable1.getValueAt(i, 0).toString().trim();
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        Starter.e.sendMessage(e);
+//                        e.printStackTrace();
+//                        Starter.e.sendMessage(e);
 
                     }
                     try {

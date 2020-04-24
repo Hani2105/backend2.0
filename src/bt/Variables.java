@@ -46,6 +46,6 @@ public class Variables {
     public static String plannpassword;
     public static String planndriver;
 //  a program verzió száma
-    public static double version = 1.01;
+    public static double version = 1.02;
 
 }
