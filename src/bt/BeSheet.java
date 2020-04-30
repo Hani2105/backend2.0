@@ -242,8 +242,8 @@ public class BeSheet extends javax.swing.JPanel {
             }
             this.piros = 200 - this.zold;
         } catch (Exception e) {
-            e.printStackTrace();
-            Starter.e.sendMessage(e);
+//            e.printStackTrace();
+//            Starter.e.sendMessage(e);
         }
 
     }

@@ -765,6 +765,12 @@ public class ControlPanel extends javax.swing.JDialog {
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Starter.e.sendMessage(e);
+                                //custom title, error icon
+                                JOptionPane.showMessageDialog(m,
+                                        "Mem sikerült a tervek hozzáadása!\n Ellenőrizd az adatok helyességét! (zöld?)",
+                                        "Hiba!",
+                                        JOptionPane.ERROR_MESSAGE);
+                                return;
                             }
 
                             continue outerloop;

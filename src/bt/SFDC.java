@@ -73,86 +73,290 @@ public class SFDC implements Runnable {
         Object sfdcadat[][] = (Object[][]) xxx.xmlfeldolg(url, nodelist, lista);
 //bejárjuk a plann objecteket és a lekért adatok alapjánk kitöltjük a megvalósulást ha egyeznek
         Component[] components = p.getbackendSheet().jPanel1.getComponents();
+//betesszük egy arraylistbe a po-kat
+        ArrayList<PlannObject> polist = new ArrayList<>();
         for (int i = 0; i < components.length; i++) {
 
             if (components[i] instanceof PlannObject) {
 
                 PlannObject po = (PlannObject) components[i];
+                polist.add(po);
+            }
+        }
+        for (int i = 0; i < polist.size(); i++) {
+            PlannObject po = polist.get(i);
 //egyezik e a kezdő dátum
-                if (po.getStartdate().contains(tol.replace("%20", " "))) {
+            if (po.getStartdate().contains(tol.replace("%20", " "))) {
+
 //mivel tobb jobban szerepelhet össze kell adni
-                    int osszterv = 0;
+                int osszterv = 0;
 //megvizsgáljuk, hogy szerepel e az sfdc ben
 //ha nem kell figyelni a job ot és a first passt sem
-                    if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
+                if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
 
-                        for (int s = 0; s < sfdcadat.length; s++) {
+                    for (int s = 0; s < sfdcadat.length; s++) {
 
-                            if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation())) {
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation())) {
 
-                                osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
 
-                            }
                         }
-
-                        po.setTeny(osszterv);
-
                     }
+                    i--;
 
-//ha kell a job ot figyelni de a first passt nem
-                    if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
+                    po.setTeny(osszterv);
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws, hogy tobbet ne irjunk mert beírtuk most az osszes adatot
+                    for (int n = 0; n < polist.size(); n++) {
 
-                        for (int s = 0; s < sfdcadat.length; s++) {
+                        if (polist.get(n).getPn().equals(po.getPn()) && polist.get(n).getWorkStation().equals(po.getWorkStation())) {
 
-                            if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3])) {
-
-                                osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
-
-                            }
+                            polist.remove(n);
+                            n--;
                         }
-
-                        po.setTeny(osszterv);
-
-                    }
-
-//ha kell a job ot figyelni és a first passt is
-                    if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
-
-                        for (int s = 0; s < sfdcadat.length; s++) {
-
-                            if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3]) && sfdcadat[s][2].equals("1")) {
-
-                                osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
-
-                            }
-                        }
-
-                        po.setTeny(osszterv);
-
-                    }
-
-//ha a job ot nem kell figyelni de a first passt igen
-                    if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
-
-                        for (int s = 0; s < sfdcadat.length; s++) {
-
-                            if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && sfdcadat[s][2].equals("1")) {
-
-                                osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
-
-                            }
-                        }
-
-                        po.setTeny(osszterv);
-
                     }
 
                 }
+
+//ha kell a job ot figyelni de a first passt nem
+                if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3])) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    i--;
+                    po.setTeny(osszterv);
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws és a job!
+                    for (int n = 0; n < polist.size(); n++) {
+
+                        if (polist.get(n).getPn().equals(po.getPn()) && polist.get(n).getWorkStation().equals(po.getWorkStation()) && polist.get(n).getJob().equals(po.getJob())) {
+
+                            polist.remove(n);
+                            n--;
+                        }
+                    }
+
+                }
+
+//ha kell a job ot figyelni és a first passt is
+                if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3]) && sfdcadat[s][2].equals("1")) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    i--;
+                    po.setTeny(osszterv);
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
+                    for (int n = 0; n < polist.size(); n++) {
+
+                        if (polist.get(n).getPn().equals(po.getPn()) && polist.get(n).getWorkStation().equals(po.getWorkStation()) && polist.get(n).getJob().equals(po.getJob())) {
+
+                            polist.remove(n);
+                            n--;
+                        }
+                    }
+
+                }
+
+//ha a job ot nem kell figyelni de a first passt igen
+                if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && sfdcadat[s][2].equals("1")) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    i--;
+                    po.setTeny(osszterv);
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
+                    for (int n = 0; n < polist.size(); n++) {
+
+                        if (polist.get(n).getPn().equals(po.getPn()) && polist.get(n).getWorkStation().equals(po.getWorkStation())) {
+
+                            polist.remove(n);
+                            n--;
+                        }
+                    }
+
+                }
+
             }
 
         }
+
+//bejárjuk a polistet és ha még találunk olyanpokat ahol egyezik a pn és a ws akkor rákérdezünk, hogy hozzáadjuk e a tervhez és nem egyezik a startdate--------------------------------------------------
+        for (int i = 0;
+                i < polist.size();
+                i++) {
+
+            PlannObject po = polist.get(i);
+            //ha nem egyezik a startdate de a pn és ws igen
+            if (!po.getStartdate().contains(tol.replace("%20", " "))) {
+                //mivel tobb jobban szerepelhet össze kell adni
+                int osszterv = 0;
+//megvizsgáljuk, hogy szerepel e az sfdc ben
+//ha nem kell figyelni a job ot és a first passt sem
+                if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation())) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+
+                    //kell hozzáadni egy uj plannobjectet de rakerdezunk, ha nagyobb mint nulla az oszterv
+                    if (osszterv > 0) {
+                        Object[] options = {"Igen, adjuk hozzá!", "Nem, ne adjuk hozzá!"};
+                        int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (n == 0) {
+//letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            p.getbackendSheet().jPanel1.add(ujpo);
+                            i--;
+
+                        }
+                    }
+
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
+                    for (int o = 0; o < polist.size(); o++) {
+
+                        if (polist.get(o).getPn().equals(po.getPn()) && polist.get(o).getWorkStation().equals(po.getWorkStation())) {
+
+                            polist.remove(o);
+                            o--;
+
+                        }
+                    }
+                }
+
+//ha kell a job ot figyelni de a first passt nem
+                if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3])) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    //kell hozzáadni egy uj plannobjectet de rakerdezunk, ha nagyobb mint nulla az oszterv
+                    if (osszterv > 0) {
+                        Object[] options = {"Igen, adjuk hozzá!", "Nem, ne adjuk hozzá!"};
+                        int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (n == 0) {
+//letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            p.getbackendSheet().jPanel1.add(ujpo);
+                            i--;
+
+                        }
+                    }
+
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws és a job
+                    for (int o = 0; o < polist.size(); o++) {
+
+                        if (polist.get(o).getPn().equals(po.getPn()) && polist.get(o).getWorkStation().equals(po.getWorkStation()) && polist.get(o).getJob().equals(po.getJob())) {
+
+                            polist.remove(o);
+                            o--;
+
+                        }
+                    }
+                }
+
+//ha kell a job ot figyelni és a first passt is
+                if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3]) && sfdcadat[s][2].equals("1")) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    //kell hozzáadni egy uj plannobjectet de rakerdezunk, ha nagyobb mint nulla az oszterv
+                    if (osszterv > 0) {
+                        Object[] options = {"Igen, adjuk hozzá!", "Nem, ne adjuk hozzá!"};
+                        int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (n == 0) {
+//letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            p.getbackendSheet().jPanel1.add(ujpo);
+                            i--;
+
+                        }
+                    }
+
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
+                    for (int o = 0; o < polist.size(); o++) {
+
+                        if (polist.get(o).getPn().equals(po.getPn()) && polist.get(o).getWorkStation().equals(po.getWorkStation()) && polist.get(o).getJob().equals(po.getJob())) {
+
+                            polist.remove(o);
+                            o--;
+
+                        }
+                    }
+                }
+
+//ha a job ot nem kell figyelni de a first passt igen
+                if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected()) {
+
+                    for (int s = 0; s < sfdcadat.length; s++) {
+
+                        if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && sfdcadat[s][2].equals("1")) {
+
+                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+
+                        }
+                    }
+                    //kell hozzáadni egy uj plannobjectet de rakerdezunk, ha nagyobb mint nulla az oszterv
+                    if (osszterv > 0) {
+                        Object[] options = {"Igen, adjuk hozzá!", "Nem, ne adjuk hozzá!"};
+                        int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (n == 0) {
+//letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            p.getbackendSheet().jPanel1.add(ujpo);
+                            i--;
+
+                        }
+                    }
+
+                    //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
+                    for (int o = 0; o < polist.size(); o++) {
+
+                        if (polist.get(o).getPn().equals(po.getPn()) && polist.get(o).getWorkStation().equals(po.getWorkStation())) {
+
+                            polist.remove(o);
+                            o--;
+
+                        }
+                    }
+                }
+            }
+        }
+
 //frissitjuk az adatokat
-        p.getbackendSheet().collectData();
+        p.getbackendSheet()
+                .collectData();
         try {
             p.getMainWindow().sfdchatter.setVisible(false);
         } catch (Exception e) {
