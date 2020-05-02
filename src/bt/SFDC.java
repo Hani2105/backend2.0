@@ -89,7 +89,7 @@ public class SFDC implements Runnable {
             if (po.getStartdate().contains(tol.replace("%20", " "))) {
 
 //mivel tobb jobban szerepelhet össze kell adni
-                int osszterv = 0;
+                int osszteny = 0;
 //megvizsgáljuk, hogy szerepel e az sfdc ben
 //ha nem kell figyelni a job ot és a first passt sem
                 if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
@@ -98,13 +98,13 @@ public class SFDC implements Runnable {
 
                         if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation())) {
 
-                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+                            osszteny += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
 
                         }
                     }
                     i--;
 
-                    po.setTeny(osszterv);
+                    po.setTeny(osszteny);
                     //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws, hogy tobbet ne irjunk mert beírtuk most az osszes adatot
                     for (int n = 0; n < polist.size(); n++) {
 
@@ -124,12 +124,12 @@ public class SFDC implements Runnable {
 
                         if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3])) {
 
-                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+                            osszteny += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
 
                         }
                     }
                     i--;
-                    po.setTeny(osszterv);
+                    po.setTeny(osszteny);
                     //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws és a job!
                     for (int n = 0; n < polist.size(); n++) {
 
@@ -149,12 +149,12 @@ public class SFDC implements Runnable {
 
                         if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3]) && sfdcadat[s][2].equals("1")) {
 
-                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+                            osszteny += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
 
                         }
                     }
                     i--;
-                    po.setTeny(osszterv);
+                    po.setTeny(osszteny);
                     //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
                     for (int n = 0; n < polist.size(); n++) {
 
@@ -174,12 +174,12 @@ public class SFDC implements Runnable {
 
                         if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && sfdcadat[s][2].equals("1")) {
 
-                            osszterv += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
+                            osszteny += Integer.parseInt(String.valueOf(sfdcadat[s][4]));
 
                         }
                     }
                     i--;
-                    po.setTeny(osszterv);
+                    po.setTeny(osszteny);
                     //kiszedjuk az osszes olyan po-t a listabol hol egyezik a pn és a ws
                     for (int n = 0; n < polist.size(); n++) {
 
@@ -197,9 +197,7 @@ public class SFDC implements Runnable {
         }
 
 //bejárjuk a polistet és ha még találunk olyanpokat ahol egyezik a pn és a ws akkor rákérdezünk, hogy hozzáadjuk e a tervhez és nem egyezik a startdate--------------------------------------------------
-        for (int i = 0;
-                i < polist.size();
-                i++) {
+        for (int i = 0; i < polist.size(); i++) {
 
             PlannObject po = polist.get(i);
             //ha nem egyezik a startdate de a pn és ws igen
@@ -227,6 +225,9 @@ public class SFDC implements Runnable {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                             PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
                             p.getbackendSheet().jPanel1.add(ujpo);
+                            ujpo.setStat(po.getStat());
+                            ujpo.getbackendSheet().osszerendez();
+
                             i--;
 
                         }
@@ -263,6 +264,8 @@ public class SFDC implements Runnable {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                             PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
                             p.getbackendSheet().jPanel1.add(ujpo);
+                            ujpo.setStat(po.getStat());
+                            ujpo.getbackendSheet().osszerendez();
                             i--;
 
                         }
@@ -299,6 +302,8 @@ public class SFDC implements Runnable {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                             PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
                             p.getbackendSheet().jPanel1.add(ujpo);
+                            ujpo.setStat(po.getStat());
+                            ujpo.getbackendSheet().osszerendez();
                             i--;
 
                         }
@@ -335,6 +340,8 @@ public class SFDC implements Runnable {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                             PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
                             p.getbackendSheet().jPanel1.add(ujpo);
+                            ujpo.setStat(po.getStat());
+                            ujpo.getbackendSheet().osszerendez();
                             i--;
 
                         }

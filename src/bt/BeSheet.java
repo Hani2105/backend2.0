@@ -120,12 +120,7 @@ public class BeSheet extends javax.swing.JPanel {
         pnlist.clear();
         wslist.clear();
         PlanConnect pc = null;
-        try {
-            pc = new PlanConnect();
-        } catch (SQLException e) {
-           e.printStackTrace();
-           Starter.e.sendMessage(e);
-        }
+
         try {
 
 //ki kell deríteni, hogy melyik tab adataira vagyunk kiváncsiak, a selected tab lesz az
@@ -165,7 +160,12 @@ public class BeSheet extends javax.swing.JPanel {
             e.printStackTrace();
             Starter.e.sendMessage(e);
         } finally {
-            pc.kinyir();
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+            }
 
         }
 
@@ -372,7 +372,7 @@ public class BeSheet extends javax.swing.JPanel {
 
                 szam = Integer.parseInt(szoveg.substring(0, i + 1));
             } catch (Exception e) {
-               
+
                 break;
             }
 

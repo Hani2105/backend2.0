@@ -132,7 +132,6 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println("Nem sikerült beolvasni a cella adatokat!");
             e.printStackTrace();
             Starter.e.sendMessage(e);
-            
 
         }
     }
@@ -492,6 +491,8 @@ public class MainWindow extends javax.swing.JFrame {
         cp.muszakjelentesToControlPanel();
         //kitoroljuk az adatokat h ne legyen zavaro
         cp.jTextPane1.setText("");
+        //segedlet frissitese
+        cp.segedlet();
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased

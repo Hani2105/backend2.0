@@ -164,8 +164,10 @@ public class TervLeker implements Runnable {
                 e.printStackTrace();
                 Starter.e.sendMessage(e);
             } finally {
-
-                pc.kinyir();
+                try {
+                    pc.kinyir();
+                } catch (Exception e) {
+                }
             }
 
 //a darabszámok és gyártási idők összegyűjtése
@@ -274,8 +276,12 @@ public class TervLeker implements Runnable {
             e.printStackTrace();
             Starter.e.sendMessage(e);
         } finally {
-
-            pc.kinyir();
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+            }
         }
 
 //a darabszámok és gyártási idők összegyűjtése

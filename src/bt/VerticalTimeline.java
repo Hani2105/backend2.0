@@ -62,14 +62,6 @@ public class VerticalTimeline extends JLabel {
             @Override
             public void mouseDragged(MouseEvent e) {
 
-//                if (e.getComponent() instanceof JLabel) {
-//
-//                    e.getComponent().setLocation(e.getXOnScreen() - (int) getParent().getLocationOnScreen().getX() - mousepozx, 0);
-//                    a plannobjectek ujrapozicionálása
-//                    setPlannObjectsPoz();
-//                    be.repaint();
-//
-//                }
             }
 
             @Override

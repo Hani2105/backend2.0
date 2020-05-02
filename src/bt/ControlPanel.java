@@ -5,7 +5,14 @@
  */
 package bt;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -31,6 +38,9 @@ public class ControlPanel extends javax.swing.JDialog {
     int y;
 
     MainWindow m;
+    //a segédlethez kell
+    ArrayList<PlannObject> polista = new ArrayList<>();
+    Date combodate;
 
     public ControlPanel(java.awt.Frame parent, boolean modal, MainWindow m) {
         super(parent, modal);
@@ -40,6 +50,16 @@ public class ControlPanel extends javax.swing.JDialog {
         jScrollPane1.getViewport().setOpaque(false);
         jScrollPane2.getViewport().setOpaque(false);
         this.m = m;
+        //combo action
+        jComboBox1.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    segedletLeker();
+                }
+            }
+        });
 
     }
 
@@ -72,6 +92,10 @@ public class ControlPanel extends javax.swing.JDialog {
         jScrollPane7 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -323,7 +347,7 @@ public class ControlPanel extends javax.swing.JDialog {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Data loader", jPanel3);
@@ -377,7 +401,7 @@ public class ControlPanel extends javax.swing.JDialog {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel7)))
@@ -388,6 +412,37 @@ public class ControlPanel extends javax.swing.JDialog {
         );
 
         jTabbedPane1.addTab("Műszakjelentés", jPanel5);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "StartDate", "PartNumber", "Job", "WorkStation", "Elmaradás", "PlannerKomment", "Komment"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Segédlet", jPanel4);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
@@ -413,7 +468,7 @@ public class ControlPanel extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -458,6 +513,10 @@ public class ControlPanel extends javax.swing.JDialog {
             //bekerjuk a cimlistat
             cimlistabeker();
             muszakjelentesToControlPanel();
+
+        } else if (jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()).equals("Segédlet")) {
+
+            segedlet();
 
         }
 
@@ -529,7 +588,7 @@ public class ControlPanel extends javax.swing.JDialog {
                 String insertquery = "";
                 try {
                     insertquery = "insert ignore tc_bepns (partnumber) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "')";
-                    pc.st.executeUpdate(insertquery);
+                    pc.feltolt(insertquery);
                 } catch (Exception e) {
                     // m.error.setVisible(true, "Nem adtál meg PN-t, így nem tudjuk feltölteni!");
                     JOptionPane.showMessageDialog(m,
@@ -542,7 +601,7 @@ public class ControlPanel extends javax.swing.JDialog {
 //ws feltoltese
                 try {
                     insertquery = "insert ignore tc_bestations (workstation) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "')";
-                    pc.st.executeUpdate(insertquery);
+                    pc.feltolt(insertquery);
                 } catch (Exception e) {
                     Starter.e.sendMessage(e);
 //                    m.error.setVisible(true, "Nem adtál meg WS-t, így nem tudjuk feltölteni!");
@@ -556,7 +615,7 @@ public class ControlPanel extends javax.swing.JDialog {
                 try {
                     insertquery = "insert ignore tc_prodmatrix (id_tc_bepns,id_tc_becells,id_tc_bestations,ciklusido,pk) values ((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'), '" + Double.parseDouble(jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString()) + "',(concat((select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "') , (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + MainWindow.jTabbedPane1.getTitleAt(MainWindow.jTabbedPane1.getSelectedIndex()) + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString().trim() + "'))))\n"
                             + "on duplicate key update tc_prodmatrix.ciklusido = values(ciklusido)";
-                    pc.st.executeUpdate(insertquery);
+                    pc.feltolt(insertquery);
                 } catch (Exception e) {
                     Starter.e.sendMessage(e);
 //                    m.error.setVisible(true, "<html>Nem adtál meg ciklusidőt, így nem tudjuk feltölteni!</html>");
@@ -570,7 +629,7 @@ public class ControlPanel extends javax.swing.JDialog {
 //updatelni kell a kommentet is
                 try {
                     insertquery = "insert ignore pn_data (PartNumber, Comment) values ('" + jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim() + "','" + jTable1.getValueAt(jTable1.getSelectedRow(), 6).toString().trim() + "') on duplicate key update pn_data.Comment = values(Comment)";
-                    pc.st.executeUpdate(insertquery);
+                    pc.feltolt(insertquery);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Starter.e.sendMessage(e);
@@ -586,7 +645,12 @@ public class ControlPanel extends javax.swing.JDialog {
                 e.printStackTrace();
                 Starter.e.sendMessage(e);
             } finally {
-                pc.kinyir();
+                try {
+                    pc.kinyir();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Starter.e.sendMessage(e);
+                }
 
             }
             //frissítjük az adatokat a backendsheeten
@@ -642,6 +706,60 @@ public class ControlPanel extends javax.swing.JDialog {
         t.start();
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    public void segedletLeker() {
+
+        DefaultTableModel model = new DefaultTableModel();
+        model = (DefaultTableModel) jTable3.getModel();
+        model.setRowCount(0);
+        try {
+            //át kell alakítani dátummá a stringet amit kiválasztottunk a combo boxbol
+            combodate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(jComboBox1.getSelectedItem().toString());
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
+        }
+        //bejárjuk a polistat és ha kisebb vagy egyenlő a datuma akkor betesszuk atablamodellbe
+        for (PlannObject po : polista) {
+
+            Date podate = null;
+            try {
+                podate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
+            }
+            if ((podate.compareTo(combodate) < 1) && (po.getTerv() - po.getTeny() > 0)) {
+                //megnezzuk, hogy van e olyan po a listaban ahol van megvalosulas a listaban ami ugyan az a pn job ws, osszeadjuk a terveket tenyeket kivonjuk es az lesz az elmaradas
+                int osszterv = 0;
+                int osszteny = 0;
+                for (PlannObject p : polista) {
+                    Date pdate = null;
+                    try {
+                        pdate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                        Starter.e.sendMessage(ex);
+                    }
+                    if ((pdate.compareTo(combodate) < 1) && p.getPn().equals(po.getPn()) && p.getJob().equals(po.getJob()) && p.getWorkStation().equals(po.getWorkStation())) {
+
+                        osszterv += p.getTerv();
+                        osszteny += p.getTeny();
+
+                    }
+
+                }
+                if (osszterv - osszteny > 0) {
+                    model.addRow(new Object[]{po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), osszterv - osszteny, po.getPlannerkomment(), po.getKomment()});
+                }
+
+            }
+
+        }
+
+        jTable3.setModel(model);
+
+    }
+
     public void cimlistabeker() {
 
         //behuzzuk a cimlistat
@@ -673,7 +791,13 @@ public class ControlPanel extends javax.swing.JDialog {
             e.printStackTrace();
             Starter.e.sendMessage(e);
         } finally {
-            pc.kinyir();
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+
+            }
         }
 
         //levagjuk az utolso biszbaszt
@@ -850,7 +974,47 @@ public class ControlPanel extends javax.swing.JDialog {
         });
     }
 
+    public void segedlet() {
+
+        //begyűjtjük az összes plannobjectet az aktuális sheetről
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        polista.clear();
+//        ArrayList<PlannObject> polista = new ArrayList<>();
+        for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+            if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+
+                polista.add((PlannObject) b.jPanel1.getComponent(i));
+
+            }
+
+        }
+        //sorba kell rendezni a startdate alapján
+        class DateSorter implements Comparator<PlannObject> {
+
+            @Override
+            public int compare(PlannObject a, PlannObject b) {
+                return a.getStartdate().compareToIgnoreCase(b.getStartdate());
+            }
+        }
+
+        polista.sort(new DateSorter());
+//a legördülőt feltöltjük a vt startdatumokkal
+        jComboBox1.removeAllItems();
+        for (int i = 0; i < b.jPanel2.getComponentCount(); i++) {
+
+            if (b.jPanel2.getComponent(i) instanceof VerticalTimeline) {
+                VerticalTimeline vt = (VerticalTimeline) b.jPanel2.getComponent(i);
+
+                jComboBox1.addItem(vt.getVtstartdate());
+
+            }
+
+        }
+
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     public static javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -859,18 +1023,22 @@ public class ControlPanel extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     public static javax.swing.JTabbedPane jTabbedPane1;
     public static javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     public static javax.swing.JTextField jTextField1;
     public static javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
+
 }

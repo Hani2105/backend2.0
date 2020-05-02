@@ -139,8 +139,8 @@ public class PlannObject extends JLabel {
                         mousepozy = (int) p.getY();
                         
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        Starter.e.sendMessage(ex);
+//                        ex.printStackTrace();
+//                        Starter.e.sendMessage(ex);
                     }
                     
                 }
