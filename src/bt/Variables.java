@@ -45,6 +45,10 @@ public class Variables {
     public static String plannusername;
     public static String plannpassword;
     public static String planndriver;
+//az anyaghiany legordulo listaja
+    public static String anyaghianylegordulo;
+//az allasido legorduloje
+    public static String allasidolegordulo;
 //  a program verzió száma
     public static double version = 1.02;
 

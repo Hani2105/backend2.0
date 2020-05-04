@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -32,7 +33,7 @@ import javax.swing.ToolTipManager;
  * @author gabor_hanacsek
  */
 public class PlannObject extends JLabel {
-    
+
     private Variables.status stat = Variables.status.NotExists;
     public String neve = "";
     private int mousepozx = 0;
@@ -67,6 +68,8 @@ public class PlannObject extends JLabel {
     private boolean selected = false;
 //mikor gyartottuk utoljara
     private int mikorment = -1;
+//az anyaghianyok listaja
+    private ArrayList<AnyagHiany> anyaghianylista = new ArrayList<>();
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -94,7 +97,7 @@ public class PlannObject extends JLabel {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                
+
                 if (e.getComponent() instanceof JLabel) {
 //a plannobject mozgatása/ ha planner
                     if (Variables.jogosultsag == 1) {
@@ -106,17 +109,17 @@ public class PlannObject extends JLabel {
 //a scrollpane ujraméretezése amennyiben szükséges
                     setScrollpanel();
                     b.repaint();
-                    
+
                 }
-                
+
             }
-            
+
             @Override
             public void mouseMoved(MouseEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
-        
+
         addMouseListener(new MouseListener() {
 //a plannobject setupablak megjelenítése
             @Override
@@ -128,7 +131,7 @@ public class PlannObject extends JLabel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
                 if (e.getComponent() instanceof JLabel) {
                     JLabel l = (JLabel) e.getComponent();
                     getParent().setComponentZOrder(l, 0);
@@ -137,17 +140,16 @@ public class PlannObject extends JLabel {
                         p = new Point(l.getMousePosition());
                         mousepozx = (int) p.getX();
                         mousepozy = (int) p.getY();
-                        
+
                     } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                        Starter.e.sendMessage(ex);
+
                     }
-                    
+
                 }
 //kijelölünk
                 kijelol();
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -157,14 +159,14 @@ public class PlannObject extends JLabel {
                 b.osszerendez();
                 setScrollpanel();
                 b.repaint();
-                
+
             }
-            
+
             @Override
             public void mouseEntered(MouseEvent e) {
-                
+
             }
-            
+
             @Override
             public void mouseExited(MouseEvent e) {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -199,10 +201,43 @@ public class PlannObject extends JLabel {
 
 //keresse meg a helyét
         setStartLocation();
-        
-    }
-//kijelöli a po-t és a többin megszünteti a kijelölest
 
+    }
+//az anyaghianyok taroloja
+
+    public class AnyagHiany {
+
+        public String pn;
+        public String tol;
+        public String ig;
+        public String felelos;
+        public String komment;
+
+        public AnyagHiany(String pn, String tol, String ig, String felelos, String komment) {
+            this.pn = pn;
+            this.tol = tol;
+            this.ig = ig;
+            this.felelos = felelos;
+            this.komment = komment;
+        }
+
+    }
+
+    public ArrayList<AnyagHiany> getAnyaghianylista() {
+        return anyaghianylista;
+    }
+
+    public void addAnyaghianylista(String pn, String tol, String ig, String feleos, String komment) {
+        AnyagHiany a = new AnyagHiany(pn, tol, ig, feleos, komment);
+        this.anyaghianylista.add(a);
+    }
+
+    public void clearAnyaghianylista() {
+
+        this.anyaghianylista.clear();
+    }
+
+//kijelöli a po-t és a többin megszünteti a kijelölest
     public void kijelol() {
 //összeszedjük az összes po-t az összes sheeten és false ra állítjuk a kijelölést
         for (int i = 0; i < m.jTabbedPane1.getTabCount(); i++) {
@@ -217,11 +252,11 @@ public class PlannObject extends JLabel {
                     if (po.getJob().equals(this.getJob()) && po.getPn().equals(this.getPn())) {
                         po.setSelected(true);
                     }
-                    
+
                 }
-                
+
             }
-            
+
         }
         //a thist pedig beállítom true ra
         this.setSelected(true);
@@ -229,32 +264,36 @@ public class PlannObject extends JLabel {
         if (m.spo.isVisible()) {
             m.spo.setVisible(true, this);
         }
+//az anyaghianyt ujrahivjuk de csak ha most is az
+        if (m.ahrogzito.isVisible()) {
+            m.ahrogzito.setVisible(this, true);
+        }
     }
-    
+
     public int getMikorment() {
         return mikorment;
     }
-    
+
     public void setMikorment(int mikorment) {
         this.mikorment = mikorment;
     }
-    
+
     public boolean isSelected() {
         return selected;
     }
-    
+
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-    
+
     public BeSheet getbackendSheet() {
         return backendSheet;
     }
-    
+
     public String getWorkStation() {
         return workStation;
     }
-    
+
     public void setWorkStation(String workStation) {
         this.workStation = workStation;
     }
@@ -268,55 +307,55 @@ public class PlannObject extends JLabel {
     public int getWtf() {
         return wtf;
     }
-    
+
     public MainWindow getMainWindow() {
         return m;
     }
-    
+
     public double getCiklusido() {
         return ciklusido;
     }
-    
+
     public double getGyartasiido() {
         return gyartasiido;
     }
-    
+
     public void setGyartasiido(double gyartasiido) {
         this.gyartasiido = gyartasiido;
     }
 
     //kiszamolja es beallitja a gyartai idot
     public void calculateGyaratsiido() {
-        
-        setGyartasiido(60/ ciklusido * this.getTeny() /60);
+
+        setGyartasiido(60 / ciklusido * this.getTeny() / 60);
     }
 
 //scrollpanel ujrameretezese ha szukseges
     public void setScrollpanel() {
-        
+
         Component components[] = backendSheet.jPanel1.getComponents();
 //        int maxx = 200;
         int maxy = 200;
         for (int i = 0; i < components.length; i++) {
-            
+
             if (components[i] instanceof PlannObject) {
-                
+
                 PlannObject po = (PlannObject) components[i];
-                
+
                 if (po.getLocation().y + this.getHeight() > maxy) {
-                    
+
                     maxy = po.getLocation().y + this.getHeight() + 100;
                 }
-                
+
             }
-            
+
         }
-        
+
         backendSheet.jPanel1.setPreferredSize(new Dimension((int) backendSheet.jPanel1.getPreferredSize().getWidth(), maxy));
         // backendSheet.jPanel2.setPreferredSize(new Dimension((int) backendSheet.jPanel1.getPreferredSize().getWidth(), (int) backendSheet.jPanel2.getPreferredSize().getHeight()));
         backendSheet.jPanel1.revalidate();
         repaint();
-        
+
     }
 
     //a starttime átírása a balról a legközelebbi vt nek megfelelően
@@ -325,28 +364,28 @@ public class PlannObject extends JLabel {
         //elindulunk szépen a this lokációtól balra és megkeressük az elő verticaltimelinet és felvesszük az ő idejét
         boolean c = true;
         int x = this.getLocation().x + 50;
-        
+
         while (c) {
-            
+
             if (backendSheet.jPanel2.getComponentAt(x, 0) instanceof VerticalTimeline) {
-                
+
                 VerticalTimeline vt = (VerticalTimeline) backendSheet.jPanel2.getComponentAt(x, 0);
                 this.setStartdate(vt.getVtstartdate() + ":00");
                 c = false;
-                
+
             } else if (x <= 0) {
-                
+
                 c = false;
-                
+
             } else {
-                
+
                 x--;
             }
-            
+
         }
-        
+
         backendSheet.collectData();
-        
+
     }
 
 //az objektek elhelyezése a lekérdezés után
@@ -366,12 +405,12 @@ public class PlannObject extends JLabel {
                     this.setScrollpanel();
                     vt.setMaxy(vt.getMaxy() + this.getHeight() + 5);
                     return;
-                    
+
                 }
             }
-            
+
         }
-        
+
     }
 
 //gyártási idő beállítása
@@ -381,14 +420,14 @@ public class PlannObject extends JLabel {
         this.tervezettido = (60 / ciklusido * this.getTerv()) / 60;
 //a grafikon szineinek kiszamitasa
         setProducTime();
-        
+
     }
 //a gyártási idő közvetlen beállítása
 
     public void setOsszGyartasiIdo(double ido) {
-        
+
         this.tervezettido = ido;
-        
+
     }
 
 //mérnöki beállítása
@@ -434,7 +473,7 @@ public class PlannObject extends JLabel {
 
 //a darabszám indikátor számainak kiszámítása
     public void setProducted() {
-        
+
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
         try {
@@ -444,62 +483,62 @@ public class PlannObject extends JLabel {
 //            e.printStackTrace();
 //            Starter.e.sendMessage(e);
         }
-        
+
     }
 //gyártási idő indikátor számainak kiszámítása
 
     public void setProducTime() {
-        
+
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.UP);
-        
+
         try {
             idozold = this.getSize().getWidth() * Double.parseDouble(df.format(((double) tervezettido) / 12));
             idopiros = this.getSize().getWidth() - idozold;
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
-            
+
         }
-        
+
     }
-    
+
     public void setStat(Variables.status stat) {
         this.stat = stat;
     }
-    
+
     public Variables.status getStat() {
         return stat;
     }
-    
+
     public String getPn() {
         return pn;
     }
-    
+
     public String getJob() {
         return job;
     }
-    
+
     public int getTerv() {
         return terv;
     }
-    
+
     public int getTeny() {
         return teny;
     }
-    
+
     public double getEngineer() {
         return engineer;
     }
-    
+
     public String getPlannerkomment() {
         return plannerkomment;
     }
-    
+
     public String getKomment() {
         return komment;
     }
-    
+
     public double getTervezettido() {
         return tervezettido;
     }
@@ -520,26 +559,26 @@ public class PlannObject extends JLabel {
 //        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
 //        setText(labeltext);
         tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
-        
+
         setToolTipText(tooltiptext);
-        
+
     }
 //a label ábrái 
 
     @Override
     public void paintComponent(Graphics g) {
-        
+
         super.paintComponent(g);
         if (!this.isSelected()) {
             g.drawImage(img.getImage(), 0, 0, null);
         } else if (this.isSelected()) {
-            
+
             g.drawImage(selectedimage.getImage(), 0, 0, null);
         }
-        
+
         if (getStartdate().equals("")) {
             g.drawImage(nostartimeimage.getImage(), 0, 0, null);
-            
+
         }
         Graphics2D g2d = (Graphics2D) g;
 // a darabszám indikátor megrajzolása
@@ -551,9 +590,9 @@ public class PlannObject extends JLabel {
 //zöld , ha nincs terv csak tény
         g2d.setColor(Variables.zold);
         if (getTerv() == 0) {
-            
+
             g2d.fillRect(0, this.getHeight() - 7, 200, 7);
-            
+
         }
 
 //a gyártási idő indikátor beállítása
@@ -565,16 +604,23 @@ public class PlannObject extends JLabel {
 
 //ha van komment rajzolunk más ikont is
         if ((plannerkomment.length() > 0) || (komment.length() > 0)) {
-            
+
             Icon komment = new javax.swing.ImageIcon(getClass().getResource("/pictures/comment.png"));
             komment.paintIcon(this, g, (int) this.getSize().getWidth() - 30, 5);
-            
+
         }
 //mérnöki ikon beállítása
         if (engineer > 0) {
             Icon engineer = new javax.swing.ImageIcon(getClass().getResource("/pictures/engineer.png"));
             engineer.paintIcon(this, g, (int) this.getSize().getWidth() - 30, this.getHeight() - 7 - engineer.getIconHeight());
-            
+
+        }
+
+//anyaghiany beallitasa
+        if (anyaghianylista.size() > 0) {
+            Icon ah = new javax.swing.ImageIcon(getClass().getResource("/pictures/ah.png"));
+            ah.paintIcon(this, g, (int) this.getSize().getWidth() - 193, this.getHeight() - 48 - ah.getIconHeight());
+
         }
 
 //a ws kiiratása
@@ -607,11 +653,11 @@ public class PlannObject extends JLabel {
         if (getMikorment() == -1) {
             g2d.setColor(Variables.piros);
             g2d.drawString("NEW", 5, 65);
-            
+
         } else if (getMikorment() > 90) {
             g2d.setColor(Variables.piros);
             g2d.drawString(String.valueOf(getMikorment()), 10, 65);
-            
+
         } else {
             g2d.setColor(Variables.zold);
             g2d.drawString(String.valueOf(getMikorment()), 10, 65);
@@ -620,7 +666,7 @@ public class PlannObject extends JLabel {
 
 //a mainicon beállítása
         switch (stat) {
-            
+
             case NotReleased:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")).getImage(), 0, 15, null);
                 break;
@@ -633,15 +679,15 @@ public class PlannObject extends JLabel {
             case Skeleton:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/skeleton.png")).getImage(), 0, 15, null);
                 break;
-            
+
             case NotExists:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notexists.png")).getImage(), 0, 15, null);
                 break;
             default:
                 g2d.drawImage(new javax.swing.ImageIcon(getClass().getResource("/pictures/notreleased.png")).getImage(), 0, 15, null);
-            
+
         }
-        
+
     }
-    
+
 }

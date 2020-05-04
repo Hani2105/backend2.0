@@ -41,7 +41,7 @@ public class PlannPopup extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //csináljunk valamit
-                
+
                 Thread t = new Thread(new TervMent(p.getbackendSheet()));
                 t.start();
                 m.menteshatter.setVisible(true);
@@ -64,7 +64,7 @@ public class PlannPopup extends JPopupMenu {
             }
         });
         this.add(setupMenuItem);
-        //submenu       
+//submenu       
         JMenu attervez = new JMenu("Áttervez");
         this.add(attervez);
 
@@ -154,6 +154,39 @@ public class PlannPopup extends JPopupMenu {
                 p.getbackendSheet().jPanel1.revalidate();
                 p.getbackendSheet().jPanel1.repaint();
 
+            }
+        });
+
+        //szeparátor
+        this.addSeparator();
+//submenu       
+        JMenu allasrogzit = new JMenu("Állásidő rögzítése");
+        this.add(allasrogzit);
+//anyaghiany
+        JMenuItem anyaghiany = new JMenuItem("Anyaghiány felvétele", new javax.swing.ImageIcon(getClass().getResource("/pictures/ah.png")));
+        anyaghiany.setOpaque(true);
+        anyaghiany.setBackground(Variables.plannObjectPopupColor);
+        allasrogzit.add(anyaghiany);
+        anyaghiany.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+               p.getMainWindow().ahrogzito.setVisible(p,true);
+                
+            }
+        });
+        
+//allasido
+        JMenuItem allasido = new JMenuItem("Állásidő felvétele", new javax.swing.ImageIcon(getClass().getResource("/pictures/allas.png")));
+        allasido.setOpaque(true);
+        allasido.setBackground(Variables.plannObjectPopupColor);
+        allasrogzit.add(allasido);
+        allasido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+               
+                
             }
         });
 

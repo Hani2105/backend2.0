@@ -362,8 +362,9 @@ public class SFDC implements Runnable {
         }
 
 //frissitjuk az adatokat
-        p.getbackendSheet()
-                .collectData();
+        p.getbackendSheet().collectData();
+//jogosultságok beállítása
+        p.getMainWindow().j.kezel();
         try {
             p.getMainWindow().sfdchatter.setVisible(false);
         } catch (Exception e) {
