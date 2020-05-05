@@ -19,7 +19,7 @@ import javax.swing.table.TableColumn;
  *
  * @author gabor_hanacsek
  */
-public class Allasido extends javax.swing.JDialog {
+public class Anyaghiany extends javax.swing.JDialog {
 
     /**
      * Creates new form Allasido
@@ -28,7 +28,7 @@ public class Allasido extends javax.swing.JDialog {
     int x;
     int y;
 
-    public Allasido(java.awt.Frame parent, boolean modal) {
+    public Anyaghiany(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         createTable();
@@ -36,10 +36,10 @@ public class Allasido extends javax.swing.JDialog {
 
     private void createTable() {
 //itt csináljuk meg a tábla tulajdonságait
-        TableColumn testColumn = jTable1.getColumnModel().getColumn(2);
+        TableColumn testColumn = jTable1.getColumnModel().getColumn(3);
         JComboBox<String> comboBox = new JComboBox<>();
 //az inibol kell a lista, hogy milyen elemeket tartalmazzon a legordulo
-        String[] lista = Variables.allasidolegordulo.split(",");
+        String[] lista = Variables.anyaghianylegordulo.split(",");
         comboBox.addItem("");
         for (String s : lista) {
             comboBox.addItem(s);
@@ -85,39 +85,39 @@ public class Allasido extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Állásidő felvétele"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Anyaghiány felvétele"));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment"
+                "PartNumber", "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(false);
+        jTable1.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -311,23 +311,21 @@ public class Allasido extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Anyaghiany.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Anyaghiany.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Anyaghiany.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Anyaghiany.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Allasido dialog = new Allasido(new javax.swing.JFrame(), true);
+                Anyaghiany dialog = new Anyaghiany(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

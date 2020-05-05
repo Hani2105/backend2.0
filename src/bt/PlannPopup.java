@@ -185,7 +185,7 @@ public class PlannPopup extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                
-               
+                p.getMainWindow().allasrogzito.setVisible(p,true);
                 
             }
         });

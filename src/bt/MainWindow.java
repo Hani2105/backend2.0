@@ -36,7 +36,8 @@ public class MainWindow extends javax.swing.JFrame {
     public SfdcHatter sfdchatter = new SfdcHatter(this, true);
     public MentesHatter menteshatter = new MentesHatter(this, true);
     public SessionObject so = new SessionObject();
-    public Allasido ahrogzito = new Allasido(this, false);
+    public Anyaghiany ahrogzito = new Anyaghiany(this, false);
+    public Allasido allasrogzito = new Allasido(this, false);
 
     //a panel szelessege es magassaga
 //inicializálás

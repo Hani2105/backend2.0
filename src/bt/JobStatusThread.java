@@ -86,6 +86,7 @@ public class JobStatusThread implements Runnable {
 
                                 po.setStat(Variables.status.NotReleased);
 //hozzáadjuk a kommenthez, hogy nincs releasálva
+                                po.formatText();
                                 String tooltiptext = po.getToolTipText() + "JOB not released in 42Q!";
                                 po.setToolTipText(tooltiptext);
 //ki is léphetünk a kövi po-ra
@@ -97,7 +98,7 @@ public class JobStatusThread implements Runnable {
 
                                     ws = rowdata[a][2].toString();
                                 }
-
+                                po.formatText();
                                 String tooltiptext = po.getToolTipText() + ws + ": " + rowdata[a][3] + " DB<br>";
                                 po.setToolTipText(tooltiptext);
                                 //ha a tooltip tartalmaz skeletont akkor s ikon, ha nem akkor r
@@ -109,6 +110,7 @@ public class JobStatusThread implements Runnable {
                                 }
                             } //ha se nem released se nem notreleased akkor c
                             else if (!rowdata[a][5].equals("N") && !rowdata[a][5].equals("R")) {
+                                po.formatText();
                                 String tooltiptext = po.getToolTipText() + rowdata[a][2] + ": " + rowdata[a][3] + " DB<br>";
                                 po.setToolTipText(tooltiptext);
                                 po.setStat(Variables.status.Complete);

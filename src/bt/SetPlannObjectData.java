@@ -21,14 +21,14 @@ public class SetPlannObjectData extends javax.swing.JDialog {
     PlannObject p;
     private static int xx = 0;
     private static int yy = 0;
-    
+
     public SetPlannObjectData(java.awt.Frame parent, boolean modal) {
-        
+
         super(parent, modal);
         initComponents();
-        
+
     }
-    
+
     public void setVisible(boolean b, PlannObject p/*, Point point*/) {
         super.setVisible(b);
 
@@ -43,12 +43,11 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         jTextField6.setText(new DecimalFormat("#.##").format((p.getTervezettido())));
         jTextField8.setText(p.getWorkStation());
         jSlider1.setValue((int) p.getEngineer());
-        
+
         this.p = p;
         this.setLocation(p.getLocationOnScreen().x + 200, p.getLocationOnScreen().y);
 
         //this.p.setBackground(Variables.plannObjectSelectedColor);
-
     }
 
     /**
@@ -270,7 +269,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
-            
+
         }
 //tény darabszám beállítása
         try {
@@ -278,7 +277,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
-            
+
         }
 
 //a darabszám indikátor csík megjelenítése
@@ -302,11 +301,11 @@ public class SetPlannObjectData extends javax.swing.JDialog {
 //gyártási idő kiszámoltatása
         p.setProducTime();
         jTextField6.setText(String.valueOf(p.getTervezettido()));
-
+        p.formatText();
+        Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
+        t.start();
 //újrarajzoljuk
-        {
-            p.repaint();
-        }
+        p.repaint();
 
 //az adatok ujraszámolása
         p.getbackendSheet().collectData();
@@ -332,8 +331,7 @@ public class SetPlannObjectData extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jLabel4MouseClicked
 
- 
-    
+
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
         // ha változik a cucc átírjuk a label szövegét
         jLabel10.setText("Mérnöki:   " + jSlider1.getValue() + " óra");

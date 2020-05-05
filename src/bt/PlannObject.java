@@ -559,7 +559,10 @@ public class PlannObject extends JLabel {
 //        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
 //        setText(labeltext);
         tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
+        for (int i = 0; i < anyaghianylista.size(); i++) {
 
+            tooltiptext+="AH: "+ anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment+ "<br>";
+        }
         setToolTipText(tooltiptext);
 
     }
@@ -619,7 +622,7 @@ public class PlannObject extends JLabel {
 //anyaghiany beallitasa
         if (anyaghianylista.size() > 0) {
             Icon ah = new javax.swing.ImageIcon(getClass().getResource("/pictures/ah.png"));
-            ah.paintIcon(this, g, (int) this.getSize().getWidth() - 193, this.getHeight() - 48 - ah.getIconHeight());
+            ah.paintIcon(this, g, (int) this.getSize().getWidth() - 196, this.getHeight() - 48 - ah.getIconHeight());
 
         }
 

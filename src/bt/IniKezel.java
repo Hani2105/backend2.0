@@ -75,7 +75,7 @@ public class IniKezel {
         ini.put("plannconnect", "password", "plan500");
         ini.put("plannconnect", "driver", "com.mysql.jdbc.driver");
         ini.put("allas", "ahlegordulo", "Nincs készleten,Nem találjuk,Quality probléma,Nem ért ki időben,Nincs előkészítve");
-        ini.put("allas", "allaslegordulo", "Planning, Termelés,Berendezés,Folyamat és mérnökség,Quality,Karbantartás,Facility");
+        ini.put("allas", "allaslegordulo", "Planning,Termelés,Berendezés,Folyamat és mérnökség,Quality,Karbantartás,Facility");
         ini.store();
 
     }
@@ -122,7 +122,7 @@ public class IniKezel {
         if (Variables.anyaghianylegordulo == null) {
             throw new NemletezoExeption("");
         }
-        Variables.anyaghianylegordulo = ini.get("allas", "allaslegordulo");
+        Variables.allasidolegordulo = ini.get("allas", "allaslegordulo");
         if (Variables.allasidolegordulo == null) {
             throw new NemletezoExeption("");
         }
