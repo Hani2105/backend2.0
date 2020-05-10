@@ -32,12 +32,21 @@ public class JobStatusThread implements Runnable {
 
             if (components[i] instanceof PlannObject) {
                 PlannObject po = (PlannObject) components[i];
-                if (!jobok.contains(po.getJob())) {
-                    jobok += po.getJob() + ";";
+                String job = "";
+                job = po.getJob().trim();
+                if (!job.equals("")) {
+                    if (!jobok.contains(po.getJob())) {
+                        jobok += po.getJob() + ";";
+                    }
                 }
 
             }
 
+        }
+
+        try {
+            jobok = jobok.replaceAll("[+.^:,/ ]", "");
+        } catch (Exception e) {
         }
         if (jobok.length() > 0) {
             jobok = jobok.substring(0, jobok.length() - 1);

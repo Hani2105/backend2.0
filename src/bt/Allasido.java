@@ -117,7 +117,7 @@ public class Allasido extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(false);
+        jTable1.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -189,7 +189,7 @@ public class Allasido extends javax.swing.JDialog {
 
     private void getData() {
         ArrayList data = null;
-        data = p.getAnyaghianylista();
+        data = p.getAllasidoLista();
         //kinullazzuk az adatokat
         DefaultTableModel model = new DefaultTableModel();
         model = (DefaultTableModel) jTable1.getModel();
@@ -205,12 +205,12 @@ public class Allasido extends javax.swing.JDialog {
 
 //beallitjuk az adatokat
             for (int i = 0; i < data.size(); i++) {
-                PlannObject.AnyagHiany a = (PlannObject.AnyagHiany) data.get(i);
-                model.setValueAt(a.pn, i, 0);
-                model.setValueAt(a.tol, i, 1);
-                model.setValueAt(a.ig, i, 2);
-                model.setValueAt(a.felelos, i, 3);
-                model.setValueAt(a.komment, i, 4);
+                PlannObject.AllasidoLista a = (PlannObject.AllasidoLista) data.get(i);
+               
+                model.setValueAt(a.tol, i, 0);
+                model.setValueAt(a.ig, i, 1);
+                model.setValueAt(a.felelos, i, 2);
+                model.setValueAt(a.komment, i, 3);
             }
         }
 
@@ -222,20 +222,20 @@ public class Allasido extends javax.swing.JDialog {
 //felvesszuk a tabla datait a plannobject tarolojaba
 //leellenorizzuk, hogy megfeleloen van e kitoltve a tabla
         try {
-            p.clearAnyaghianylista();
+            p.clearAllasidoLista();
         } catch (Exception e) {
         }
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-            String pn = "";
+            String tol = "";
             try {
-                pn = jTable1.getValueAt(i, 0).toString().trim();
+                tol = jTable1.getValueAt(i, 0).toString().trim();
             } catch (Exception e) {
             }
             try {
 
-                if (!pn.equals("")) {
+                if (!tol.equals("")) {
 
-                    if (jTable1.getValueAt(i, 3).toString().equals("")) {
+                    if (jTable1.getValueAt(i, 2).toString().equals("")) {
                         JOptionPane.showMessageDialog(p.getMainWindow(),
                                 "Nem adtál meg felelőst a " + (i + 1) + " .sorban! \n Ezt nem visszük fel!",
                                 "Hiba",
@@ -244,8 +244,8 @@ public class Allasido extends javax.swing.JDialog {
 
                     }
 
-                    String date = jTable1.getValueAt(i, 1).toString().trim();
-                    String date2 = jTable1.getValueAt(i, 2).toString().trim();
+                    String date = jTable1.getValueAt(i, 0).toString().trim();
+                    String date2 = jTable1.getValueAt(i, 1).toString().trim();
                     //leellenőrizzük hogy a startdátum megfelelő formátumú e
                     if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date) || !Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date2)) {
                         //custom title, error icon
@@ -259,10 +259,10 @@ public class Allasido extends javax.swing.JDialog {
 //ha ide eljutunk akkor megyunk tovabb
                     String komment = "";
                     try {
-                        komment = jTable1.getValueAt(i, 4).toString();
+                        komment = jTable1.getValueAt(i, 3).toString();
                     } catch (Exception e) {
                     }
-                    p.addAnyaghianylista(pn, date, date2, jTable1.getValueAt(i, 3).toString(), komment);
+                    p.addAllasidoLista(date, date2, jTable1.getValueAt(i, 2).toString(), komment);
 
                 }
 

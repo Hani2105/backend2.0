@@ -149,6 +149,7 @@ public class PlannPopup extends JPopupMenu {
                 //csináljunk valamit
                 PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(), p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m);
                 po.setStat(p.getStat());
+                po.setPktomig(p.getPktomig());
                 po.setMikorment(p.getMikorment());
                 p.getbackendSheet().jPanel1.add(po);
                 p.getbackendSheet().jPanel1.revalidate();

@@ -487,14 +487,29 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         //változik a seleted tab
-        cp.tablaTorol();
-        cp.adatlekerBeSheetrol();
+        try {
+            cp.tablaTorol();
+        } catch (Exception e) {
+        }
+        try {
+            cp.adatlekerBeSheetrol();
+        } catch (Exception e) {
+        }
         //a control panelen kitoltjuk a muszakjelentest
-        cp.muszakjelentesToControlPanel();
+        try {
+            cp.muszakjelentesToControlPanel();
+        } catch (Exception e) {
+        }
         //kitoroljuk az adatokat h ne legyen zavaro
-        cp.jTextPane1.setText("");
+        try {
+            cp.jTextPane1.setText("");
+        } catch (Exception e) {
+        }
         //segedlet frissitese
-        cp.segedlet();
+        try {
+            cp.segedlet();
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased

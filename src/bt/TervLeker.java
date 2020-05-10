@@ -119,7 +119,7 @@ public class TervLeker implements Runnable {
             //a formattert átalakítjuk a megfelelő formátummá
 
 //        tabneve = "UBT";
-            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
+            String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.pktomig FROM tc_terv\n"
                     + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
                     + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
                     + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
@@ -149,6 +149,7 @@ public class TervLeker implements Runnable {
                     int qty_teny = b.getIntFromText(pc.rs.getString("qty_teny"));
 
                     PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), poformatter.format(pc.rs.getTimestamp("date")), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
+                    po.setPktomig(pc.rs.getString("pktomig"));
                     b.jPanel1.add(po);
                     szamlalo++;
 
@@ -176,6 +177,9 @@ public class TervLeker implements Runnable {
             Thread t = new Thread(new JobStatusThread(b));
             t.start();
             m.jTabbedPane1.add(b, b.getName());
+            //elindítjuk az állásidők legyűjtését
+            Thread allaidok = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.leker,b));
+            allaidok.start();
 
         }
         m.jProgressBar1.setValue(0);
@@ -183,6 +187,7 @@ public class TervLeker implements Runnable {
 //elindítjuk a mikor gyártottuk futását
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
+
 //lefuttatjuk a jogosultság kezelőt, hogy az uj plannobjectek is rendben legyenek
         m.j.kezel();
 //kiszedjük a pipát, hogy többször ne kérjük le az összesre
@@ -231,7 +236,7 @@ public class TervLeker implements Runnable {
         //a formattert átalakítjuk a megfelelő formátummá
 
 //        tabneve = "UBT";
-        String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido FROM tc_terv\n"
+        String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.pktomig FROM tc_terv\n"
                 + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
                 + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
                 + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
@@ -261,6 +266,7 @@ public class TervLeker implements Runnable {
                 int qty_teny = b.getIntFromText(pc.rs.getString("qty_teny"));
 
                 PlannObject po = new PlannObject(b, 200, 75, pc.rs.getString("partnumber"), pc.rs.getString("job"), poformatter.format(pc.rs.getTimestamp("date")), qty, qty_teny, plannerkomment, komment, pc.rs.getDouble("mernokiido"), pc.rs.getInt("wtf"), pc.rs.getString("workstation"), pc.rs.getDouble("ciklusido"), b.getM());
+                po.setPktomig(pc.rs.getString("pktomig"));
                 b.jPanel1.add(po);
                 szamlalo++;
 
@@ -295,6 +301,9 @@ public class TervLeker implements Runnable {
 //elindítjuk a mikor gyártottuk futását
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
+//elindítjuk az állásidők legyűjtését
+        Thread allaidok = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.leker, b));
+        allaidok.start();
 //lefuttatjuk a jogosultság kezelőt, hogy az uj plannobjectek is rendben legyenek
         m.j.kezel();
 //kiszedjük a pipát, hogy többször ne kérjük le az összesre

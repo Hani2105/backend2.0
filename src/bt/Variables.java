@@ -5,7 +5,6 @@
  */
 package bt;
 
-
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -28,15 +27,23 @@ public class Variables {
 //a felhasználó valaki_valaki
     public static String user = "";
 //a job státusainak lehetőségei
+
     public static enum status {
-        NotReleased, Released, Complete,Skeleton,NotExists
+        NotReleased, Released, Complete, Skeleton, NotExists
     };
 //mit rajzoljon a screensaver
+
     public static enum background {
         sfdc, tervmentese, oldalmenu, controlpanelkulso, controlpanelbelso, setplannobjectback
     };
+
     public static enum viewports {
         plannpanel, datapanel
+    };
+//az allasido interface lekerjen vagy mentsen
+
+    public static enum allasidoInterfaceParam {
+        leker, ment
     };
 //a felhasználó pozíciója, planner vagy műszakvezető vagy csak megtekintés, 1,2,0
     public static int jogosultsag = 0;

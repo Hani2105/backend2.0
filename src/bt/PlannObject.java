@@ -66,10 +66,14 @@ public class PlannObject extends JLabel {
     private MainWindow m;
     private double ciklusido = 0.00;
     private boolean selected = false;
+//az egyedi azonosító
+    private String pktomig = "";
 //mikor gyartottuk utoljara
     private int mikorment = -1;
 //az anyaghianyok listaja
     private ArrayList<AnyagHiany> anyaghianylista = new ArrayList<>();
+//az állásidők listája
+    private ArrayList<AllasidoLista> allasidolista = new ArrayList<>();
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -222,6 +226,25 @@ public class PlannObject extends JLabel {
         }
 
     }
+//az anyaghianyok taroloja
+
+    public class AllasidoLista {
+
+       
+        public String tol;
+        public String ig;
+        public String felelos;
+        public String komment;
+
+        public AllasidoLista(String tol, String ig, String felelos, String komment) {
+
+            this.tol = tol;
+            this.ig = ig;
+            this.felelos = felelos;
+            this.komment = komment;
+        }
+
+    }
 
     public ArrayList<AnyagHiany> getAnyaghianylista() {
         return anyaghianylista;
@@ -232,9 +255,23 @@ public class PlannObject extends JLabel {
         this.anyaghianylista.add(a);
     }
 
+    public ArrayList<AllasidoLista> getAllasidoLista() {
+        return allasidolista;
+    }
+
+    public void addAllasidoLista(String tol, String ig, String feleos, String komment) {
+        AllasidoLista a = new AllasidoLista(tol, ig, feleos, komment);
+        this.allasidolista.add(a);
+    }
+
     public void clearAnyaghianylista() {
 
         this.anyaghianylista.clear();
+    }
+
+    public void clearAllasidoLista() {
+
+        this.allasidolista.clear();
     }
 
 //kijelöli a po-t és a többin megszünteti a kijelölest
@@ -268,6 +305,19 @@ public class PlannObject extends JLabel {
         if (m.ahrogzito.isVisible()) {
             m.ahrogzito.setVisible(this, true);
         }
+
+        //az allasidot ujrahivjuk de csak ha most is az
+        if (m.allasrogzito.isVisible()) {
+            m.allasrogzito.setVisible(this, true);
+        }
+    }
+
+    public String getPktomig() {
+        return pktomig;
+    }
+
+    public void setPktomig(String pktomig) {
+        this.pktomig = pktomig;
     }
 
     public int getMikorment() {
@@ -561,7 +611,7 @@ public class PlannObject extends JLabel {
         tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
         for (int i = 0; i < anyaghianylista.size(); i++) {
 
-            tooltiptext+="AH: "+ anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment+ "<br>";
+            tooltiptext += "AH: " + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
         }
         setToolTipText(tooltiptext);
 
@@ -619,8 +669,16 @@ public class PlannObject extends JLabel {
 
         }
 
-//anyaghiany beallitasa
-        if (anyaghianylista.size() > 0) {
+//anyaghiany és allasido beallitasa
+        if (anyaghianylista.size() > 0 && allasidolista.size() > 0) {
+            Icon ah = new javax.swing.ImageIcon(getClass().getResource("/pictures/ahallas.png"));
+            ah.paintIcon(this, g, (int) this.getSize().getWidth() - 196, this.getHeight() - 48 - ah.getIconHeight());
+
+        } else if (allasidolista.size() > 0) {
+            Icon ah = new javax.swing.ImageIcon(getClass().getResource("/pictures/allas.png"));
+            ah.paintIcon(this, g, (int) this.getSize().getWidth() - 196, this.getHeight() - 48 - ah.getIconHeight());
+
+        } else if (anyaghianylista.size() > 0) {
             Icon ah = new javax.swing.ImageIcon(getClass().getResource("/pictures/ah.png"));
             ah.paintIcon(this, g, (int) this.getSize().getWidth() - 196, this.getHeight() - 48 - ah.getIconHeight());
 

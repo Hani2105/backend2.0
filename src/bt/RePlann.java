@@ -62,6 +62,7 @@ public class RePlann {
 //hozzáadjuk a panelhoz oda ahol a tobbi van
                     po.setStat(p.getStat());
                     po.setMikorment(p.getMikorment());
+                    po.setPktomig(p.getPktomig());
                     p.getbackendSheet().jPanel1.add(po);
                     po.setLocation(vt.getLocation().x + 10, 0);
 

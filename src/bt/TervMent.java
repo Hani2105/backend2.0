@@ -61,6 +61,9 @@ public class TervMent implements Runnable {
                 mentes();
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
+//az allasidok rogzitese
+                Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, b));
+                allas.start();
 
 //ha nem mentem
             } else if (n == 1) {
@@ -75,6 +78,9 @@ public class TervMent implements Runnable {
             mentes();
             //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
             valtozasFrissito();
+            //az allasidok rogzitese
+            Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, b));
+            allas.start();
 
         }
 
@@ -121,14 +127,14 @@ public class TervMent implements Runnable {
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String query = "update tc_terv set active = CASE when tc_terv.active = 2 then 1 when tc_terv.active = 1 then 0 end where tc_terv.active in (2,1) and tc_terv.date between '" + /*dateFormat.format(b.getM().jDateChooser1.getDate())*/ tol + "' and '" + /*dateFormat.format(b.getM().jDateChooser2.getDate())*/ig + "' and tc_terv.idtc_becells = (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname ='" + b.getName() + "')";
+        String query = "update tc_terv set active = CASE when tc_terv.active = 2 then 1 when tc_terv.active = 1 then 0 end where tc_terv.active in (2,1) and tc_terv.date between '" + /*dateFormat.format(b.getM().jDateChooser1.getDate())*/ tol + "' and '" + /*dateFormat.format(b.getM().jDateChooser2.getDate())*/ ig + "' and tc_terv.idtc_becells = (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname ='" + b.getName() + "')";
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();
             pc.feltolt(query);
         } catch (SQLException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
@@ -185,8 +191,8 @@ public class TervMent implements Runnable {
             }
 
         } catch (SQLException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
             //custom title, error icon
             JOptionPane.showMessageDialog(b.getM(),
                     "<html>A mentés nem sikerült!<br>" + ex.getMessage() + "<html>",
@@ -218,11 +224,11 @@ public class TervMent implements Runnable {
                 b.setUtolsomodisito(Variables.user);
             }
         } catch (SQLException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } catch (ClassNotFoundException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } finally {
             try {
                 pc.kinyir();
@@ -256,8 +262,8 @@ public class TervMent implements Runnable {
             ex.printStackTrace();
             Starter.e.sendMessage(ex);
         } catch (ClassNotFoundException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         } finally {
 
             try {
