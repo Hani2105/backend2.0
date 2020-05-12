@@ -61,9 +61,7 @@ public class TervMent implements Runnable {
                 mentes();
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
-//az allasidok rogzitese
-                Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, b));
-                allas.start();
+
 
 //ha nem mentem
             } else if (n == 1) {
@@ -78,9 +76,7 @@ public class TervMent implements Runnable {
             mentes();
             //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
             valtozasFrissito();
-            //az allasidok rogzitese
-            Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, b));
-            allas.start();
+           
 
         }
 

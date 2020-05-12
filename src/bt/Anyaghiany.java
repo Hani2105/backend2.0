@@ -89,36 +89,48 @@ public class Anyaghiany extends javax.swing.JDialog {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "PartNumber", "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment"
+                "PartNumber", "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment", "id"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jTable1.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(5).setMinWidth(30);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(5).setMaxWidth(30);
+        }
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
@@ -207,10 +219,11 @@ public class Anyaghiany extends javax.swing.JDialog {
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AnyagHiany a = (PlannObject.AnyagHiany) data.get(i);
                 model.setValueAt(a.pn, i, 0);
-                model.setValueAt(a.tol, i, 1);
-                model.setValueAt(a.ig, i, 2);
+                model.setValueAt(a.tol.substring(0, a.tol.length()-5), i, 1);
+                model.setValueAt(a.ig.substring(0, a.ig.length()-5), i, 2);
                 model.setValueAt(a.felelos, i, 3);
                 model.setValueAt(a.komment, i, 4);
+                model.setValueAt(a.id, i, 5);
             }
         }
 
@@ -262,7 +275,14 @@ public class Anyaghiany extends javax.swing.JDialog {
                         komment = jTable1.getValueAt(i, 4).toString();
                     } catch (Exception e) {
                     }
-                    p.addAnyaghianylista(pn, date, date2, jTable1.getValueAt(i, 3).toString(), komment);
+
+                    String id = "";
+                    try {
+
+                        id = jTable1.getValueAt(i, 5).toString();
+                    } catch (Exception e) {
+                    }
+                    p.addAnyaghianylista(pn, date, date2, jTable1.getValueAt(i, 3).toString(), komment,id);
 
                 }
 
@@ -275,11 +295,15 @@ public class Anyaghiany extends javax.swing.JDialog {
             }
 
         }
-        
+
         p.formatText();
         Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
         t.start();
         p.repaint();
+
+        //az allasidok rogzitese
+        Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, p.getbackendSheet(), p));
+        allas.start();
 
     }//GEN-LAST:event_jLabel2MouseClicked
 

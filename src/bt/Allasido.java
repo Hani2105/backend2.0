@@ -89,36 +89,48 @@ public class Allasido extends javax.swing.JDialog {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment"
+                "Tól (yyyy-MM-dd hh:mm)", "Ig (yyyy-MM-dd hh:mm)", "Felelős", "Komment", "id"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jTable1.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(4).setMinWidth(30);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(4).setMaxWidth(30);
+        }
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
@@ -206,11 +218,12 @@ public class Allasido extends javax.swing.JDialog {
 //beallitjuk az adatokat
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AllasidoLista a = (PlannObject.AllasidoLista) data.get(i);
-               
-                model.setValueAt(a.tol, i, 0);
-                model.setValueAt(a.ig, i, 1);
+
+                model.setValueAt(a.tol.substring(0, a.tol.length()-5), i, 0);
+                model.setValueAt(a.ig.substring(0, a.ig.length()-5), i, 1);
                 model.setValueAt(a.felelos, i, 2);
                 model.setValueAt(a.komment, i, 3);
+                model.setValueAt(a.id, i, 4);
             }
         }
 
@@ -262,7 +275,12 @@ public class Allasido extends javax.swing.JDialog {
                         komment = jTable1.getValueAt(i, 3).toString();
                     } catch (Exception e) {
                     }
-                    p.addAllasidoLista(date, date2, jTable1.getValueAt(i, 2).toString(), komment);
+                    String id = "";
+                    try {
+                        id = jTable1.getValueAt(i, 4).toString();
+                    } catch (Exception e) {
+                    }
+                    p.addAllasidoLista(date, date2, jTable1.getValueAt(i, 2).toString(), komment, id);
 
                 }
 
@@ -275,11 +293,14 @@ public class Allasido extends javax.swing.JDialog {
             }
 
         }
-        
+
         p.formatText();
         Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
         t.start();
         p.repaint();
+        //az allasidok rogzitese az adatbazisba
+        Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, p.getbackendSheet(), p));
+        allas.start();
 
     }//GEN-LAST:event_jLabel2MouseClicked
 

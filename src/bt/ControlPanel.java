@@ -534,7 +534,9 @@ public class ControlPanel extends javax.swing.JDialog {
         DefaultTableModel model = new DefaultTableModel();
         model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
+        ArrayList<String> polista = new ArrayList<>();
         //végigjárjuk az elemeit és ha po 
+
         for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
 
             if (b.jPanel1.getComponent(i) instanceof PlannObject) {
@@ -542,8 +544,26 @@ public class ControlPanel extends javax.swing.JDialog {
                 PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
                 //ha a po státusza notexist
                 if (po.getStat().equals(Variables.status.NotExists)) {
+                    //akkor végigjárjuk még egyszer ha nincs a listában és összeadjuk, a darabot
+                    if (!polista.contains(po.getPn() + po.getJob() + po.getWorkStation())) {
+                        int osszeg = 0;
+                        for (int n = 0; n < b.jPanel1.getComponentCount(); n++) {
 
-                    model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", po.getTerv(), "TAB", "RELEASED", "TAB", most, "*DN"});
+                            if (b.jPanel1.getComponent(n) instanceof PlannObject) {
+
+                                PlannObject po1 = (PlannObject) b.jPanel1.getComponent(n);
+                                if (po1.getJob().equals(po.getJob()) && po1.getPn().equals(po.getPn()) && po1.getWorkStation().equals(po.getWorkStation())) {
+
+                                    osszeg += po1.getTerv();
+                                }
+
+                            }
+                        }
+                        polista.add(po.getPn() + po.getJob() + po.getWorkStation());
+                        model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", osszeg, "TAB", "RELEASED", "TAB", most, "*DN"});
+                    }
+
+                   
                 }
 
             }

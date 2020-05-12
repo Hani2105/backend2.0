@@ -216,13 +216,15 @@ public class PlannObject extends JLabel {
         public String ig;
         public String felelos;
         public String komment;
+        public String id;
 
-        public AnyagHiany(String pn, String tol, String ig, String felelos, String komment) {
+        public AnyagHiany(String pn, String tol, String ig, String felelos, String komment, String id) {
             this.pn = pn;
             this.tol = tol;
             this.ig = ig;
             this.felelos = felelos;
             this.komment = komment;
+            this.id = id;
         }
 
     }
@@ -235,13 +237,15 @@ public class PlannObject extends JLabel {
         public String ig;
         public String felelos;
         public String komment;
+        public String id;
 
-        public AllasidoLista(String tol, String ig, String felelos, String komment) {
+        public AllasidoLista(String tol, String ig, String felelos, String komment, String id) {
 
             this.tol = tol;
             this.ig = ig;
             this.felelos = felelos;
             this.komment = komment;
+            this.id = id;
         }
 
     }
@@ -250,8 +254,8 @@ public class PlannObject extends JLabel {
         return anyaghianylista;
     }
 
-    public void addAnyaghianylista(String pn, String tol, String ig, String feleos, String komment) {
-        AnyagHiany a = new AnyagHiany(pn, tol, ig, feleos, komment);
+    public void addAnyaghianylista(String pn, String tol, String ig, String feleos, String komment, String id) {
+        AnyagHiany a = new AnyagHiany(pn, tol, ig, feleos, komment, id);
         this.anyaghianylista.add(a);
     }
 
@@ -259,8 +263,8 @@ public class PlannObject extends JLabel {
         return allasidolista;
     }
 
-    public void addAllasidoLista(String tol, String ig, String feleos, String komment) {
-        AllasidoLista a = new AllasidoLista(tol, ig, feleos, komment);
+    public void addAllasidoLista(String tol, String ig, String feleos, String komment, String id) {
+        AllasidoLista a = new AllasidoLista(tol, ig, feleos, komment, id);
         this.allasidolista.add(a);
     }
 
@@ -611,8 +615,15 @@ public class PlannObject extends JLabel {
         tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
         for (int i = 0; i < anyaghianylista.size(); i++) {
 
-            tooltiptext += "AH: " + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
+            tooltiptext += "<strong>AH: </strong>" + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
         }
+        
+        for (int i = 0; i < allasidolista.size(); i++) {
+
+            tooltiptext += "<strong>Állásidő: </strong>" + allasidolista.get(i).felelos + " " + allasidolista.get(i).tol + " " +allasidolista.get(i).ig + " " + allasidolista.get(i).komment + "<br>";
+        }
+        
+        
         setToolTipText(tooltiptext);
 
     }
