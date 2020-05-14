@@ -86,6 +86,7 @@ public class JobStatusThread implements Runnable {
                 if (components[i] instanceof PlannObject) {
                     PlannObject po = (PlannObject) components[i];
                     po.setStat(Variables.status.NotExists);
+                    po.formatText();
 
                     for (int a = 0; a < rowdata.length; a++) {
 //ha oda érünk, hogy egyezik a jobszám apo jobszámával                
