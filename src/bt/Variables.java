@@ -7,6 +7,7 @@ package bt;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Timer;
 import javax.swing.ImageIcon;
 
 /**
@@ -58,5 +59,7 @@ public class Variables {
     public static String allasidolegordulo;
 //  a program verzió száma
     public static double version = 1.02;
+//a timer
+    public static Timer timer = new Timer();
 
 }

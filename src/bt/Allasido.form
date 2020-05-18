@@ -181,6 +181,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Felvitt adat t&#xf6;rl&#xe9;se"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel3MouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

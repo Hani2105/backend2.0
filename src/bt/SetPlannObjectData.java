@@ -296,9 +296,6 @@ public class SetPlannObjectData extends javax.swing.JDialog {
 //gyártási idő kiszámoltatása
         p.setProducTime();
         jTextField6.setText(String.valueOf(p.getTervezettido()));
-//az sfdc adatok visszaírása
-        Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
-        t.start();
 //újrarajzoljuk
         p.repaint();
 

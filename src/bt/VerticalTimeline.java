@@ -109,8 +109,8 @@ public class VerticalTimeline extends JLabel {
             dayofweek = c.get(Calendar.DAY_OF_WEEK);
 
         } catch (ParseException ex) {
-           ex.printStackTrace();
-           Starter.e.sendMessage(ex);
+            ex.printStackTrace();
+            Starter.e.sendMessage(ex);
         }
 
         return dayofweek;
@@ -169,7 +169,7 @@ public class VerticalTimeline extends JLabel {
                     }
                     osszterv += po.getTerv();
                     osszteny += po.getTeny();
-                    String[] adatok = new String[7];
+                    String[] adatok = new String[9];
                     adatok[0] = po.getPn();
                     adatok[1] = po.getJob();
                     adatok[2] = String.valueOf(po.getTerv());
@@ -177,6 +177,15 @@ public class VerticalTimeline extends JLabel {
                     adatok[4] = po.getWorkStation();
                     adatok[5] = po.getPlannerkomment();
                     adatok[6] = po.getKomment();
+                    adatok[7] = "";
+                    for (int n = 0; n < po.getAnyaghianylista().size(); n++) {
+                        adatok[7] += po.getAnyaghianylista().get(n).pn + " " + po.getAnyaghianylista().get(n).tol + " " + po.getAnyaghianylista().get(n).ig + " " + po.getAnyaghianylista().get(n).felelos +" " + po.getAnyaghianylista().get(n).komment + "<br>";
+                    }
+                    adatok[8] = "";
+                    for (int n = 0; n < po.getAllasidoLista().size(); n++) {
+                        adatok[8] += po.getAllasidoLista().get(n).felelos + " " + po.getAllasidoLista().get(n).tol + " " + po.getAllasidoLista().get(n).ig + " " + po.getAllasidoLista().get(n).komment + "<br>";
+                    }
+
                     jobonkent.add(adatok);
                 }
 
@@ -190,12 +199,12 @@ public class VerticalTimeline extends JLabel {
         for (String key : keys) {
 
             wsenkent += "<tr><td><font color=\"red\">" + key + ": </td><td>Terv: " + (int) Math.round(map.get(key)[0]) + "</td><td> Tény: " + (int) Math.round(map.get(key)[1]) + "</td></tr>";
-            allomasido += "<tr><font color=\"red\">Tervezett/Gyártott idő az állomáson: <td>" + key + ": </td><td>" + df.format(map.get(key)[2]) +" / "+ df.format(map.get(key)[3]) + "h</td></tr>";
+            allomasido += "<tr><font color=\"red\">Tervezett/Gyártott idő az állomáson: <td>" + key + ": </td><td>" + df.format(map.get(key)[2]) + " / " + df.format(map.get(key)[3]) + "h</td></tr>";
         }
 //összerakjuk a jobonkenti szoveget
-        String jobonkentszoveg = "Tervenként: <br><table border = \"4\"><tr><td><font color=\"red\">Partnumber</td><td><font color=\"red\">Job</td><td><font color=\"red\">Workstation</td><td><font color=\"red\">Terv:</td><td><font color=\"red\">Tény:</td><td><font color=\"red\">Planner komment</td><td><font color=\"red\">Termelés komment</td></tr><font color=\"black\">";
+        String jobonkentszoveg = "Tervenként: <br><table border = \"4\"><tr><td><font color=\"red\">Partnumber</td><td><font color=\"red\">Job</td><td><font color=\"red\">Workstation</td><td><font color=\"red\">Terv:</td><td><font color=\"red\">Tény:</td><td><font color=\"red\">Planner komment</td><td><font color=\"red\">Termelés komment</td><td><font color=\"red\">Anyaghiány</td><td><font color=\"red\">Állásidő</td></tr><font color=\"black\">";
         for (int i = 0; i < jobonkent.size(); i++) {
-            jobonkentszoveg += "<tr><td>" + jobonkent.get(i)[0] + "</td><td>" + jobonkent.get(i)[1] + "</td><td>" + jobonkent.get(i)[4] + "</td><td>" + jobonkent.get(i)[2] + "</td><td>" + jobonkent.get(i)[3] + "</td><td>" + jobonkent.get(i)[5] + "</td><td>" + jobonkent.get(i)[6] + "</td></tr>";
+            jobonkentszoveg += "<tr><td>" + jobonkent.get(i)[0] + "</td><td>" + jobonkent.get(i)[1] + "</td><td>" + jobonkent.get(i)[4] + "</td><td>" + jobonkent.get(i)[2] + "</td><td>" + jobonkent.get(i)[3] + "</td><td>" + jobonkent.get(i)[5] + "</td><td>" + jobonkent.get(i)[6] + "</td><td>" + jobonkent.get(i)[7] + "</td><td>" + jobonkent.get(i)[8] + "</td></tr>";
         }
 
         be.m.cp.jTextPane1.setText("<html>Tervezett mennyiség a cellára nézve:<br><table border = \"4\"><tr><td><font color=\"red\">Össz terv: </td><td><font color=\"black\">" + osszterv + "</td><tr><td><font color=\"red\">Össz tény: <font color=\"black\"></td>" + osszteny + "</tr></table><br>"

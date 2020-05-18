@@ -156,6 +156,11 @@ public class Anyaghiany extends javax.swing.JDialog {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/deleteallas.png"))); // NOI18N
         jLabel3.setToolTipText("Felvitt adat törlése");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -222,8 +227,8 @@ public class Anyaghiany extends javax.swing.JDialog {
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AnyagHiany a = (PlannObject.AnyagHiany) data.get(i);
                 model.setValueAt(a.pn, i, 0);
-                model.setValueAt(a.tol.substring(0, a.tol.length()-5), i, 1);
-                model.setValueAt(a.ig.substring(0, a.ig.length()-5), i, 2);
+                model.setValueAt(a.tol.substring(0, a.tol.length()), i, 1);
+                model.setValueAt(a.ig.substring(0, a.ig.length()), i, 2);
                 model.setValueAt(a.felelos, i, 3);
                 model.setValueAt(a.komment, i, 4);
                 model.setValueAt(a.id, i, 5);
@@ -235,80 +240,169 @@ public class Anyaghiany extends javax.swing.JDialog {
 
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        //anyaghiany mentese
+        ment();
+
+
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    public void ment() {
+
 //felvesszuk a tabla datait a plannobject tarolojaba
 //leellenorizzuk, hogy megfeleloen van e kitoltve a tabla
-        try {
-            p.clearAnyaghianylista();
-        } catch (Exception e) {
-        }
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-            String pn = "";
+            String tol = "";
             try {
-                pn = jTable1.getValueAt(i, 0).toString().trim();
+//a tol leellenőrzése
+                tol = jTable1.getValueAt(i, 1).toString().trim();
+//akkor megyünk tovább ha van tol dátum
+                if (!tol.equals("")) {
+                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", tol)) {
+                        JOptionPane.showMessageDialog(p.getMainWindow(),
+                                "Nem megfelelő dátum formátum a " + (i + 1) + " .sorban!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+//az ig leellenőrzése
+                    String ig = jTable1.getValueAt(i, 2).toString().trim();
+                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", ig)) {
+                        JOptionPane.showMessageDialog(p.getMainWindow(),
+                                "Nem megfelelő dátum formátum a " + (i + 1) + " .sorban!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+
+//a partnumber leellenőrzése
+                    String pn = "";
+                    try {
+                        pn = jTable1.getValueAt(i, 0).toString().trim();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(p.getMainWindow(),
+                                "Nem adtál meg pn-t a " + (i + 1) + " .sorban!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+
+//a felelős kitöltésének 
+                    String felelos = jTable1.getValueAt(i, 3).toString();
+                    if (felelos.equals("")) {
+                        JOptionPane.showMessageDialog(p.getMainWindow(),
+                                "Nem választottál ki felelőst a " + (i + 1) + " .sorban!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+                }
             } catch (Exception e) {
+                JOptionPane.showMessageDialog(p.getMainWindow(),
+                        "Nem megfelelő vagy hiányzó adatok!!",
+                        "Hiba",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+
             }
+        }
+//ha eddig eljutottunk akkor kitörölhetjük a listát és felvihetjük az új adatokat
+        p.clearAnyaghianylista();
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+
+            if (!jTable1.getValueAt(i, 3).equals("")) {
+
+                String tol = jTable1.getValueAt(i, 1).toString().trim();
+                String ig = jTable1.getValueAt(i, 2).toString().trim();
+                String felelos = jTable1.getValueAt(i, 3).toString().trim();
+                String pn = jTable1.getValueAt(i, 0).toString().trim();
+                String komment = "";
+                try {
+                    komment = jTable1.getValueAt(i, 4).toString().trim();
+                } catch (Exception e) {
+                }
+                String id = "";
+                try {
+                    id = jTable1.getValueAt(i, 5).toString().trim();
+                } catch (Exception e) {
+                }
+                p.addAnyaghianylista(pn, tol, ig, felelos, komment, id);
+            }
+
+        }
+//beállítjuk a tooltip textet
+        p.formatText();
+        p.repaint();
+
+//az anyaghianyok rogzitese az adatbazisba
+        String query = "insert ignore tc_anyaghiany (pktomig,pn,comment,felelos,tol,ig,cella, idtc_anyaghiany) values";
+        String adatok = "";
+
+        //bejarjuk a plannobjecteket es ha nagyobb az allasidos lista nullanal begyujtjuk az adatokat
+        if (p.getAnyaghianylista().size() > 0) {
+
+            for (int m = 0; m < p.getAnyaghianylista().size(); m++) {
+
+                adatok += "(concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "'),'" + p.getAnyaghianylista().get(m).pn + "','" + p.getAnyaghianylista().get(m).komment + "','" + p.getAnyaghianylista().get(m).felelos + "','" + p.getAnyaghianylista().get(m).tol + "','" + p.getAnyaghianylista().get(m).ig + "','" + p.getbackendSheet().getName() + "','" + p.getAnyaghianylista().get(m).id + "'),";
+
+            }
+
+            adatok = adatok.substring(0, adatok.length() - 1);
+            PlanConnect pc = null;
             try {
+                query = query + adatok + "on duplicate key update comment = values(comment), felelos = values(felelos), tol = values(tol), ig = values(ig), pn = values (pn)";
+                pc = new PlanConnect();
+                pc.feltolt(query);
+//visszakérdezzük
+                query = "select * from tc_anyaghiany where pktomig = concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "')";
+                pc.lekerdez(query);
+                DefaultTableModel model = new DefaultTableModel();
+                model = (DefaultTableModel) jTable1.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
 
-                if (!pn.equals("")) {
+                    for (int c = 0; c < model.getColumnCount(); c++) {
 
-                    if (jTable1.getValueAt(i, 3).toString().equals("")) {
-                        JOptionPane.showMessageDialog(p.getMainWindow(),
-                                "Nem adtál meg felelőst a " + (i + 1) + " .sorban! \n Ezt nem visszük fel!",
-                                "Hiba",
-                                JOptionPane.ERROR_MESSAGE);
-                        continue;
-
+                        model.setValueAt("", i, c);
                     }
 
-                    String date = jTable1.getValueAt(i, 1).toString().trim();
-                    String date2 = jTable1.getValueAt(i, 2).toString().trim();
-                    //leellenőrizzük hogy a startdátum megfelelő formátumú e
-                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date) || !Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date2)) {
-                        //custom title, error icon
-                        JOptionPane.showMessageDialog(p.getMainWindow(),
-                                "A dátumot nem a megfelelő formátumban adtad meg a " + (i + 1) + " .sorban! \n Elvárt: yyyy-MM-dd hh:mm",
-                                "Hiba",
-                                JOptionPane.ERROR_MESSAGE);
+                }
+                p.clearAnyaghianylista();
+                int i = 0;
+                while (pc.rs.next()) {
 
-                    }
-
-//ha ide eljutunk akkor megyunk tovabb
-                    String komment = "";
-                    try {
-                        komment = jTable1.getValueAt(i, 4).toString();
-                    } catch (Exception e) {
-                    }
-
-                    String id = "";
-                    try {
-
-                        id = jTable1.getValueAt(i, 5).toString();
-                    } catch (Exception e) {
-                    }
-                    p.addAnyaghianylista(pn, date, date2, jTable1.getValueAt(i, 3).toString(), komment,id);
+                    model.setValueAt(pc.rs.getString("pn"), i, 0);
+                    model.setValueAt(pc.rs.getString("tol").substring(0, pc.rs.getString("tol").length() - 5), i, 1);
+                    model.setValueAt(pc.rs.getString("ig").substring(0, pc.rs.getString("ig").length() - 5), i, 2);
+                    model.setValueAt(pc.rs.getString("felelos"), i, 3);
+                    model.setValueAt(pc.rs.getString("comment"), i, 4);
+                    model.setValueAt(pc.rs.getString("idtc_anyaghiany"), i, 5);
+                    p.addAnyaghianylista(pc.rs.getString("pn"), pc.rs.getString("tol"), pc.rs.getString("ig"), pc.rs.getString("felelos"), pc.rs.getString("comment"), pc.rs.getString("idtc_anyaghiany"));
+                    i++;
 
                 }
 
-            } catch (Exception e) {
+                jTable1.setModel(model);
+//default title and icon
                 JOptionPane.showMessageDialog(p.getMainWindow(),
-                        "Hiányzó adat a " + (i + 1) + " . sorban, ez nem kerül mentésre!",
-                        "Hiba",
-                        JOptionPane.ERROR_MESSAGE);
+                        "Sikeres mentés!");
 
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+            } finally {
+                try {
+                    pc.kinyir();
+                } catch (Exception e) {
+                }
             }
-
         }
 
-        p.formatText();
-        Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
-        t.start();
-        p.repaint();
+    }
 
-        //az allasidok rogzitese
-        Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, p.getbackendSheet(), p));
-        allas.start();
-
-    }//GEN-LAST:event_jLabel2MouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // TODO add your handling code here:
@@ -320,6 +414,62 @@ public class Anyaghiany extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.setLocation(evt.getXOnScreen() - x, evt.getYOnScreen() - y);
     }//GEN-LAST:event_formMouseDragged
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // anyaghiany torlese
+        //allasido torlese
+        //kitöröljük az adatbázisból
+        PlanConnect pc = null;
+        String query = "delete from tc_anyaghiany where tc_anyaghiany.idtc_anyaghiany = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 5).toString() + "'";
+        try {
+            pc = new PlanConnect();
+            pc.feltolt(query);
+            //visszakérdezzük
+            query = "select * from tc_anyaghiany where pktomig = concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "')";
+            pc.lekerdez(query);
+
+            DefaultTableModel model = new DefaultTableModel();
+            model = (DefaultTableModel) jTable1.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+
+                for (int c = 0; c < model.getColumnCount(); c++) {
+
+                    model.setValueAt("", i, c);
+                }
+
+            }
+            p.clearAnyaghianylista();
+            int i = 0;
+            while (pc.rs.next()) {
+
+                model.setValueAt(pc.rs.getString("pn"), i, 0);
+                model.setValueAt(pc.rs.getString("tol").substring(0, pc.rs.getString("tol").length() - 5), i, 1);
+                model.setValueAt(pc.rs.getString("ig").substring(0, pc.rs.getString("ig").length() - 5), i, 2);
+                model.setValueAt(pc.rs.getString("felelos"), i, 3);
+                model.setValueAt(pc.rs.getString("comment"), i, 4);
+                model.setValueAt(pc.rs.getString("idtc_anyaghiany"), i, 5);
+                p.addAnyaghianylista(pc.rs.getString("pn"), pc.rs.getString("tol"), pc.rs.getString("ig"), pc.rs.getString("felelos"), pc.rs.getString("comment"), pc.rs.getString("idtc_anyaghiany"));
+                p.formatText();
+                i++;
+
+            }
+
+            jTable1.setModel(model);
+            //default title and icon
+            JOptionPane.showMessageDialog(p.getMainWindow(),
+                    "Sikeres törlés!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
+        } finally {
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+            }
+
+        }
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments

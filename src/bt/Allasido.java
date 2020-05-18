@@ -7,7 +7,10 @@ package bt;
 
 import static bt.ControlPanel.jTable1;
 import bt.PlannObject.AnyagHiany;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -156,6 +159,11 @@ public class Allasido extends javax.swing.JDialog {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/deleteallas.png"))); // NOI18N
         jLabel3.setToolTipText("Felvitt adat törlése");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -226,8 +234,8 @@ public class Allasido extends javax.swing.JDialog {
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AllasidoLista a = (PlannObject.AllasidoLista) data.get(i);
 
-                model.setValueAt(a.tol.substring(0, a.tol.length()-5), i, 0);
-                model.setValueAt(a.ig.substring(0, a.ig.length()-5), i, 1);
+                model.setValueAt(a.tol.substring(0, a.tol.length()), i, 0);
+                model.setValueAt(a.ig.substring(0, a.ig.length()), i, 1);
                 model.setValueAt(a.felelos, i, 2);
                 model.setValueAt(a.komment, i, 3);
                 model.setValueAt(a.id, i, 4);
@@ -239,77 +247,151 @@ public class Allasido extends javax.swing.JDialog {
 
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+//Az állásidők mentése
+        ment();
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void ment() {
+
 //felvesszuk a tabla datait a plannobject tarolojaba
 //leellenorizzuk, hogy megfeleloen van e kitoltve a tabla
-        try {
-            p.clearAllasidoLista();
-        } catch (Exception e) {
-        }
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             String tol = "";
             try {
+//a tol leellenőrzése
                 tol = jTable1.getValueAt(i, 0).toString().trim();
-            } catch (Exception e) {
-            }
-            try {
-
+//akkor megyünk tovább ha van tol dátum
                 if (!tol.equals("")) {
-
-                    if (jTable1.getValueAt(i, 2).toString().equals("")) {
+                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", tol)) {
                         JOptionPane.showMessageDialog(p.getMainWindow(),
-                                "Nem adtál meg felelőst a " + (i + 1) + " .sorban! \n Ezt nem visszük fel!",
+                                "Nem megfelelő dátum formátum a " + (i + 1) + " .sorban!",
                                 "Hiba",
                                 JOptionPane.ERROR_MESSAGE);
-                        continue;
+                        return;
 
                     }
-
-                    String date = jTable1.getValueAt(i, 0).toString().trim();
-                    String date2 = jTable1.getValueAt(i, 1).toString().trim();
-                    //leellenőrizzük hogy a startdátum megfelelő formátumú e
-                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date) || !Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", date2)) {
-                        //custom title, error icon
+//az ig leellenőrzése
+                    String ig = jTable1.getValueAt(i, 1).toString().trim();
+                    if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}", ig)) {
                         JOptionPane.showMessageDialog(p.getMainWindow(),
-                                "A dátumot nem a megfelelő formátumban adtad meg a " + (i + 1) + " .sorban! \n Elvárt: yyyy-MM-dd hh:mm",
+                                "Nem megfelelő dátum formátum a " + (i + 1) + " .sorban!",
                                 "Hiba",
                                 JOptionPane.ERROR_MESSAGE);
+                        return;
 
                     }
 
-//ha ide eljutunk akkor megyunk tovabb
-                    String komment = "";
-                    try {
-                        komment = jTable1.getValueAt(i, 3).toString();
-                    } catch (Exception e) {
-                    }
-                    String id = "";
-                    try {
-                        id = jTable1.getValueAt(i, 4).toString();
-                    } catch (Exception e) {
-                    }
-                    p.addAllasidoLista(date, date2, jTable1.getValueAt(i, 2).toString(), komment, id);
+//a felelős kitöltésének 
+                    String felelos = jTable1.getValueAt(i, 2).toString();
+                    if (felelos.equals("")) {
+                        JOptionPane.showMessageDialog(p.getMainWindow(),
+                                "Nem választottál ki felelőst a " + (i + 1) + " .sorban!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
 
+                    }
                 }
-
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(p.getMainWindow(),
-                        "Hiányzó adat a " + (i + 1) + " . sorban, ez nem kerül mentésre!",
+                        "Nem megfelelő vagy hiányzó adatok!!",
                         "Hiba",
                         JOptionPane.ERROR_MESSAGE);
+                return;
 
+            }
+        }
+//ha eddig eljutottunk akkor kitörölhetjük a listát és felvihetjük az új adatokat
+        p.clearAllasidoLista();
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+
+            if (!jTable1.getValueAt(i, 2).equals("")) {
+
+                String tol = jTable1.getValueAt(i, 0).toString().trim();
+                String ig = jTable1.getValueAt(i, 1).toString().trim();
+                String felelos = jTable1.getValueAt(i, 2).toString().trim();
+                String komment = "";
+                try {
+                    komment = jTable1.getValueAt(i, 3).toString().trim();
+                } catch (Exception e) {
+                }
+                String id = "";
+                try {
+                    id = jTable1.getValueAt(i, 4).toString().trim();
+                } catch (Exception e) {
+                }
+                p.addAllasidoLista(tol, ig, felelos, komment, id);
             }
 
         }
-
+//beállítjuk a tooltip textet
         p.formatText();
-        Thread t = new Thread(new JobStatusThread(p.getbackendSheet()));
-        t.start();
         p.repaint();
-        //az allasidok rogzitese az adatbazisba
-        Thread allas = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.ment, p.getbackendSheet(), p));
-        allas.start();
 
-    }//GEN-LAST:event_jLabel2MouseClicked
+//az allasidok rogzitese az adatbazisba
+        String query = "insert ignore downtimes_production (line,datefrom,dateto,downtimename,comments,pktomig,id) values";
+        String adatok = "";
+
+        //bejarjuk a plannobjecteket es ha nagyobb az allasidos lista nullanal begyujtjuk az adatokat
+        if (p.getAllasidoLista().size() > 0) {
+
+            for (int m = 0; m < p.getAllasidoLista().size(); m++) {
+
+                adatok += "('" + p.getbackendSheet().getName() + "','" + p.getAllasidoLista().get(m).tol + "','" + p.getAllasidoLista().get(m).ig + "','" + p.getAllasidoLista().get(m).felelos + "','" + p.getAllasidoLista().get(m).komment + "',concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "'),'" + p.getAllasidoLista().get(m).id + "'),";
+
+            }
+
+            adatok = adatok.substring(0, adatok.length() - 1);
+            PlanConnect pc = null;
+            try {
+                query = query + adatok + "on duplicate key update datefrom = values (datefrom), dateto = values (dateto), downtimename = values (downtimename), comments = values(comments)";
+                pc = new PlanConnect();
+                pc.feltolt(query);
+//visszakérdezzük
+                query = "select * from downtimes_production where pktomig = concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "')";
+                pc.lekerdez(query);
+                DefaultTableModel model = new DefaultTableModel();
+                model = (DefaultTableModel) jTable1.getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+
+                    for (int c = 0; c < model.getColumnCount(); c++) {
+
+                        model.setValueAt("", i, c);
+                    }
+
+                }
+                p.clearAllasidoLista();
+                int i = 0;
+                while (pc.rs.next()) {
+
+                    model.setValueAt(pc.rs.getString("datefrom").substring(0, pc.rs.getString("datefrom").length() - 5), i, 0);
+                    model.setValueAt(pc.rs.getString("dateto").substring(0, pc.rs.getString("dateto").length() - 5), i, 1);
+                    model.setValueAt(pc.rs.getString("downtimename"), i, 2);
+                    model.setValueAt(pc.rs.getString("comments"), i, 3);
+                    model.setValueAt(pc.rs.getString("id"), i, 4);
+                    p.addAllasidoLista(pc.rs.getString("datefrom"), pc.rs.getString("dateto"), pc.rs.getString("downtimename"), pc.rs.getString("comments"), pc.rs.getString("id"));
+                    i++;
+
+                }
+
+                jTable1.setModel(model);
+//default title and icon
+                JOptionPane.showMessageDialog(p.getMainWindow(),
+                        "Sikeres mentés!");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Starter.e.sendMessage(e);
+            } finally {
+                try {
+                    pc.kinyir();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // TODO add your handling code here:
@@ -321,6 +403,60 @@ public class Allasido extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.setLocation(evt.getXOnScreen() - x, evt.getYOnScreen() - y);
     }//GEN-LAST:event_formMouseDragged
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        //allasido torlese
+        //kitöröljük az adatbázisból
+        PlanConnect pc = null;
+        String query = "delete from downtimes_production where downtimes_production.id = '" + jTable1.getValueAt(jTable1.getSelectedRow(), 4).toString() + "'";
+        try {
+            pc = new PlanConnect();
+            pc.feltolt(query);
+            //visszakérdezzük
+            query = "select * from downtimes_production where pktomig = concat('" + p.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + p.getbackendSheet().getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + p.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + p.getPn() + "'), '3', '" + p.getJob() + "')";
+            pc.lekerdez(query);
+
+            DefaultTableModel model = new DefaultTableModel();
+            model = (DefaultTableModel) jTable1.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+
+                for (int c = 0; c < model.getColumnCount(); c++) {
+
+                    model.setValueAt("", i, c);
+                }
+
+            }
+            p.clearAllasidoLista();
+            int i = 0;
+            while (pc.rs.next()) {
+
+                model.setValueAt(pc.rs.getString("datefrom").substring(0, pc.rs.getString("datefrom").length() - 5), i, 0);
+                model.setValueAt(pc.rs.getString("dateto").substring(0, pc.rs.getString("dateto").length() - 5), i, 1);
+                model.setValueAt(pc.rs.getString("downtimename"), i, 2);
+                model.setValueAt(pc.rs.getString("comments"), i, 3);
+                model.setValueAt(pc.rs.getString("id"), i, 4);
+                p.addAllasidoLista(pc.rs.getString("datefrom"), pc.rs.getString("dateto"), pc.rs.getString("downtimename"), pc.rs.getString("comments"), pc.rs.getString("id"));
+                p.formatText();
+                i++;
+
+            }
+
+            jTable1.setModel(model);
+            //default title and icon
+            JOptionPane.showMessageDialog(p.getMainWindow(),
+                    "Sikeres törlés!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Starter.e.sendMessage(e);
+        } finally {
+            try {
+                pc.kinyir();
+            } catch (Exception e) {
+            }
+
+        }
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -336,16 +472,24 @@ public class Allasido extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Allasido.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Allasido.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Allasido.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Allasido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Allasido.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

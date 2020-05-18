@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -173,12 +174,9 @@ public class TervLeker implements Runnable {
 
 //a darabszámok és gyártási idők összegyűjtése
             b.collectData();
-//a job státusok összegyűjtése egy külön szálban h ne tartsunk fel semmit
-            Thread t = new Thread(new JobStatusThread(b));
-            t.start();
             m.jTabbedPane1.add(b, b.getName());
             //elindítjuk az állásidők legyűjtését
-            Thread allaidok = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.leker,b));
+            Thread allaidok = new Thread(new AllasidoInterface(Variables.allasidoInterfaceParam.leker, b));
             allaidok.start();
 
         }
@@ -192,7 +190,16 @@ public class TervLeker implements Runnable {
         m.j.kezel();
 //kiszedjük a pipát, hogy többször ne kérjük le az összesre
         m.jCheckBox3.setSelected(false);
+//elindítjuk a timert ami a jobstátusokat kerdezi le
 
+//megrobáljuk updatelni
+        try {
+            Variables.timer.cancel();
+            Variables.timer = new Timer();
+            Variables.timer.scheduleAtFixedRate(new Visszaszamolo(m), 0, 1000);
+        } catch (Exception e) {
+            Variables.timer.scheduleAtFixedRate(new Visszaszamolo(m), 0, 1000);
+        }
     }
 
     private void singleCell() {
@@ -292,9 +299,6 @@ public class TervLeker implements Runnable {
 
 //a darabszámok és gyártási idők összegyűjtése
         b.collectData();
-//a job státusok összegyűjtése egy külön szálban h ne tartsunk fel semmit
-        Thread t = new Thread(new JobStatusThread(b));
-        t.start();
 //        m.jTabbedPane1.add(b, b.getName());
         m.jProgressBar1.setValue(0);
         m.jProgressBar1.setString("Lekér!");
@@ -302,12 +306,24 @@ public class TervLeker implements Runnable {
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
 //elindítjuk az állásidők legyűjtését
-        Thread allaidok = new Thread(new allasidoInterface(Variables.allasidoInterfaceParam.leker, b));
+        Thread allaidok = new Thread(new AllasidoInterface(Variables.allasidoInterfaceParam.leker, b));
         allaidok.start();
 //lefuttatjuk a jogosultság kezelőt, hogy az uj plannobjectek is rendben legyenek
         m.j.kezel();
 //kiszedjük a pipát, hogy többször ne kérjük le az összesre
         m.jCheckBox3.setSelected(false);
+//elindítjuk a timert ami a jobstátusokat kerdezi le
+//elindítjuk a timert ami a jobstátusokat kerdezi le
+
+//megrobáljuk updatelni
+//megrobáljuk updatelni
+        try {
+            Variables.timer.cancel();
+            Variables.timer = new Timer();
+            Variables.timer.scheduleAtFixedRate(new Visszaszamolo(m), 0, 1000);
+        } catch (Exception e) {
+            Variables.timer.scheduleAtFixedRate(new Visszaszamolo(m), 0, 1000);
+        }
 
     }
 

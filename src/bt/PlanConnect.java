@@ -7,6 +7,7 @@ package bt;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ public class PlanConnect {
     public String username = Variables.plannusername;
     public String password = Variables.plannpassword;
     public Statement st;
+    public PreparedStatement ps;
 
     public PlanConnect() throws SQLException {
         conn = (Connection) DriverManager.getConnection(url, username, password);
@@ -47,6 +49,15 @@ public class PlanConnect {
     public void feltolt(String query) throws SQLException {
 
         st.executeUpdate(query);
+
+    }
+
+    public Object feltoltvisszaid(String query) throws SQLException {
+
+        ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        ps.execute();
+        rs = ps.getGeneratedKeys();
+        return rs;
 
     }
 
