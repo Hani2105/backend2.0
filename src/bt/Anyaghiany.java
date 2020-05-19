@@ -227,8 +227,17 @@ public class Anyaghiany extends javax.swing.JDialog {
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AnyagHiany a = (PlannObject.AnyagHiany) data.get(i);
                 model.setValueAt(a.pn, i, 0);
-                model.setValueAt(a.tol.substring(0, a.tol.length()), i, 1);
-                model.setValueAt(a.ig.substring(0, a.ig.length()), i, 2);
+                if (a.tol.length() > 16) {
+                    model.setValueAt(a.tol.substring(0, a.tol.length() - 5), i, 1);
+                } else {
+                    model.setValueAt(a.tol.substring(0, a.tol.length()), i, 1);
+                }
+                if (a.ig.length() > 16) {
+                    model.setValueAt(a.ig.substring(0, a.ig.length() - 5), i, 2);
+                } else {
+                    model.setValueAt(a.ig.substring(0, a.ig.length()), i, 2);
+                }
+
                 model.setValueAt(a.felelos, i, 3);
                 model.setValueAt(a.komment, i, 4);
                 model.setValueAt(a.id, i, 5);

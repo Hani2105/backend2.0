@@ -62,7 +62,6 @@ public class TervMent implements Runnable {
                 //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
                 valtozasFrissito();
 
-
 //ha nem mentem
             } else if (n == 1) {
                 b.getM().menteshatter.setVisible(false);
@@ -70,13 +69,29 @@ public class TervMent implements Runnable {
             }
         } //ha egyezik az idő, menthetem
         else if (valtozas.equals("mehet") || valtozas.equals("")) {
+//le kell csekkolni, hogy minden po-nak megvan e a starttimeja
+            for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+                if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+                    PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
+                    if (po.getStartdate().equals("")) {
+                        b.getM().menteshatter.setVisible(false);
+                        JOptionPane.showMessageDialog(b.getM(),
+                                "<html>A mentés nem sikerült!<br>" + "Hiányzó starttime!" + "<html>",
+                                "Feltöltési hiba!",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+
+                }
+
+            }
 
             //deaktiváljuk az eddigi tervet
             deActivate();
             mentes();
             //visszakérdezzük és letároljuk az adatokat, hogy mi mentettünk utoljára
             valtozasFrissito();
-           
 
         }
 
@@ -148,9 +163,14 @@ public class TervMent implements Runnable {
         StringBuffer adatok = new StringBuffer();
         StringBuffer query = new StringBuffer("insert into tc_terv (date, idtc_becells, idtc_bestations, idtc_bepns,qty,wtf,active, tt, user, job, pktomig, qty_teny, mernokiido) values ");
         for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+
             if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+                //lecsekkoljuk, hogy van e a po-nak startdateja
+
                 PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
+
                 adatok.append("('" + po.getStartdate() + "',(select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'),'" + po.getTerv() + "','" + po.getWtf() + "', '2', '3','" + Variables.user + "','" + po.getJob() + "', concat('" + po.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'), '3', '" + po.getJob() + "'),'" + po.getTeny() + "','" + po.getEngineer() + "'),");
+
             }
 
         }
@@ -199,6 +219,7 @@ public class TervMent implements Runnable {
             try {
                 pc.kinyir();
             } catch (Exception e) {
+                b.getM().menteshatter.setVisible(false);
                 e.printStackTrace();
                 Starter.e.sendMessage(e);
             }

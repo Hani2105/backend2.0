@@ -913,7 +913,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             try {
                                 PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
-                                po.setLocation(m.cp.getLocationOnScreen().x, m.cp.getLocationOnScreen().y-250);
+                                po.setLocation(m.cp.getLocationOnScreen().x+ b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y-250);
                                 b.repaint();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -923,6 +923,7 @@ public class ControlPanel extends javax.swing.JDialog {
                                         "Mem sikerült a tervek hozzáadása!\n Ellenőrizd az adatok helyességét! (zöld?)",
                                         "Hiba!",
                                         JOptionPane.ERROR_MESSAGE);
+                                
                                 return;
                             }
 

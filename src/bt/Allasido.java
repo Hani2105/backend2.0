@@ -233,9 +233,17 @@ public class Allasido extends javax.swing.JDialog {
 //beallitjuk az adatokat
             for (int i = 0; i < data.size(); i++) {
                 PlannObject.AllasidoLista a = (PlannObject.AllasidoLista) data.get(i);
+                if (a.tol.length() > 16) {
+                    model.setValueAt(a.tol.substring(0, a.tol.length() - 5), i, 0);
+                } else {
+                    model.setValueAt(a.tol.substring(0, a.tol.length()), i, 0);
+                }
+                if (a.ig.length() > 16) {
+                    model.setValueAt(a.ig.substring(0, a.ig.length() - 5), i, 1);
+                } else {
+                    model.setValueAt(a.ig.substring(0, a.ig.length()), i, 1);
+                }
 
-                model.setValueAt(a.tol.substring(0, a.tol.length()), i, 0);
-                model.setValueAt(a.ig.substring(0, a.ig.length()), i, 1);
                 model.setValueAt(a.felelos, i, 2);
                 model.setValueAt(a.komment, i, 3);
                 model.setValueAt(a.id, i, 4);
