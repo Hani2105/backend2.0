@@ -137,7 +137,8 @@ public class JogosultsagKezelo {
             sp.jTextField8.setEditable(false);
             sp.jTextField3.setEditable(true);
             sp.jTextField5.setEditable(true);
-            sp.jTextField7.setEditable(false);
+            //gyartas komment
+            sp.jTextField7.setEditable(true);
             sp.jTextField6.setEditable(false);
             sp.jSlider1.setEnabled(true);
             sp.jTextField4.setEditable(true);

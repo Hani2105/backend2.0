@@ -8,6 +8,7 @@ package bt;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.joda.time.DateTime;
@@ -96,6 +98,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
@@ -375,7 +378,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jTextArea2.setRows(5);
         jScrollPane7.setViewportView(jTextArea2);
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/sendmail.gif"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/envelope.png"))); // NOI18N
         jLabel7.setToolTipText("Levél küldése!");
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -393,19 +396,19 @@ public class ControlPanel extends javax.swing.JDialog {
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 538, Short.MAX_VALUE))))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel7)))
+                        .addContainerGap()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
@@ -419,10 +422,25 @@ public class ControlPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "StartDate", "PartNumber", "Job", "WorkStation", "Elmaradás", "PlannerKomment", "Komment"
+                "StartDate", "PartNumber", "Job", "WorkStation", "Elmaradás", "PlannerKomment", "Komment", "Anyaghiány", "Felelős", "Tól-Ig"
             }
         ));
+        jTable3.setCellSelectionEnabled(true);
         jScrollPane3.setViewportView(jTable3);
+        if (jTable3.getColumnModel().getColumnCount() > 0) {
+            jTable3.getColumnModel().getColumn(4).setMinWidth(70);
+            jTable3.getColumnModel().getColumn(4).setPreferredWidth(70);
+            jTable3.getColumnModel().getColumn(4).setMaxWidth(70);
+        }
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pictures/printer.png"))); // NOI18N
+        jLabel6.setToolTipText("Nyomtat");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -431,13 +449,17 @@ public class ControlPanel extends javax.swing.JDialog {
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBox1)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
         );
@@ -571,7 +593,6 @@ public class ControlPanel extends javax.swing.JDialog {
                         model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", osszeg, "TAB", "RELEASED", "TAB", most, "*DN"});
                     }
 
-                   
                 }
 
             }
@@ -722,6 +743,9 @@ public class ControlPanel extends javax.swing.JDialog {
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         //muszakjlelentes elkuldese
         sendMail();
+        //default title and icon
+        JOptionPane.showMessageDialog(m,
+                "A levelet elküldtük!");
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -733,6 +757,23 @@ public class ControlPanel extends javax.swing.JDialog {
         Thread t = new Thread(new JobAdagolo((BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex())));
         t.start();
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        //nyomtatás
+
+        MessageFormat header = new MessageFormat("Report print");
+        MessageFormat footer = new MessageFormat("Page{0,number,integer}");
+
+        try {
+
+            jTable3.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+
+        } catch (java.awt.print.PrinterException e) {
+
+            System.err.format("Cannot print", e.getMessage());
+
+        }
+    }//GEN-LAST:event_jLabel6MouseClicked
 
     public void segedletLeker() {
 
@@ -777,7 +818,23 @@ public class ControlPanel extends javax.swing.JDialog {
 
                 }
                 if (osszterv - osszteny > 0) {
-                    model.addRow(new Object[]{po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), osszterv - osszteny, po.getPlannerkomment(), po.getKomment()});
+                    //összegyüjtjük az anyaghiányokat
+                    String ah = "";
+                    String tolig = "";
+                    String felelos = "";
+                    for (int n = 0; n < po.getAnyaghianylista().size(); n++) {
+
+                        ah += po.getAnyaghianylista().get(n).pn + ", ";
+                        tolig += po.getAnyaghianylista().get(n).tol.substring(0, po.getAnyaghianylista().get(n).tol.length() - 5) + " - " + po.getAnyaghianylista().get(n).ig.substring(0, po.getAnyaghianylista().get(n).ig.length() - 5) + ", ";
+                        felelos += po.getAnyaghianylista().get(n).felelos + ", ";
+                    }
+                    if (ah.length() > 2 && tolig.length() > 2) {
+                        ah = ah.substring(0, ah.length() - 2);
+                        tolig = tolig.substring(0, tolig.length() - 2);
+                        felelos = felelos.substring(0, felelos.length() - 2);
+                    }
+
+                    model.addRow(new Object[]{po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), osszterv - osszteny, po.getPlannerkomment(), po.getKomment(), ah, felelos, tolig});
                 }
 
             }
@@ -785,6 +842,8 @@ public class ControlPanel extends javax.swing.JDialog {
         }
 
         jTable3.setModel(model);
+        //szelesseg beallitas
+        new TablaSzelesseg(jTable3);
 
     }
 
@@ -913,7 +972,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             try {
                                 PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
-                                po.setLocation(m.cp.getLocationOnScreen().x+ b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y-250);
+                                po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250);
                                 b.repaint();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -923,7 +982,7 @@ public class ControlPanel extends javax.swing.JDialog {
                                         "Mem sikerült a tervek hozzáadása!\n Ellenőrizd az adatok helyességét! (zöld?)",
                                         "Hiba!",
                                         JOptionPane.ERROR_MESSAGE);
-                                
+
                                 return;
                             }
 
@@ -1050,6 +1109,7 @@ public class ControlPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

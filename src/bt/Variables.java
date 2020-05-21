@@ -41,11 +41,7 @@ public class Variables {
     public static enum viewports {
         plannpanel, datapanel
     };
-//az allasido interface lekerjen vagy mentsen
 
-    public static enum allasidoInterfaceParam {
-        leker, ment
-    };
 //a felhasználó pozíciója, planner vagy műszakvezető vagy csak megtekintés, 1,2,0
     public static int jogosultsag = 0;
 //a planner adatbázis változói
