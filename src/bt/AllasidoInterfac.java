@@ -17,13 +17,13 @@ import javax.swing.JOptionPane;
  *
  * @author gabor_hanacsek
  */
-public class AllasidoInterface implements Runnable {
+public class AllasidoInterfac implements Runnable {
 
   
     BeSheet b;
  
 
-    public AllasidoInterface(BeSheet b) {
+    public AllasidoInterfac(BeSheet b) {
 
         this.b = b;
 

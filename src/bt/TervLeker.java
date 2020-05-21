@@ -176,7 +176,7 @@ public class TervLeker implements Runnable {
             b.collectData();
             m.jTabbedPane1.add(b, b.getName());
             //elindítjuk az állásidők legyűjtését
-            Thread allaidok = new Thread(new AllasidoInterface(b));
+            Thread allaidok = new Thread(new AllasidoInterfac(b));
             allaidok.start();
 
         }
@@ -306,7 +306,7 @@ public class TervLeker implements Runnable {
         Thread mikor = new Thread(new Mikorgyartottuk());
         mikor.start();
 //elindítjuk az állásidők legyűjtését
-        Thread allaidok = new Thread(new AllasidoInterface(b));
+        Thread allaidok = new Thread(new AllasidoInterfac(b));
         allaidok.start();
 //lefuttatjuk a jogosultság kezelőt, hogy az uj plannobjectek is rendben legyenek
         m.j.kezel();
