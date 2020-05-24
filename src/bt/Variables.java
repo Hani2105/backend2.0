@@ -62,7 +62,7 @@ public class Variables {
 //az allasido legorduloje
     public static String allasidolegordulo;
 //  a program verzió száma
-    public static double version = 1.5;
+    public static double version = 1.6;
 //a timer
     public static Timer timer = new Timer();
 
