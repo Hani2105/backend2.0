@@ -62,7 +62,15 @@ public class ControlPanel extends javax.swing.JDialog {
                 }
             }
         });
+        jComboBox2.addItemListener(new ItemListener() {
 
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    segedletLeker();
+                }
+            }
+        });
     }
 
     /**
@@ -99,6 +107,7 @@ public class ControlPanel extends javax.swing.JDialog {
         jTable3 = new javax.swing.JTable();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
@@ -422,15 +431,15 @@ public class ControlPanel extends javax.swing.JDialog {
 
             },
             new String [] {
-                "StartDate", "PartNumber", "Job", "WorkStation", "Elmaradás", "PlannerKomment", "Komment", "Anyaghiány", "Felelős", "Tól-Ig"
+                "Cella", "StartDate", "PartNumber", "Job", "WorkStation", "Elm/Terv", "PlannerKomment", "Komment", "Anyaghiány", "Felelős", "Tól-Ig"
             }
         ));
         jTable3.setCellSelectionEnabled(true);
         jScrollPane3.setViewportView(jTable3);
         if (jTable3.getColumnModel().getColumnCount() > 0) {
-            jTable3.getColumnModel().getColumn(4).setMinWidth(70);
-            jTable3.getColumnModel().getColumn(4).setPreferredWidth(70);
-            jTable3.getColumnModel().getColumn(4).setMaxWidth(70);
+            jTable3.getColumnModel().getColumn(5).setMinWidth(70);
+            jTable3.getColumnModel().getColumn(5).setPreferredWidth(70);
+            jTable3.getColumnModel().getColumn(5).setMaxWidth(70);
         }
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -442,6 +451,8 @@ public class ControlPanel extends javax.swing.JDialog {
             }
         });
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elmaradás", "Aktuális terv" }));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -450,15 +461,22 @@ public class ControlPanel extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBox1, jComboBox2});
+
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox1)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
@@ -776,74 +794,126 @@ public class ControlPanel extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel6MouseClicked
 
     public void segedletLeker() {
+//ha az elmaradás van kiválasztva
 
-        DefaultTableModel model = new DefaultTableModel();
-        model = (DefaultTableModel) jTable3.getModel();
-        model.setRowCount(0);
-        try {
-            //át kell alakítani dátummá a stringet amit kiválasztottunk a combo boxbol
-            combodate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(jComboBox1.getSelectedItem().toString());
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            Starter.e.sendMessage(ex);
-        }
-        //bejárjuk a polistat és ha kisebb vagy egyenlő a datuma akkor betesszuk atablamodellbe
-        for (PlannObject po : polista) {
-
-            Date podate = null;
+        if (jComboBox2.getSelectedItem().toString().equals("Elmaradás")) {
+            DefaultTableModel model = new DefaultTableModel();
+            model = (DefaultTableModel) jTable3.getModel();
+            model.setRowCount(0);
             try {
-                podate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+                //át kell alakítani dátummá a stringet amit kiválasztottunk a combo boxbol
+                combodate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(jComboBox1.getSelectedItem().toString());
             } catch (ParseException ex) {
                 ex.printStackTrace();
                 Starter.e.sendMessage(ex);
             }
-            if ((podate.compareTo(combodate) < 1) && (po.getTerv() - po.getTeny() > 0)) {
-                //megnezzuk, hogy van e olyan po a listaban ahol van megvalosulas a listaban ami ugyan az a pn job ws, osszeadjuk a terveket tenyeket kivonjuk es az lesz az elmaradas
-                int osszterv = 0;
-                int osszteny = 0;
-                for (PlannObject p : polista) {
-                    Date pdate = null;
-                    try {
-                        pdate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
-                        Starter.e.sendMessage(ex);
-                    }
-                    if ((pdate.compareTo(combodate) < 1) && p.getPn().equals(po.getPn()) && p.getJob().equals(po.getJob()) && p.getWorkStation().equals(po.getWorkStation())) {
+            //bejárjuk a polistat és ha kisebb a datuma akkor betesszuk atablamodellbe
+            for (PlannObject po : polista) {
 
-                        osszterv += p.getTerv();
-                        osszteny += p.getTeny();
-
-                    }
-
+                Date podate = null;
+                try {
+                    podate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                    Starter.e.sendMessage(ex);
                 }
-                if (osszterv - osszteny > 0) {
-                    //összegyüjtjük az anyaghiányokat
-                    String ah = "";
-                    String tolig = "";
-                    String felelos = "";
-                    for (int n = 0; n < po.getAnyaghianylista().size(); n++) {
+                if ((podate.compareTo(combodate) < 0) && (po.getTerv() - po.getTeny() > 0)) {
+                    //megnezzuk, hogy van e olyan po a listaban ahol van megvalosulas a listaban ami ugyan az a pn job ws, osszeadjuk a terveket tenyeket kivonjuk es az lesz az elmaradas
+                    int osszterv = 0;
+                    int osszteny = 0;
+                    for (PlannObject p : polista) {
+                        Date pdate = null;
+                        try {
+                            pdate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                            Starter.e.sendMessage(ex);
+                        }
+                        if ((pdate.compareTo(combodate) < 0) && p.getPn().equals(po.getPn()) && p.getJob().equals(po.getJob()) && p.getWorkStation().equals(po.getWorkStation())) {
 
-                        ah += po.getAnyaghianylista().get(n).pn + ", ";
-                        tolig += po.getAnyaghianylista().get(n).tol.substring(0, po.getAnyaghianylista().get(n).tol.length() - 5) + " - " + po.getAnyaghianylista().get(n).ig.substring(0, po.getAnyaghianylista().get(n).ig.length() - 5) + ", ";
-                        felelos += po.getAnyaghianylista().get(n).felelos + ", ";
+                            osszterv += p.getTerv();
+                            osszteny += p.getTeny();
+
+                        }
+
                     }
-                    if (ah.length() > 2 && tolig.length() > 2) {
-                        ah = ah.substring(0, ah.length() - 2);
-                        tolig = tolig.substring(0, tolig.length() - 2);
-                        felelos = felelos.substring(0, felelos.length() - 2);
+                    if (osszterv - osszteny > 0) {
+                        //összegyüjtjük az anyaghiányokat
+                        String ah = "";
+                        String tolig = "";
+                        String felelos = "";
+                        for (int n = 0; n < po.getAnyaghianylista().size(); n++) {
+
+                            ah += po.getAnyaghianylista().get(n).pn + ", ";
+                            tolig += po.getAnyaghianylista().get(n).tol.substring(0, po.getAnyaghianylista().get(n).tol.length() - 5) + " - " + po.getAnyaghianylista().get(n).ig.substring(0, po.getAnyaghianylista().get(n).ig.length() - 5) + ", ";
+                            felelos += po.getAnyaghianylista().get(n).felelos + ", ";
+                        }
+                        if (ah.length() > 2 && tolig.length() > 2) {
+                            ah = ah.substring(0, ah.length() - 2);
+                            tolig = tolig.substring(0, tolig.length() - 2);
+                            felelos = felelos.substring(0, felelos.length() - 2);
+                        }
+
+                        model.addRow(new Object[]{po.getbackendSheet().getName(), po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), osszterv - osszteny, po.getPlannerkomment(), po.getKomment(), ah, felelos, tolig});
                     }
 
-                    model.addRow(new Object[]{po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), osszterv - osszteny, po.getPlannerkomment(), po.getKomment(), ah, felelos, tolig});
                 }
 
             }
 
-        }
+            jTable3.setModel(model);
+            //szelesseg beallitas
+            new TablaSzelesseg(jTable3);
+        } //ha az aktuális terv van kiválasztva
+        else if (jComboBox2.getSelectedItem().toString().equals("Aktuális terv")) {
 
-        jTable3.setModel(model);
-        //szelesseg beallitas
-        new TablaSzelesseg(jTable3);
+            DefaultTableModel model = new DefaultTableModel();
+            model = (DefaultTableModel) jTable3.getModel();
+            model.setRowCount(0);
+
+            try {
+                //át kell alakítani dátummá a stringet amit kiválasztottunk a combo boxbol
+                combodate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(jComboBox1.getSelectedItem().toString());
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+                Starter.e.sendMessage(ex);
+            }
+//bejárjuk a po listát és ha egyezik a startdate betesszuk a modellbe            
+            for (PlannObject po : polista) {
+                try {
+                    Date pdate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(po.getStartdate().toString());
+                    if (pdate.compareTo(combodate) == 0 && po.getTerv() > 0) {
+                        String ah = "";
+                        String tolig = "";
+                        String felelos = "";
+                        for (int n = 0; n < po.getAnyaghianylista().size(); n++) {
+
+                            ah += po.getAnyaghianylista().get(n).pn + ", ";
+                            tolig += po.getAnyaghianylista().get(n).tol.substring(0, po.getAnyaghianylista().get(n).tol.length() - 5) + " - " + po.getAnyaghianylista().get(n).ig.substring(0, po.getAnyaghianylista().get(n).ig.length() - 5) + ", ";
+                            felelos += po.getAnyaghianylista().get(n).felelos + ", ";
+                        }
+                        if (ah.length() > 2 && tolig.length() > 2) {
+                            ah = ah.substring(0, ah.length() - 2);
+                            tolig = tolig.substring(0, tolig.length() - 2);
+                            felelos = felelos.substring(0, felelos.length() - 2);
+                        }
+
+                        model.addRow(new Object[]{po.getbackendSheet().getName(), po.getStartdate(), po.getPn(), po.getJob(), po.getWorkStation(), po.getTerv(), po.getPlannerkomment(), po.getKomment(), ah, felelos, tolig});
+
+                    }
+
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                    Starter.e.sendMessage(ex);
+                }
+
+            }
+
+            jTable3.setModel(model);
+            //szelesseg beallitas
+            new TablaSzelesseg(jTable3);
+
+        }
 
     }
 
@@ -1064,19 +1134,23 @@ public class ControlPanel extends javax.swing.JDialog {
     }
 
     public void segedlet() {
-
-        //begyűjtjük az összes plannobjectet az aktuális sheetről
-        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
         polista.clear();
-//        ArrayList<PlannObject> polista = new ArrayList<>();
-        for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
-            if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+        //begyűjtjük az összes plannobjectet az összes sheetről
+        BeSheet b = null;
+        for (int n = 0; n < MainWindow.jTabbedPane1.getComponentCount(); n++) {
+            b = (BeSheet) m.jTabbedPane1.getComponentAt(n/*m.jTabbedPane1.getSelectedIndex()*/);
 
-                polista.add((PlannObject) b.jPanel1.getComponent(i));
+//        ArrayList<PlannObject> polista = new ArrayList<>();
+            for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+                if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+
+                    polista.add((PlannObject) b.jPanel1.getComponent(i));
+
+                }
 
             }
-
         }
+
         //sorba kell rendezni a startdate alapján
         class DateSorter implements Comparator<PlannObject> {
 
@@ -1086,8 +1160,33 @@ public class ControlPanel extends javax.swing.JDialog {
             }
         }
 
-        polista.sort(new DateSorter());
-//a legördülőt feltöltjük a vt startdatumokkal
+        class CellaShorter implements Comparator<PlannObject> {
+
+            @Override
+            public int compare(PlannObject a, PlannObject b) {
+                return a.getbackendSheet().getName().compareToIgnoreCase(b.getbackendSheet().getName());
+            }
+        }
+
+        class MultiSorter implements Comparator<PlannObject> {
+
+            @Override
+            public int compare(PlannObject a, PlannObject b) {
+                int i = a.getbackendSheet().getName().compareTo(b.getbackendSheet().getName());
+                if (i != 0) {
+                    return i;
+                }
+
+                i = a.getStartdate().compareTo(b.getStartdate());
+                return i;
+
+            }
+        }
+
+        polista.sort(new MultiSorter());
+//        polista.sort(new DateSorter());
+//a legördülőt feltöltjük a vt startdatumokkal, az aktuális sheetével
+        b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
         jComboBox1.removeAllItems();
         for (int i = 0; i < b.jPanel2.getComponentCount(); i++) {
 
@@ -1104,6 +1203,7 @@ public class ControlPanel extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     public static javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
