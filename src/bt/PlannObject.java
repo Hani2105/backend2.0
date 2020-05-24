@@ -74,6 +74,8 @@ public class PlannObject extends JLabel {
     private ArrayList<AnyagHiany> anyaghianylista = new ArrayList<>();
 //az állásidők listája
     private ArrayList<AllasidoLista> allasidolista = new ArrayList<>();
+//a teljesülés változója
+    private boolean teljesult = false;
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -129,7 +131,9 @@ public class PlannObject extends JLabel {
             @Override
             public void mouseClicked(MouseEvent e) {
 
-                //b.setPlannObjectData.setVisible(true, (PlannObject) e.getComponent(), new Point(e.getXOnScreen(), e.getYOnScreen()));
+                //a teljesules megvizsgalasa
+                Thread t = new Thread(new Teljesules((PlannObject) e.getComponent()));
+                t.start();
             }
 //egér pozíció felvétele a jlabelen
 
@@ -232,7 +236,6 @@ public class PlannObject extends JLabel {
 
     public class AllasidoLista {
 
-       
         public String tol;
         public String ig;
         public String felelos;
@@ -382,6 +385,14 @@ public class PlannObject extends JLabel {
     public void calculateGyaratsiido() {
 
         setGyartasiido(60 / ciklusido * this.getTeny() / 60);
+    }
+
+    public boolean isTeljesult() {
+        return teljesult;
+    }
+
+    public void setTeljesult(boolean teljesult) {
+        this.teljesult = teljesult;
     }
 
 //scrollpanel ujrameretezese ha szukseges
@@ -617,13 +628,12 @@ public class PlannObject extends JLabel {
 
             tooltiptext += "<strong>AH: </strong>" + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
         }
-        
+
         for (int i = 0; i < allasidolista.size(); i++) {
 
-            tooltiptext += "<strong>Állásidő: </strong>" + allasidolista.get(i).felelos + " " + allasidolista.get(i).tol + " " +allasidolista.get(i).ig + " " + allasidolista.get(i).komment + "<br>";
+            tooltiptext += "<strong>Állásidő: </strong>" + allasidolista.get(i).felelos + " " + allasidolista.get(i).tol + " " + allasidolista.get(i).ig + " " + allasidolista.get(i).komment + "<br>";
         }
-        
-        
+
         setToolTipText(tooltiptext);
 
     }
@@ -644,7 +654,16 @@ public class PlannObject extends JLabel {
             g.drawImage(nostartimeimage.getImage(), 0, 0, null);
 
         }
+
         Graphics2D g2d = (Graphics2D) g;
+//ha megvalósult a dolog legyen pipa
+        if (teljesult) {
+            g2d.setColor(Variables.pipacolor);
+            int[] xek = {40, 55, 65, 170, 155, 62, 50};
+            int[] yok = {30, 65, 65, 10, 10, 58, 30};
+            g2d.fillPolygon(xek, yok, 7);
+
+        }
 // a darabszám indikátor megrajzolása
 //zöld
         g2d.setColor(Variables.zold);

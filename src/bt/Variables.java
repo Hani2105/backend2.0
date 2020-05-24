@@ -24,6 +24,9 @@ public class Variables {
 //a tab szinei
     public static Color tabcolor;
     public static Color selectedtabcolor;
+//a megvalósult terv pipájának színe
+    public static Color pipacolor;
+    
     public static ArrayList<String[]> pnkomment = new ArrayList<>();
 //a felhasználó valaki_valaki
     public static String user = "";
@@ -41,6 +44,11 @@ public class Variables {
     public static enum viewports {
         plannpanel, datapanel
     };
+//a statisztika enumja
+    
+    public static enum statisztika{
+       heti
+    };
 
 //a felhasználó pozíciója, planner vagy műszakvezető vagy csak megtekintés, 1,2,0
     public static int jogosultsag = 0;
@@ -54,8 +62,9 @@ public class Variables {
 //az allasido legorduloje
     public static String allasidolegordulo;
 //  a program verzió száma
-    public static double version = 1.02;
+    public static double version = 1.5;
 //a timer
     public static Timer timer = new Timer();
+
 
 }

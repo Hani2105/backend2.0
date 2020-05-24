@@ -70,6 +70,7 @@ public class IniKezel {
         ini.put("colors", "piros", new Color(252, 73, 94).getRGB());
         ini.put("colors", "tabcolor", new Color(217, 219, 219).getRGB());
         ini.put("colors", "selectedtabcolor", new Color(50, 137, 168).getRGB());
+        ini.put("colors", "pipacolor", new Color(230, 205, 46).getRGB());
         ini.put("plannconnect", "url", "jdbc:mysql://143.116.140.114:3306/planningdb?characterEncoding=utf8");
         ini.put("plannconnect", "username", "plan");
         ini.put("plannconnect", "password", "plan500");
@@ -102,6 +103,12 @@ public class IniKezel {
         if (Variables.selectedtabcolor.getRGB() == -16777216) {
             throw new NemletezoExeption("");
         }
+
+        Variables.pipacolor = new Color(ini.get("colors", "pipacolor", int.class));
+        if (Variables.pipacolor.getRGB() == -16777216) {
+            throw new NemletezoExeption("");
+        }
+
         Variables.plannurl = ini.get("plannconnect", "url");
         if (Variables.plannurl == null) {
             throw new NemletezoExeption("");

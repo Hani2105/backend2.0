@@ -40,6 +40,7 @@ public class MainWindow extends javax.swing.JFrame {
     public SessionObject so = new SessionObject();
     public Anyaghiany ahrogzito = new Anyaghiany(this, false);
     public Allasido allasrogzito = new Allasido(this, false);
+    public Statisztika statisztika = new Statisztika(this, false);
 
     //a panel szelessege es magassaga
 //inicializálás
@@ -224,6 +225,8 @@ public class MainWindow extends javax.swing.JFrame {
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
 
         jLabel1.setText("jLabel1");
@@ -423,6 +426,21 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem4);
 
+        jMenu1.setBackground(new java.awt.Color(102, 153, 255));
+        jMenu1.setText("Statisztikák");
+        jMenu1.setOpaque(true);
+
+        jMenuItem1.setBackground(new java.awt.Color(51, 153, 255));
+        jMenuItem1.setText("Aktuális heti kihasználtság");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenu3.add(jMenu1);
+
         jMenuItem3.setBackground(new java.awt.Color(102, 153, 255));
         jMenuItem3.setText("Login");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -563,6 +581,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jProgressBar1MouseClicked
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // heti statisztika lekérése
+        statisztika.setVisible(true, Variables.statisztika.heti);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -615,8 +638,10 @@ public class MainWindow extends javax.swing.JFrame {
     public static javax.swing.JLabel jLabel8;
     public static javax.swing.JLabel jLabel9;
     public static javax.swing.JList<String> jList1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
