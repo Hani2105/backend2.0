@@ -78,6 +78,8 @@ public class PlannObject extends JLabel {
     private boolean teljesult = false;
 //az összter és tény szövege a tooltipben
     private String ossztervtenytooltip = "";
+//az sfdc adatok
+    private String sfdcadat = "";
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -284,6 +286,16 @@ public class PlannObject extends JLabel {
 
         this.allasidolista.clear();
     }
+
+    public String getSfdcadat() {
+        return sfdcadat;
+    }
+
+    public void setSfdcadat(String sfdcadat) {
+        this.sfdcadat = sfdcadat;
+    }
+    
+    
 
 //kijelöli a po-t és a többin megszünteti a kijelölest
     public void kijelol() {
@@ -624,11 +636,8 @@ public class PlannObject extends JLabel {
 
 //a tooltip és a szöveg formátumának előállítása és beállítása
     public void formatText() {
-//
-//        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
-//        setText(labeltext);
-        osszTervTenyTooltipbe();
-        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Össz terv/tény: </strong><font color=\"red\">" + ossztervtenytooltip + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
+
+        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Össz terv/tény: </strong><font color=\"red\"> " + ossztervtenytooltip + " </font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
         for (int i = 0; i < anyaghianylista.size(); i++) {
 
             tooltiptext += "<strong>AH: </strong>" + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
@@ -638,7 +647,7 @@ public class PlannObject extends JLabel {
 
             tooltiptext += "<strong>Állásidő: </strong>" + allasidolista.get(i).felelos + " " + allasidolista.get(i).tol + " " + allasidolista.get(i).ig + " " + allasidolista.get(i).komment + "<br>";
         }
-
+        tooltiptext += getSfdcadat();
         setToolTipText(tooltiptext);
 
     }
@@ -664,7 +673,7 @@ public class PlannObject extends JLabel {
         }
 
         ossztervtenytooltip = String.valueOf(osszterv) + "/" + String.valueOf(osszteny);
-        //
+        formatText();
 
     }
 

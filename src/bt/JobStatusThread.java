@@ -84,7 +84,8 @@ public class JobStatusThread implements Runnable {
                     if (components[i] instanceof PlannObject) {
                         PlannObject po = (PlannObject) components[i];
                         po.setStat(Variables.status.NotExists);
-                        po.formatText();
+//                        po.formatText();
+                        po.setSfdcadat("");
 
                         for (int a = 0; a < rowdata.length; a++) {
 //ha oda érünk, hogy egyezik a jobszám apo jobszámával                
@@ -94,9 +95,8 @@ public class JobStatusThread implements Runnable {
 
                                     po.setStat(Variables.status.NotReleased);
 //hozzáadjuk a kommenthez, hogy nincs releasálva
-                                    //po.formatText();
-                                    String tooltiptext = po.getToolTipText() + "JOB not released in 42Q!";
-                                    po.setToolTipText(tooltiptext);
+                                    po.setSfdcadat("JOB not released in 42Q!");
+                                    po.formatText();
 //ki is léphetünk a kövi po-ra
                                     continue outerloop;
                                 } //ha released a státusz akkor beállítjuk az ikont majd a tooltiphez hozzáfűzzük a mennyiségeket de itt két eset van, ha van benne skeleton és ha nincs                       
@@ -106,9 +106,8 @@ public class JobStatusThread implements Runnable {
 
                                         ws = rowdata[a][2].toString();
                                     }
-                                    //po.formatText();
-                                    String tooltiptext = po.getToolTipText() + ws + ": " + rowdata[a][3] + " DB<br>";
-                                    po.setToolTipText(tooltiptext);
+                                    po.setSfdcadat(po.getSfdcadat() + ws + ": " + rowdata[a][3] + " DB<br>");
+                                    po.formatText();
                                     //ha a tooltip tartalmaz skeletont akkor s ikon, ha nem akkor r
                                     if (po.getToolTipText().contains("Skeleton")) {
                                         po.setStat(Variables.status.Skeleton);
@@ -118,9 +117,8 @@ public class JobStatusThread implements Runnable {
                                     }
                                 } //ha se nem released se nem notreleased akkor c
                                 else if (!rowdata[a][5].equals("N") && !rowdata[a][5].equals("R")) {
-                                    //po.formatText();
-                                    String tooltiptext = po.getToolTipText() + rowdata[a][2] + ": " + rowdata[a][3] + " DB<br>";
-                                    po.setToolTipText(tooltiptext);
+                                    po.setSfdcadat(po.getSfdcadat() + rowdata[a][2] + ": " + rowdata[a][3] + " DB<br>");
+                                    po.formatText();
                                     po.setStat(Variables.status.Complete);
 
                                 }
