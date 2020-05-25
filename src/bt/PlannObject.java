@@ -76,6 +76,8 @@ public class PlannObject extends JLabel {
     private ArrayList<AllasidoLista> allasidolista = new ArrayList<>();
 //a teljesülés változója
     private boolean teljesult = false;
+//az összter és tény szövege a tooltipben
+    private String ossztervtenytooltip = "";
 
 //construct
     public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
@@ -94,8 +96,8 @@ public class PlannObject extends JLabel {
         this.setBorder(border);
 
 //tooltip beállítások
-        ToolTipManager.sharedInstance().setInitialDelay(500);
-        ToolTipManager.sharedInstance().setDismissDelay(5000);
+        ToolTipManager.sharedInstance().setInitialDelay(1000);
+        ToolTipManager.sharedInstance().setDismissDelay(7000);
 
 //ikon beállítása
 //        setMainIcon(Variables.status.NotReleased);
@@ -172,6 +174,8 @@ public class PlannObject extends JLabel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
+
+                osszTervTenyTooltipbe();
 
             }
 
@@ -623,7 +627,8 @@ public class PlannObject extends JLabel {
 //
 //        labeltext = "<html>WS: <font color=\"red\">" + workStation + "</font><br>PN: <font color=\"red\">" + pn + "</font><br>JOB: <font color=\"red\">" + job + "</font><br>Qty terv/tény: <font color=\"red\">" + terv + "/" + teny + "</font></html>";
 //        setText(labeltext);
-        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
+        osszTervTenyTooltipbe();
+        tooltiptext = "<html><strong>PN: </strong><font color=\"red\">" + pn + "</font><br><strong>JOB: </strong><font color=\"red\">" + job + "</font><br><strong>Qty terv/tény: </strong><font color=\"red\">" + terv + "/" + teny + "</font><br><strong>Össz terv/tény: </strong><font color=\"red\">" + ossztervtenytooltip + "</font><br><strong>Planner komment: </strong><font color=\"red\">" + plannerkomment + "</font><br><strong>Komment: </strong><font color=\"red\">" + komment + "</font><br>";
         for (int i = 0; i < anyaghianylista.size(); i++) {
 
             tooltiptext += "<strong>AH: </strong>" + anyaghianylista.get(i).pn + " " + anyaghianylista.get(i).tol + " " + anyaghianylista.get(i).ig + " " + anyaghianylista.get(i).felelos + " " + anyaghianylista.get(i).komment + "<br>";
@@ -637,8 +642,33 @@ public class PlannObject extends JLabel {
         setToolTipText(tooltiptext);
 
     }
-//a label ábrái 
 
+//az összterv és tény összegyüjtése összegyüjtése
+    private void osszTervTenyTooltipbe() {
+        int osszterv = 0;
+        int osszteny = 0;
+        for (int i = 0; i < this.getbackendSheet().jPanel1.getComponentCount(); i++) {
+
+            if (this.getbackendSheet().jPanel1.getComponent(i) instanceof PlannObject) {
+
+                PlannObject po = (PlannObject) this.getbackendSheet().jPanel1.getComponent(i);
+                if (po.getPn().equals(this.getPn()) && po.getJob().equals(this.getJob()) && po.getWorkStation().equals(this.getWorkStation())) {
+
+                    osszterv += po.getTerv();
+                    osszteny += po.getTeny();
+
+                }
+
+            }
+
+        }
+
+        ossztervtenytooltip = String.valueOf(osszterv) + "/" + String.valueOf(osszteny);
+        //
+
+    }
+
+//a label ábrái 
     @Override
     public void paintComponent(Graphics g) {
 
