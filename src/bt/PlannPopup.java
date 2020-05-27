@@ -33,7 +33,7 @@ public class PlannPopup extends JPopupMenu {
         this.setBackground(Variables.plannObjectPopupColor);
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createCompoundBorder(), "Menü", CENTER, 1));
         //terv mentése
-        JMenuItem Ment = new JMenuItem("Terv mentése", new javax.swing.ImageIcon(getClass().getResource("/pictures/save.png")));
+        JMenuItem Ment = new JMenuItem("Terv (Cella) mentése", new javax.swing.ImageIcon(getClass().getResource("/pictures/save.png")));
         Ment.setOpaque(true);
         Ment.setBackground(Variables.plannObjectPopupColor);
         this.add(Ment);

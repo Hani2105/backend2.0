@@ -55,7 +55,23 @@ public class TervMent implements Runnable {
                     options[1]);
             //ha folytatom a mentést
             if (n == 0) {
+//le kell csekkolni, hogy minden po-nak megvan e a starttimeja
+                for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
+                    if (b.jPanel1.getComponent(i) instanceof PlannObject) {
+                        PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
+                        if (po.getStartdate().equals("")) {
+                            b.getM().menteshatter.setVisible(false);
+                            JOptionPane.showMessageDialog(b.getM(),
+                                    "<html>A mentés nem sikerült!<br>" + "Hiányzó starttime!" + "<html>",
+                                    "Feltöltési hiba!",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
 
+                        }
+
+                    }
+
+                }
                 //deaktiváljuk a régi tervet
                 deActivate();
                 mentes();
@@ -169,7 +185,7 @@ public class TervMent implements Runnable {
 
                 PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
 
-                adatok.append("('" + po.getStartdate() + "',(select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'),'" + po.getTerv() + "','" + po.getWtf() + "', '2', '3','" + Variables.user + "','" + po.getJob() + "', concat('" + po.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'), '3', '" + po.getJob() + "'),'" + po.getTeny() + "','" + po.getEngineer() + "'),");
+                adatok.append("('" + po.getStartdate() + "',(select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'),'" + po.getTerv() + po.getPlannerkomment() + "','" + po.getWtf() + "', '2', '3','" + Variables.user + "','" + po.getJob() + "', concat('" + po.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'), '3', '" + po.getJob() + "'),'" + po.getTeny() + po.getKomment() + "','" + po.getEngineer() + "'),");
 
             }
 
