@@ -1020,11 +1020,13 @@ public class ControlPanel extends javax.swing.JDialog {
                     }
                     try {
                         startdate = jTable1.getValueAt(i, 4).toString().trim();
+
                         //leellenőrizzük hogy a startdátum megfelelő formátumú e
-                        if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}[:][0-9]{2}", startdate)) {
+                        if (!Pattern.matches("[0-9]{4}[-][0-9]{2}[-][0-9]{2}[ ][0-9]{2}[:][0-9]{2}"/*[:][0-9]{2}"*/, startdate) && !startdate.equals("")) {
+
                             //custom title, error icon
                             JOptionPane.showMessageDialog(m,
-                                    "A Strat dátumot nem a megfelelő formátumban adtad meg! Elvárt: yyyy-MM-dd hh:mm:ss",
+                                    "A Strat dátumot nem a megfelelő formátumban adtad meg! Elvárt: yyyy-MM-dd hh:mm",
                                     "Hiba",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
@@ -1034,16 +1036,48 @@ public class ControlPanel extends javax.swing.JDialog {
 //                        Starter.e.sendMessage(e);
 
                     }
+
+//ha muszakvezeto van bent, kotelezo a starttime!!!!
+                    if (Variables.jogosultsag == 2 && startdate.equals("")) {
+
+                        //custom title, error icon
+                        JOptionPane.showMessageDialog(m,
+                                "A Strat dátum megadása kötelező! Elvárt: yyyy-MM-dd hh:mm",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+//ha muszakvezeto van bent, a terv mindenkepp nulla!!
+                    int terv = 0;
+
+                    try {
+                        terv = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
+                    } catch (Exception e) {
+
+                        JOptionPane.showMessageDialog(m,
+                                "Darabszám felvételi hiba! Nem megfelelő számot adtál meg!",
+                                "Hiba",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+
+                    }
+
+                    if (Variables.jogosultsag == 2) {
+                        terv = 0;
+                    }
+
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
 
                         if (b.gyarthatosagiadatok.get(c)[0].trim().equals(pn.trim()) && b.gyarthatosagiadatok.get(c)[1].trim().equals(ws.trim())) {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
-                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, Integer.parseInt(jTable1.getValueAt(i, 3).toString()), 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
                                 b.jPanel1.add(po);
                                 po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250);
                                 b.repaint();
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Starter.e.sendMessage(e);
@@ -1060,6 +1094,7 @@ public class ControlPanel extends javax.swing.JDialog {
                         }
 
                     }
+
 //ha ide eljutunk akkor nem szerepelt ilyen adat, kiirjuk a hibát
 //                    m.error.setVisible(true, "<html>A következő tétel nem kerül felvételre!<br>PN: " + pn + " WS: " + ws + "<br>Javítsd a hibát és próbáld újból!</html>");
                     JOptionPane.showMessageDialog(m,
@@ -1073,6 +1108,9 @@ public class ControlPanel extends javax.swing.JDialog {
 
             }
         }
+        b.osszerendez();
+        //beallitjuk a jogosultsagokat
+        b.getM().j.kezel();
 
     }
 
@@ -1090,6 +1128,20 @@ public class ControlPanel extends javax.swing.JDialog {
             pncolumn.setCellEditor(new DefaultCellEditor(PncomboBox));
             TableColumn wscolumn = jTable1.getColumnModel().getColumn(2);
             wscolumn.setCellEditor(new DefaultCellEditor(WscomboBox));
+//hozzáadjuk a starttimeokat is
+            JComboBox<String> StartTimeCombo = new JComboBox<>();
+            StartTimeCombo.addItem("");
+            for (int i = 0; i < b.jPanel2.getComponentCount(); i++) {
+                if (b.jPanel2.getComponent(i) instanceof VerticalTimeline) {
+                    VerticalTimeline vt = (VerticalTimeline) b.jPanel2.getComponent(i);
+                    StartTimeCombo.addItem(vt.getVtstartdate());
+
+                }
+
+            }
+            TableColumn starttimecolumn = jTable1.getColumnModel().getColumn(4);
+            starttimecolumn.setCellEditor(new DefaultCellEditor(StartTimeCombo));
+
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);

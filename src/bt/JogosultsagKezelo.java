@@ -27,7 +27,8 @@ public class JogosultsagKezelo {
         //control panel beállításai
         //tervek hozzáadás letiltása a  2 es esetben műszakvezető
         if (Variables.jogosultsag == 2) {
-            cp.jLabel2.setEnabled(false);
+            //a terv hozzaadasa gomb
+            cp.jLabel2.setEnabled(true);
             //setplannobject beállításai
             //ha műszakvezető akkor ne lehessen szerkeszteni a pn-t
             sp.jTextField1.setEditable(false);
