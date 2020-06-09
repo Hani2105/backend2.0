@@ -89,7 +89,6 @@ public class MainWindow extends javax.swing.JFrame {
 //láthatóvá tesszük a loginscreent
         ls.setVisible(true);
 
-
     }
 
     public void setIcon() {
@@ -283,6 +282,11 @@ public class MainWindow extends javax.swing.JFrame {
         jCheckBox1.setToolTipText("Ha be van kapcsolva, a megvalósulás kitöltésénél figyelembe vesszük a JOB számot is!");
         jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jCheckBox1.setOpaque(false);
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
 
         jCheckBox2.setText("SFDC, first pass only!");
         jCheckBox2.setToolTipText("Ha be van kapcsolva, csak a first pass mennyiséget vesszük figyelembe!");
@@ -549,6 +553,14 @@ public class MainWindow extends javax.swing.JFrame {
             cp.segedlet();
         } catch (Exception e) {
         }
+        //a jobfigyeles pipajat beallitjuk a sheet ertekenek megfeleloen
+        try {
+            BeSheet b = (BeSheet) jTabbedPane1.getComponentAt(jTabbedPane1.getSelectedIndex());
+            jCheckBox1.setSelected(b.isJobfigyeles());
+        } catch (Exception e) {
+        }
+
+
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
@@ -585,6 +597,20 @@ public class MainWindow extends javax.swing.JFrame {
         // heti statisztika lekérése
         statisztika.setVisible(true, Variables.statisztika.heti);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // job figyelés beállítása a sheeten
+        //az aktiv besheet jobfigyeles erteket beallitjuk
+        BeSheet b = (BeSheet) jTabbedPane1.getComponentAt(jTabbedPane1.getSelectedIndex());
+        if (jCheckBox1.isSelected()) {
+
+            b.setJobfigyeles(true);
+        } else {
+
+            b.setJobfigyeles(false);
+
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
      * @param args the command line arguments

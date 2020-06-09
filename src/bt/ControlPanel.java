@@ -333,8 +333,8 @@ public class ControlPanel extends javax.swing.JDialog {
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
 
         jTabbedPane1.addTab("Tervek hozzáadása", jPanel1);
@@ -646,6 +646,17 @@ public class ControlPanel extends javax.swing.JDialog {
         // ha ráklikkelünk a plusz gombra, adatok felvitele
 
         if (jTable1.getSelectedColumn() == 7) {
+
+//ha muszakvezeto vagy megtekinto akkor kirjuk h nincs joga es elbucsuzunk
+            if (Variables.jogosultsag == 2 || Variables.jogosultsag == 0) {
+                JOptionPane.showMessageDialog(m,
+                        "Nem megfelelő a jogosultsági szinted az adatok módosításához!",
+                        "Feltöltési hiba!",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+
+            }
+
             PlanConnect pc = null;
             try {
                 pc = new PlanConnect();

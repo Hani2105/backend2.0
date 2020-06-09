@@ -6,6 +6,9 @@
 package bt;
 
 import com.sun.mail.handlers.message_rfc822;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -77,7 +80,8 @@ public class JogosultsagKezelo {
                 }
 
             }
-
+            //az adatok modositasa gomb megjelenitese miatt   
+            cp.jTable1.repaint();
         } //sima megtekintő
         else if (Variables.jogosultsag == 0) {
 //semmit nem csinálhat
@@ -103,7 +107,7 @@ public class JogosultsagKezelo {
             sp.jTextField4.setEditable(false);
             //a set gomb
             sp.jButton1.setEnabled(false);
-            
+
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 
@@ -130,6 +134,8 @@ public class JogosultsagKezelo {
                 }
 
             }
+            //az adatok modositasa gomb megjelenitese miatt   
+            cp.jTable1.repaint();
 //ha planner
         } else {
             cp.jLabel2.setEnabled(true);
@@ -171,6 +177,8 @@ public class JogosultsagKezelo {
                 }
 
             }
+            //az adatok modositasa gomb megjelenitese miatt   
+            cp.jTable1.repaint();
         }
 
     }

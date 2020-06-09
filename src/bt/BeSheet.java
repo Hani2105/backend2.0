@@ -63,6 +63,8 @@ public class BeSheet extends javax.swing.JPanel {
     private String utolsomodisito = "";
     //az utolso id a sheeten
     private String utolsotime = "";
+    //a jobfigyeles pipája
+    private boolean jobfigyeles = false;
 
     //a tab neve lesz, és egyben a terv lekérdezéséhez kell
 //    private String tabneve = "";
@@ -111,6 +113,16 @@ public class BeSheet extends javax.swing.JPanel {
     public void setM(MainWindow m) {
         this.m = m;
     }
+
+    public boolean isJobfigyeles() {
+        return jobfigyeles;
+    }
+
+    public void setJobfigyeles(boolean jobfigyeles) {
+        this.jobfigyeles = jobfigyeles;
+    }
+    
+    
 
     //a gyárthatósági adatok
     public void adatleker(String neve) {

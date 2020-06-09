@@ -81,13 +81,14 @@ public class SFDC implements Runnable {
 
                 PlannObject po = (PlannObject) components[i];
                 polist.add(po);
+                //System.out.println(po.getPn()+ " " + po.getJob()+ " " + po.getWorkStation() + " " + po.getStartdate());
             }
         }
         for (int i = 0; i < polist.size(); i++) {
             PlannObject po = polist.get(i);
 //egyezik e a kezdő dátum
             if (po.getStartdate().contains(tol.replace("%20", " "))) {
-
+                //System.out.println(po.getPn() + " " + po.getJob() + " " + po.getWorkStation() + " " + po.getStartdate());
 //mivel tobb jobban szerepelhet össze kell adni
                 int osszteny = 0;
 //megvizsgáljuk, hogy szerepel e az sfdc ben
@@ -121,7 +122,10 @@ public class SFDC implements Runnable {
                 if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected()) {
 
                     for (int s = 0; s < sfdcadat.length; s++) {
-
+//                        if (po.getPn().equals(sfdcadat[s][1])) {
+//                            System.out.println(sfdcadat[s][3]);
+//                            System.out.println(sfdcadat[s][0]);
+//                        }
                         if (po.getPn().equals(sfdcadat[s][1]) && String.valueOf(sfdcadat[s][0]).contains(po.getWorkStation()) && po.getJob().equals(sfdcadat[s][3])) {
 
                             osszteny += Integer.parseInt(String.valueOf(sfdcadat[s][4]));

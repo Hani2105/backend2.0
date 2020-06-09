@@ -181,7 +181,7 @@ public class TervMent implements Runnable {
         for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
 
             if (b.jPanel1.getComponent(i) instanceof PlannObject) {
-                //lecsekkoljuk, hogy van e a po-nak startdateja
+          
 
                 PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
 
