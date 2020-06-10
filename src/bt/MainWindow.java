@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.util.Timer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -525,6 +526,14 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // loader panel
+        if (jTabbedPane1.getTabCount() == 0) {
+            //custom title, warning icon
+            JOptionPane.showMessageDialog(this,
+                    "Nincs lekért cellád, először kérdezz le valamit!",
+                    "Figyelem!",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         cp.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
