@@ -227,7 +227,7 @@ public class SFDC implements Runnable {
                         int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (n == 0) {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
-                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow(), 0);
                             p.getbackendSheet().jPanel1.add(ujpo);
                             ujpo.setStat(po.getStat());
                             ujpo.getbackendSheet().osszerendez();
@@ -266,7 +266,7 @@ public class SFDC implements Runnable {
                         int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (n == 0) {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
-                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow(),0);
                             p.getbackendSheet().jPanel1.add(ujpo);
                             ujpo.setStat(po.getStat());
                             ujpo.getbackendSheet().osszerendez();
@@ -304,7 +304,7 @@ public class SFDC implements Runnable {
                         int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (n == 0) {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
-                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow(),0);
                             p.getbackendSheet().jPanel1.add(ujpo);
                             ujpo.setStat(po.getStat());
                             ujpo.getbackendSheet().osszerendez();
@@ -342,7 +342,7 @@ public class SFDC implements Runnable {
                         int n = JOptionPane.showOptionDialog(po.getMainWindow(), "A " + po.getPn() + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (n == 0) {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
-                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow());
+                            PlannObject ujpo = new PlannObject(po.getbackendSheet(), 200, 75, po.getPn(), po.getJob(), tol.replace("%20", " "), 0, osszterv, "Nem tervezett gyártás!", "", 0.0, 0, po.getWorkStation(), po.getCiklusido(), po.getMainWindow(),0);
                             p.getbackendSheet().jPanel1.add(ujpo);
                             ujpo.setStat(po.getStat());
                             ujpo.getbackendSheet().osszerendez();

@@ -147,7 +147,7 @@ public class PlannPopup extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //csináljunk valamit
-                PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(), p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m);
+                PlannObject po = new PlannObject(p.getbackendSheet(), 200, 75, p.getPn(), p.getJob(), "", p.getTerv(), p.getTeny(), p.getPlannerkomment(), p.getKomment(), p.getEngineer(), p.getWtf(), p.getWorkStation(), p.getCiklusido(), m, p.getLathato());
                 po.setStat(p.getStat());
                 po.setPktomig(p.getPktomig());
                 po.setMikorment(p.getMikorment());
@@ -171,12 +171,12 @@ public class PlannPopup extends JPopupMenu {
         anyaghiany.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
-               p.getMainWindow().ahrogzito.setVisible(p,true);
-                
+
+                p.getMainWindow().ahrogzito.setVisible(p, true);
+
             }
         });
-        
+
 //allasido
         JMenuItem allasido = new JMenuItem("Állásidő felvétele", new javax.swing.ImageIcon(getClass().getResource("/pictures/allas.png")));
         allasido.setOpaque(true);
@@ -185,9 +185,30 @@ public class PlannPopup extends JPopupMenu {
         allasido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
-                p.getMainWindow().allasrogzito.setVisible(p,true);
-                
+
+                p.getMainWindow().allasrogzito.setVisible(p, true);
+
+            }
+        });
+
+//szeparátor
+        this.addSeparator();
+//láthatóság
+        JMenuItem lathato = new JMenuItem("Láthatóság", new javax.swing.ImageIcon(getClass().getResource("/pictures/lathato.png")));
+        lathato.setOpaque(true);
+        lathato.setBackground(Variables.plannObjectPopupColor);
+        this.add(lathato);
+        lathato.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //csináljunk valamit
+                //ha látható akkor legyen léthatatlan és fordítva
+                if (p.getLathato() == 0) {
+                    p.setLathato(1);
+                } else {
+                    p.setLathato(0);
+                }
+                p.repaint();
             }
         });
 

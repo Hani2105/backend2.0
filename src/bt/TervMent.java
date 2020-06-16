@@ -177,15 +177,14 @@ public class TervMent implements Runnable {
     private void mentes() {
 
         StringBuffer adatok = new StringBuffer();
-        StringBuffer query = new StringBuffer("insert into tc_terv (date, idtc_becells, idtc_bestations, idtc_bepns,qty,wtf,active, tt, user, job, pktomig, qty_teny, mernokiido) values ");
+        StringBuffer query = new StringBuffer("insert into tc_terv (date, idtc_becells, idtc_bestations, idtc_bepns,qty,wtf,active, tt, user, job, pktomig, qty_teny, mernokiido, lathato) values ");
         for (int i = 0; i < b.jPanel1.getComponentCount(); i++) {
 
             if (b.jPanel1.getComponent(i) instanceof PlannObject) {
-          
 
                 PlannObject po = (PlannObject) b.jPanel1.getComponent(i);
 
-                adatok.append("('" + po.getStartdate() + "',(select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'),'" + po.getTerv() + po.getPlannerkomment() + "','" + po.getWtf() + "', '2', '3','" + Variables.user + "','" + po.getJob() + "', concat('" + po.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'), '3', '" + po.getJob() + "'),'" + po.getTeny() + po.getKomment() + "','" + po.getEngineer() + "'),");
+                adatok.append("('" + po.getStartdate() + "',(select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'),'" + po.getTerv() + po.getPlannerkomment() + "','" + po.getWtf() + "', '2', '3','" + Variables.user + "','" + po.getJob() + "', concat('" + po.getStartdate() + "', (select tc_becells.idtc_cells from tc_becells where tc_becells.cellname = '" + b.getName() + "'), (select tc_bestations.idtc_bestations from tc_bestations where tc_bestations.workstation = '" + po.getWorkStation() + "'), (select tc_bepns.idtc_bepns from tc_bepns where tc_bepns.partnumber = '" + po.getPn() + "'), '3', '" + po.getJob() + "'),'" + po.getTeny() + po.getKomment() + "','" + po.getEngineer() + "','" + po.getLathato() + "'),");
 
             }
 
@@ -193,7 +192,7 @@ public class TervMent implements Runnable {
 
         adatok.setLength(adatok.length() - 1);
         query.append(adatok);
-        query.append("on duplicate key update qty = values(qty), qty_teny = values(qty_teny), wtf = values(wtf), user = values(user), active = (2), mernokiido = values(mernokiido)");
+        query.append("on duplicate key update qty = values(qty), qty_teny = values(qty_teny), wtf = values(wtf), user = values(user), active = (2), mernokiido = values(mernokiido), lathato = values(lathato)");
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();

@@ -63,6 +63,7 @@ public class PlannObject extends JLabel {
     private ImageIcon img;
     private ImageIcon selectedimage;
     private ImageIcon nostartimeimage;
+    private ImageIcon nemlathato;
     private MainWindow m;
     private double ciklusido = 0.00;
     private boolean selected = false;
@@ -80,9 +81,11 @@ public class PlannObject extends JLabel {
     private String ossztervtenytooltip = "";
 //az sfdc adatok
     private String sfdcadat = "";
+//látható e a termelés felé, 0 igen 1 nem
+    private int lathato = 0;
 
 //construct
-    public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m) {
+    public PlannObject(BeSheet b, int hossz, int magassag, String pn, String job, String startdate, int terv, int teny, String plannerkomment, String komment, double mernoki, int wtf, String workstation, double ciklusido, MainWindow m, int lathato) {
         this.backendSheet = b;
         this.m = m;
         this.ciklusido = ciklusido;
@@ -194,6 +197,8 @@ public class PlannObject extends JLabel {
         selectedimage = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\poselected.jpg");
 //nincs startime background
         nostartimeimage = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\nostarttime.jpg");
+//nem látható háttér
+        nemlathato = new ImageIcon(System.getProperty("user.home") + "\\BT\\Pictures\\eye.png");
 
 //popupmenu csinálása
         JPopupMenu popupMenu = new PlannPopup(this, m);
@@ -212,6 +217,7 @@ public class PlannObject extends JLabel {
         setWtf(wtf);
         setWorkStation(workstation);
         formatText();
+        setLathato(lathato);
 
 //keresse meg a helyét
         setStartLocation();
@@ -294,8 +300,14 @@ public class PlannObject extends JLabel {
     public void setSfdcadat(String sfdcadat) {
         this.sfdcadat = sfdcadat;
     }
-    
-    
+
+    public int getLathato() {
+        return lathato;
+    }
+
+    public void setLathato(int visible) {
+        this.lathato = visible;
+    }
 
 //kijelöli a po-t és a többin megszünteti a kijelölest
     public void kijelol() {
@@ -692,6 +704,21 @@ public class PlannObject extends JLabel {
         if (getStartdate().equals("")) {
             g.drawImage(nostartimeimage.getImage(), 0, 0, null);
 
+        }
+
+        //ha nem lathato
+        if (getLathato() == 1) {
+
+            g.drawImage(nemlathato.getImage(), 3, 5,null);
+            if (Variables.jogosultsag == 2 || Variables.jogosultsag == 0) {
+
+                this.setVisible(false);
+            } else {
+                this.setVisible(true);
+            }
+
+        } else {
+            this.setVisible(true);
         }
 
         Graphics2D g2d = (Graphics2D) g;

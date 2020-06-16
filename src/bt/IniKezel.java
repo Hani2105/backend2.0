@@ -216,6 +216,14 @@ public class IniKezel {
             img = ImageIO.read(getClass().getResource("/pictures/nostarttime.jpg"));
             ImageIO.write(img, "jpg", new File(System.getProperty("user.home") + "\\BT\\Pictures\\nostarttime.jpg"));
         }
+        //nemlathato hatter beallitasa
+        try {
+            img = ImageIO.read(new File(System.getProperty("user.home") + "\\BT\\Pictures\\eye.png"));
+        } catch (Exception e) {
+            System.out.println("Nem látható háttér létrehozása..");
+            img = ImageIO.read(getClass().getResource("/pictures/eye.png"));
+            ImageIO.write(img, "png", new File(System.getProperty("user.home") + "\\BT\\Pictures\\eye.png"));
+        }
 
         //oldalmenü háttér
         try {

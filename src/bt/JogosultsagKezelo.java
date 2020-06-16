@@ -74,6 +74,8 @@ public class JogosultsagKezelo {
                         p.getComponentPopupMenu().getComponent(5).setEnabled(false);
                         //terv másolása
                         p.getComponentPopupMenu().getComponent(6).setEnabled(false);
+                        //lathatosag
+                        p.getComponentPopupMenu().getComponent(10).setEnabled(false);
 
                     }
 
@@ -128,6 +130,8 @@ public class JogosultsagKezelo {
                         p.getComponentPopupMenu().getComponent(5).setEnabled(false);
                         //terv másolása
                         p.getComponentPopupMenu().getComponent(6).setEnabled(false);
+                        //lathatosag
+                        p.getComponentPopupMenu().getComponent(10).setEnabled(false);
 
                     }
 
@@ -171,6 +175,8 @@ public class JogosultsagKezelo {
                         p.getComponentPopupMenu().getComponent(5).setEnabled(true);
                         //terv másolása
                         p.getComponentPopupMenu().getComponent(6).setEnabled(true);
+                        //lathatosag
+                        p.getComponentPopupMenu().getComponent(10).setEnabled(true);
 
                     }
 

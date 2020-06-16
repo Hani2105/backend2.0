@@ -1084,7 +1084,7 @@ public class ControlPanel extends javax.swing.JDialog {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
-                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m);
+                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m, 0);
                                 b.jPanel1.add(po);
                                 po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250);
                                 b.repaint();
