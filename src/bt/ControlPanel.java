@@ -704,7 +704,9 @@ public class ControlPanel extends javax.swing.JDialog {
                     e.printStackTrace();
                     Starter.e.sendMessage(e);
                 }
+
                 adatlekerBeSheetrol();
+
                 MainWindow.pnCommentLeker();
                 jTable1.repaint();
 
@@ -748,6 +750,7 @@ public class ControlPanel extends javax.swing.JDialog {
         try {
             BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
             jTextArea1.setText(b.muszakjelentes);
+        } catch (ArrayIndexOutOfBoundsException e) {
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
@@ -800,7 +803,7 @@ public class ControlPanel extends javax.swing.JDialog {
         // sor hozzáadása a segédlet táblához
         DefaultTableModel model = new DefaultTableModel();
         model = (DefaultTableModel) jTable3.getModel();
-        model.addRow(new Object[]{"","","","","","","","","","",""});
+        model.addRow(new Object[]{"", "", "", "", "", "", "", "", "", "", ""});
         jTable3.setModel(model);
     }//GEN-LAST:event_jLabel8MouseClicked
 
@@ -1077,6 +1080,10 @@ public class ControlPanel extends javax.swing.JDialog {
                     if (Variables.jogosultsag == 2) {
                         terv = 0;
                     }
+                    String plannerkomment = "";
+                    if (Variables.jogosultsag == 2) {
+                        plannerkomment = "Nem tervezett gyártás!";
+                    }
 
                     for (int c = 0; c < b.gyarthatosagiadatok.size(); c++) {
 
@@ -1084,7 +1091,7 @@ public class ControlPanel extends javax.swing.JDialog {
 
 //ha találunk olyan kombot ami fel van vive akkor csinálunk plann objectet
                             try {
-                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, "", "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m, 0);
+                                PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, plannerkomment, "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m, 0);
                                 b.jPanel1.add(po);
                                 po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250);
                                 b.repaint();
@@ -1129,6 +1136,7 @@ public class ControlPanel extends javax.swing.JDialog {
         //a terv hozzáadásához kell
         new ExcelAdapter(jTable1, this);
         try {
+
 //hozzáadjuk egy comboboxhoz az adatokat
             BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
             JComboBox<String> PncomboBox = new AutoCompleteComboBox(b.pnlist.toArray());
@@ -1153,6 +1161,7 @@ public class ControlPanel extends javax.swing.JDialog {
             TableColumn starttimecolumn = jTable1.getColumnModel().getColumn(4);
             starttimecolumn.setCellEditor(new DefaultCellEditor(StartTimeCombo));
 
+        } catch (ArrayIndexOutOfBoundsException e) {
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
@@ -1162,6 +1171,7 @@ public class ControlPanel extends javax.swing.JDialog {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
+
         adatlekerBeSheetrol();
 
     }

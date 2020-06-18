@@ -43,7 +43,8 @@ public class JobStatusThread implements Runnable {
             }
 
             try {
-                jobok = jobok.replaceAll("[+.^:,/ ]", "");
+                jobok = jobok.replaceAll("[-+'.^:,]","");
+                
             } catch (Exception e) {
             }
             if (jobok.length() > 0) {
