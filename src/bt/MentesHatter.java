@@ -15,12 +15,12 @@ import java.awt.Toolkit;
  *
  * @author gabor_hanacsek
  */
-public class MentesHatter extends javax.swing.JDialog {
+public  class MentesHatter extends javax.swing.JDialog {
 
     /**
      * Creates new form ScreenSaver
      */
-    public MentesHatter(java.awt.Frame parent, boolean modal) {
+    public  MentesHatter(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

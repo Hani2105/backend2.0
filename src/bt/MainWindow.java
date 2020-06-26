@@ -42,6 +42,8 @@ public class MainWindow extends javax.swing.JFrame {
     public Anyaghiany ahrogzito = new Anyaghiany(this, false);
     public Allasido allasrogzito = new Allasido(this, false);
     public Statisztika statisztika = new Statisztika(this, false);
+    //a setup ablak
+    public Setup setup = new Setup(this, false);
 
     //a panel szelessege es magassaga
 //inicializálás
@@ -89,14 +91,14 @@ public class MainWindow extends javax.swing.JFrame {
 
 //láthatóvá tesszük a loginscreent
         ls.setVisible(true);
-
+        
     }
-
+    
     public void setIcon() {
-
+        
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/pictures/mainicon.png")));
     }
-
+    
     public void cellakMentese() {
         ArrayList<String> cellak = new ArrayList<>();
         // Get the index of all the selected items
@@ -114,35 +116,35 @@ public class MainWindow extends javax.swing.JFrame {
             Starter.e.sendMessage(ex);
         }
     }
-
+    
     public void cellakKijelolese() {
         try {
             int[] selected = new int[so.getCellak().size()];
             int counter = 0;
-
+            
             for (int i = 0; i < so.getCellak().size(); i++) {
-
+                
                 for (int l = 0; l < jList1.getModel().getSize(); l++) {
-
+                    
                     if (so.getCellak().get(i).equals(jList1.getModel().getElementAt(l))) {
-
+                        
                         selected[counter] = l;
                         counter++;
-
+                        
                     }
                 }
             }
-
+            
             jList1.setSelectedIndices(selected);
-
+            
         } catch (Exception e) {
             System.out.println("Nem sikerült beolvasni a cella adatokat!");
             e.printStackTrace();
             Starter.e.sendMessage(e);
-
+            
         }
     }
-
+    
     public void getCellas() {
 //lekérdezzük, hogy egyáltalán milyen celláink vannak
         String query = "SELECT distinct tc_becells.cellname FROM tc_becells";
@@ -150,27 +152,27 @@ public class MainWindow extends javax.swing.JFrame {
         DefaultListModel listModel = new DefaultListModel();
         try {
             pc = new PlanConnect();
-
+            
             try {
                 pc.lekerdez(query);
-
+                
                 while (pc.rs.next()) {
-
+                    
                     listModel.addElement(pc.rs.getString(1));
                 }
-
+                
                 this.jList1.setModel(listModel);
-
+                
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 Starter.e.sendMessage(ex);
-
+                
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
                 Starter.e.sendMessage(ex);
-
+                
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
@@ -182,7 +184,7 @@ public class MainWindow extends javax.swing.JFrame {
                 Starter.e.sendMessage(e);
             }
         }
-
+        
     }
 
     /**
@@ -225,9 +227,8 @@ public class MainWindow extends javax.swing.JFrame {
         jMenuBar2 = new MyMenubar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jLabel1.setText("jLabel1");
 
@@ -431,21 +432,6 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem4);
 
-        jMenu1.setBackground(new java.awt.Color(102, 153, 255));
-        jMenu1.setText("Statisztikák");
-        jMenu1.setOpaque(true);
-
-        jMenuItem1.setBackground(new java.awt.Color(51, 153, 255));
-        jMenuItem1.setText("Aktuális heti kihasználtság");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
-        jMenu3.add(jMenu1);
-
         jMenuItem3.setBackground(new java.awt.Color(102, 153, 255));
         jMenuItem3.setText("Login");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -454,6 +440,15 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem3);
+
+        jMenuItem1.setBackground(new java.awt.Color(102, 153, 255));
+        jMenuItem1.setText("Setup");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
 
         jMenuBar2.add(jMenu3);
 
@@ -481,7 +476,7 @@ public class MainWindow extends javax.swing.JFrame {
         PlanConnect pc = null;
         try {
             pc = new PlanConnect();
-
+            
             try {
                 pc.lekerdez(query);
             } catch (SQLException ex) {
@@ -493,12 +488,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
             try {
                 while (pc.rs.next()) {
-
+                    
                     String[] adatok = new String[2];
                     adatok[0] = pc.rs.getString(1);
                     adatok[1] = pc.rs.getString(2);
                     Variables.pnkomment.add(adatok);
-
+                    
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -507,7 +502,7 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
             Starter.e.sendMessage(e);
-
+            
         } finally {
             try {
                 pc.kinyir();
@@ -516,7 +511,7 @@ public class MainWindow extends javax.swing.JFrame {
                 Starter.e.sendMessage(e);
             }
         }
-
+        
     }
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -568,7 +563,7 @@ public class MainWindow extends javax.swing.JFrame {
             jCheckBox1.setSelected(b.isJobfigyeles());
         } catch (Exception e) {
         }
-
+        
 
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
@@ -578,17 +573,17 @@ public class MainWindow extends javax.swing.JFrame {
         Component[] components = b.jPanel1.getComponents();
         for (int i = 0; i < components.length; i++) {
             if (components[i] instanceof PlannObject) {
-
+                
                 PlannObject po = (PlannObject) components[i];
                 if (!po.getJob().contains(jTextField1.getText()) && !po.getPn().contains(jTextField1.getText())) {
-
+                    
                     po.setVisible(false);
                 } else {
                     po.setVisible(true);
                 }
-
+                
             }
-
+            
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
@@ -602,24 +597,24 @@ public class MainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jProgressBar1MouseClicked
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // heti statisztika lekérése
-        statisztika.setVisible(true, Variables.statisztika.heti);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // job figyelés beállítása a sheeten
         //az aktiv besheet jobfigyeles erteket beallitjuk
         BeSheet b = (BeSheet) jTabbedPane1.getComponentAt(jTabbedPane1.getSelectedIndex());
         if (jCheckBox1.isSelected()) {
-
+            
             b.setJobfigyeles(true);
         } else {
-
+            
             b.setJobfigyeles(false);
-
+            
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        setup.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -673,10 +668,9 @@ public class MainWindow extends javax.swing.JFrame {
     public static javax.swing.JLabel jLabel8;
     public static javax.swing.JLabel jLabel9;
     public static javax.swing.JList<String> jList1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
+    public static javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;

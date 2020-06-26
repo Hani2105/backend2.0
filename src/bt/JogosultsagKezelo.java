@@ -53,6 +53,8 @@ public class JogosultsagKezelo {
             sp.jTextField4.setEditable(true);
             //a set gomb
             sp.jButton1.setEnabled(true);
+            //a setup menu letiltasa
+            MainWindow.jMenuItem1.setEnabled(false);
 
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
@@ -109,6 +111,8 @@ public class JogosultsagKezelo {
             sp.jTextField4.setEditable(false);
             //a set gomb
             sp.jButton1.setEnabled(false);
+            //a setup beállítésa
+            MainWindow.jMenuItem1.setEnabled(false);
 
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
@@ -155,6 +159,8 @@ public class JogosultsagKezelo {
             sp.jTextField4.setEditable(true);
             //a set gomb
             sp.jButton1.setEnabled(true);
+            //a setup beállítésa
+            MainWindow.jMenuItem1.setEnabled(true);
             //a plannobjectek menuitemek letiltasa
             for (int i = 0; i < MainWindow.jTabbedPane1.getTabCount(); i++) {
 

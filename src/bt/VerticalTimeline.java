@@ -150,7 +150,7 @@ public class VerticalTimeline extends JLabel {
                         Double eddigiterv = map.get(po.getWorkStation())[0] + po.getTerv();
                         Double eddigteny = map.get(po.getWorkStation())[1] + po.getTeny();
                         Double eddigtervezettido = map.get(po.getWorkStation())[2] + po.getTervezettido();
-                        Double eddiggyartottido = map.get(po.getWorkStation())[2] + po.getGyartasiido();
+                        Double eddiggyartottido = map.get(po.getWorkStation())[3] + po.getGyartasiido();
                         Double[] eddigadat = new Double[4];
                         eddigadat[0] = eddigiterv;
                         eddigadat[1] = eddigteny;

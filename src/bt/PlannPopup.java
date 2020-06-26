@@ -211,6 +211,22 @@ public class PlannPopup extends JPopupMenu {
                 p.repaint();
             }
         });
+        
+        
+        //összeset áttervez
+        JMenuItem varazsloMenuItem = new JMenuItem("Tervek rendezése eddig", new javax.swing.ImageIcon(getClass().getResource("/pictures/varazslo.png")));
+        varazsloMenuItem.setOpaque(true);
+        varazsloMenuItem.setBackground(Variables.plannObjectPopupColor);
+        attervez.add(varazsloMenuItem);
+        varazsloMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+    
+                RePlann rp = new RePlann();
+                rp.varazslo1(p);
+                
+            }
+        });
 
     }
 

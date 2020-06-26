@@ -5,6 +5,8 @@
  */
 package bt;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
@@ -279,6 +281,12 @@ public class ControlPanel extends javax.swing.JDialog {
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel2MouseExited(evt);
             }
         });
 
@@ -807,6 +815,27 @@ public class ControlPanel extends javax.swing.JDialog {
         jTable3.setModel(model);
     }//GEN-LAST:event_jLabel8MouseClicked
 
+    private void jLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseEntered
+        // ha bejövünk az egérrel, rajzoljuk ki, hogy hova fogjuk elhelyezni a terveket
+        //ki kell szedni a backend sheetet
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        //kell a graphicsa
+        Graphics g = b.jPanel1.getGraphics();
+        g.setColor(Color.red);
+        int thickNess = 4;
+        for (int i = 0; i < thickNess; i++) {
+            g.drawRect(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue() + 5 + i, m.cp.getLocationOnScreen().y - 255 + b.jScrollPane2.getVerticalScrollBar().getValue() + i, 200 - 2 * i, 75 - 2 * i);
+        }
+//        g.drawRect(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250 + b.jScrollPane2.getVerticalScrollBar().getValue(), 200, 75);
+
+    }//GEN-LAST:event_jLabel2MouseEntered
+
+    private void jLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseExited
+        // ha kijövünk a tervek hozzáadása területről
+        BeSheet b = (BeSheet) m.jTabbedPane1.getComponentAt(m.jTabbedPane1.getSelectedIndex());
+        b.repaint();
+    }//GEN-LAST:event_jLabel2MouseExited
+
     public void segedletLeker() {
 //ha az elmaradás van kiválasztva
 
@@ -1093,7 +1122,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             try {
                                 PlannObject po = new PlannObject(b, 200, 75, pn.trim(), job, startdate, terv, 0, plannerkomment, "", 0.00, 0, ws.trim(), Double.parseDouble(jTable1.getValueAt(i, 5).toString()), m, 0);
                                 b.jPanel1.add(po);
-                                po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue(), m.cp.getLocationOnScreen().y - 250);
+                                po.setLocation(m.cp.getLocationOnScreen().x + b.jScrollPane2.getHorizontalScrollBar().getValue() + 5, m.cp.getLocationOnScreen().y - 255 + b.jScrollPane2.getVerticalScrollBar().getValue());
                                 b.repaint();
 
                             } catch (Exception e) {
@@ -1129,6 +1158,10 @@ public class ControlPanel extends javax.swing.JDialog {
         b.osszerendez();
         //beallitjuk a jogosultsagokat
         b.getM().j.kezel();
+//kiirjuk, hogy sikeres hozzáadás
+//default title and icon
+        JOptionPane.showMessageDialog(m,
+                "A tervek hozzáadása megtörtént!");
 
     }
 
