@@ -90,6 +90,34 @@ public class BeSheet extends javax.swing.JPanel {
         jScrollPane2.getVerticalScrollBar().setUnitIncrement(16);
     }
 
+    public ArrayList<String[]> getGyarthatosagiadatok() {
+        return gyarthatosagiadatok;
+    }
+
+    public void setGyarthatosagiadatok(ArrayList<String[]> gyarthatosagiadatok) {
+        this.gyarthatosagiadatok = gyarthatosagiadatok;
+    }
+    
+    
+
+    public ArrayList<String> getWslist() {
+        return wslist;
+    }
+
+    public void setWslist(ArrayList<String> wslist) {
+        this.wslist = wslist;
+    }
+  
+    public ArrayList<String> getPnlist() {
+        return pnlist;
+    }
+
+    public void setPnlist(ArrayList<String> pnlist) {
+        this.pnlist = pnlist;
+    }
+    
+    
+
     public String getUtolsotime() {
         return utolsotime;
     }

@@ -22,7 +22,7 @@ public class ErrorLogger {
         String exceptionAsString = sw.toString();
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
 
-        Thread t = new Levelkuldes("BT hiba! " + timeStamp, Variables.user +" " + exceptionAsString, "gabor.hanacsek@sanmina.com", "BTLogger@sanmina.com");
+        Thread t = new Levelkuldes("BT hiba! " + timeStamp, Variables.user + " " + MainWindow.jTabbedPane1.getSelectedComponent().getName() + " " + exceptionAsString, "gabor.hanacsek@sanmina.com", "BTLogger@sanmina.com");
         t.start();
 
     }

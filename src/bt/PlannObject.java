@@ -517,11 +517,11 @@ public class PlannObject extends JLabel {
     }
 //a gyártási idő közvetlen beállítása
 
-    public void setOsszGyartasiIdo(double ido) {
-
-        this.tervezettido = ido;
-
-    }
+//    public void setOsszGyartasiIdo(double ido) {
+//
+//        this.tervezettido = ido;
+//
+//    }
 
 //mérnöki beállítása
     public void setEngineer(double b) {

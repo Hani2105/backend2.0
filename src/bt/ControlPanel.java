@@ -608,7 +608,7 @@ public class ControlPanel extends javax.swing.JDialog {
                             }
                         }
                         polista.add(po.getPn() + po.getJob() + po.getWorkStation());
-                        model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", osszeg, "TAB", "RELEASED", "TAB", most, "*DN"});
+                        model.addRow(new Object[]{po.getJob(), "TAB", "TAB", po.getPn(), "TAB", "TAB", osszeg, "TAB", "Released", "TAB", most, "*DN"});
                     }
 
                 }
