@@ -440,26 +440,17 @@ public class SFDC implements Runnable {
         for (int n = 0; n < sfdcadat.length; n++) {
 
             String pn = sfdcadat[n][1].toString().toUpperCase().trim();
-            String ws = sfdcadat[n][0].toString().toUpperCase().trim();
+            String ws = sfdcadat[n][0].toString();
             String job = sfdcadat[n][3].toString().toUpperCase().trim();
             double ct = 0.00;
-            //megnezzuk, hogy ezzel a kombinációval foglalkoztunk e már
-            for (int e = 0; e < foglalkoztunk.size(); e++) {
 
-                if (foglalkoztunk.get(e)[0].equals(pn) && foglalkoztunk.get(e)[1].equals(ws)) {
-
-                    continue outerloop;
-
-                }
-
-            }
-            //ha idáig eljutottunk akkor még nem foglalkoztunk ezzel a pn ws kombinációval, tehát foglalkozni kell vele, akkor, ha ez a pn és ws szerepel a sheet adatai között, a gyárthatósági adatok között
+            //ha ez a pn és ws szerepel a sheet adatai között, a gyárthatósági adatok között
             boolean tovabb = false;
             for (int e = 0; e < p.getbackendSheet().getGyarthatosagiadatok().size(); e++) {
 
-                if (p.getbackendSheet().getGyarthatosagiadatok().get(e)[0].toUpperCase().trim().equals(pn) && ws.contains(p.getbackendSheet().getGyarthatosagiadatok().get(e)[1].toUpperCase().trim())) {
+                if (p.getbackendSheet().getGyarthatosagiadatok().get(e)[0].toUpperCase().trim().equals(pn) && ws.toUpperCase().trim().contains(p.getbackendSheet().getGyarthatosagiadatok().get(e)[1].toUpperCase().trim())) {
                     ct = Double.parseDouble(p.getbackendSheet().getGyarthatosagiadatok().get(e)[2]);
-                    ws = p.getbackendSheet().getGyarthatosagiadatok().get(e)[1].toUpperCase().trim();
+                    ws = p.getbackendSheet().getGyarthatosagiadatok().get(e)[1].toString();
                     tovabb = true;
                     break;
                 }
@@ -478,28 +469,28 @@ public class SFDC implements Runnable {
             for (int s = 0; s < sfdcadat.length; s++) {
 
                 //az első eset amikor semmit nem figyelünk de egyezik a pn és megvan benne a ws
-                if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws)) {
+                if (!p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws.toUpperCase().trim())) {
                     //ha ezeknek megfelelünk akkor hozzáadunk a osszeghez
                     osszeg += Integer.parseInt(sfdcadat[s][4].toString());
 
                 }
 
                 //a második eset amikor van job figyelés de nem csak first pass kell
-                if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws) && job.toUpperCase().trim().equals(sfdcadat[s][3].toString().toUpperCase().trim())) {
+                if (p.getMainWindow().jCheckBox1.isSelected() && !p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws.toUpperCase().trim()) && job.toUpperCase().trim().equals(sfdcadat[s][3].toString().toUpperCase().trim())) {
                     //ha ezeknek megfelelünk akkor hozzáadunk a osszeghez
                     osszeg += Integer.parseInt(sfdcadat[s][4].toString());
 
                 }
 
                 //a harmadik eset amikor mindent figyelni kell
-                if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws) && job.toUpperCase().trim().equals(sfdcadat[s][3].toString().toUpperCase().trim()) && sfdcadat[s][2].toString().equals("1")) {
+                if (p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws.toUpperCase().trim()) && job.toUpperCase().trim().equals(sfdcadat[s][3].toString().toUpperCase().trim()) && sfdcadat[s][2].toString().equals("1")) {
                     //ha ezeknek megfelelünk akkor hozzáadunk a osszeghez
                     osszeg += Integer.parseInt(sfdcadat[s][4].toString());
 
                 }
 
                 //a negyedik eset amikor csak a first passt kell
-                if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws) && sfdcadat[s][2].toString().equals("1")) {
+                if (!p.getMainWindow().jCheckBox1.isSelected() && p.getMainWindow().jCheckBox2.isSelected() && sfdcadat[s][1].toString().toUpperCase().trim().equals(pn) && sfdcadat[s][0].toString().toUpperCase().trim().contains(ws.toUpperCase().trim()) && sfdcadat[s][2].toString().equals("1")) {
                     //ha ezeknek megfelelünk akkor hozzáadunk a osszeghez
                     osszeg += Integer.parseInt(sfdcadat[s][4].toString());
 
@@ -513,13 +504,13 @@ public class SFDC implements Runnable {
                 for (int p = 0; p < polist.size(); p++) {
 
                     //ha van jobfigyelés akkor csak olyanhoz adjuk ahol a job is eggyezik
-                    if (MainWindow.jCheckBox1.isSelected() && polist.get(p).getPn().toUpperCase().trim().equals(pn) && ws.contains(polist.get(p).getWorkStation().toUpperCase().trim()) && polist.get(p).getJob().toUpperCase().trim().equals(job)) {
+                    if (MainWindow.jCheckBox1.isSelected() && polist.get(p).getPn().toUpperCase().trim().equals(pn) && ws.toUpperCase().trim().contains(polist.get(p).getWorkStation().toUpperCase().trim()) && polist.get(p).getJob().toUpperCase().trim().equals(job)) {
 
                         polist.get(p).setTeny(osszeg);
                         //ha írtunk akkor false-ra állítjuk
                         tovabb = false;
 
-                    } else if (!MainWindow.jCheckBox1.isSelected() && polist.get(p).getPn().toUpperCase().trim().equals(pn) && ws.contains(polist.get(p).getWorkStation().toUpperCase().trim())) {
+                    } else if (!MainWindow.jCheckBox1.isSelected() && polist.get(p).getPn().toUpperCase().trim().equals(pn) && ws.toUpperCase().trim().contains(polist.get(p).getWorkStation().toUpperCase().trim())) {
 
                         polist.get(p).setTeny(osszeg);
                         //ha írtunk akkor false-ra állítjuk
@@ -536,6 +527,8 @@ public class SFDC implements Runnable {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                         PlannObject ujpo = new PlannObject(p.getbackendSheet(), 200, 75, pn, job, tol.replace("%20", " "), 0, osszeg, "Nem tervezett gyártás!", "", 0.0, 0, ws, ct, p.getMainWindow(), 0);
                         p.getbackendSheet().jPanel1.add(ujpo);
+                        //betesszuk a polistaba
+                        polist.add(ujpo);
                         //ujpo.setStat(po.getStat());
                         ujpo.getbackendSheet().osszerendez();
 
@@ -544,9 +537,6 @@ public class SFDC implements Runnable {
 
             }
 
-            //betesszuk a pn ws kombinációt a foglalkoztunk listába
-            String[] adatok = {pn, ws};
-            foglalkoztunk.add(adatok);
 
         }
 
