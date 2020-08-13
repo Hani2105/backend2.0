@@ -522,7 +522,7 @@ public class SFDC implements Runnable {
                 if (tovabb == true) {
                     //ha itt a tovabb true, ez azt jelenti, hogy kell letrehozni valami po-t
                     Object[] options = {"Igen, adjuk hozzá!", "Nem, ne adjuk hozzá!"};
-                    int q = JOptionPane.showOptionDialog(p.getMainWindow(), "A " + pn + "-t hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                    int q = JOptionPane.showOptionDialog(p.getMainWindow(), "A " + pn + "-t, állomás: " + ws + " hozzáadjuk a szakos tervhez?", "Új adat!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                     if (q == 0) {
 //letrehozunk egy uj po-t es beallitjuk az adatait majd hozzaadjuk a japnelhez
                         PlannObject ujpo = new PlannObject(p.getbackendSheet(), 200, 75, pn, job, tol.replace("%20", " "), 0, osszeg, "Nem tervezett gyártás!", "", 0.0, 0, ws, ct, p.getMainWindow(), 0);
@@ -536,7 +536,6 @@ public class SFDC implements Runnable {
                 }
 
             }
-
 
         }
 
