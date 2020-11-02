@@ -25,7 +25,7 @@ import javax.swing.ImageIcon;
 public class IniKezel {
 
     private Wini ini;
-//megprobáljuk beolvasni az ini filet
+//megprobáljuk beolvasni az ini filet!!!
 
     public void iniOlvas() throws IOException {
 
