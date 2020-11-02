@@ -38,7 +38,7 @@ public class Allasido extends javax.swing.JDialog {
     }
 
     private void createTable() {
-//itt csináljuk meg a tábla tulajdonságait
+//itt csináljuk meg a tábla tulajdonságait!!!
         TableColumn testColumn = jTable1.getColumnModel().getColumn(2);
         JComboBox<String> comboBox = new JComboBox<>();
 //az inibol kell a lista, hogy milyen elemeket tartalmazzon a legordulo
