@@ -243,7 +243,7 @@ public class TervLeker implements Runnable {
         //a formattert átalakítjuk a megfelelő formátummá
 
 //        tabneve = "UBT";
-        String query = "SELECT tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.pktomig, tc_terv.lathato FROM tc_terv\n"
+        String query = "SELECT distinct tc_bepns.partnumber , tc_terv.job, tc_bestations.workstation,tc_terv.date,tc_terv.qty,tc_terv.qty_teny,tc_terv.mernokiido,tc_terv.wtf,tc_prodmatrix.ciklusido, tc_terv.pktomig, tc_terv.lathato FROM tc_terv\n"
                 + "left join tc_bepns on tc_bepns.idtc_bepns = tc_terv.idtc_bepns\n"
                 + "left join tc_bestations on tc_bestations.idtc_bestations = tc_terv.idtc_bestations\n"
                 + "left join tc_becells on tc_becells.idtc_cells = tc_terv.idtc_becells\n"
